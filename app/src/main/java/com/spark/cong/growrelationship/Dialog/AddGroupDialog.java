@@ -51,6 +51,7 @@ public class AddGroupDialog extends DialogFragment implements View.OnClickListen
         dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        dialog.getContext().getTheme().applyStyle(R.style.MyAlertDialog, true);
+        dialog.setCanceledOnTouchOutside(false);
         return dialog;
     }
 
