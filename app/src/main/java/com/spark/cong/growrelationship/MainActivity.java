@@ -15,6 +15,7 @@ import com.spark.cong.growrelationship.Adapter.GroupPeopleRecyclerAdapter;
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeole;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupPeopleViewModel;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
+import com.spark.cong.growrelationship.Dialog.AddGroupDialog;
 
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void listenerEvent(){
-        // add button listener
+        // add group button listener
         btnAddGroup.setOnClickListener(mOnClickListener);
     }
 
@@ -77,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
             switch (v.getId()){
                 case R.id.btn_add_group: {
                     Toast.makeText(getApplicationContext(),"addGroup",Toast.LENGTH_SHORT).show();
+                    AddGroupDialog addGroupDialog = new AddGroupDialog();
+                    addGroupDialog.show(getSupportFragmentManager(),"group");
                 }break;
             }
         }
