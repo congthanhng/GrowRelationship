@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyAlertDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:layout_gravity">center</item>
+        <!-- NOPE!!!!! -->
+        <item name="android:layout_width">400dp</item>
+        <!-- NOPE!!!!! -->
+        <item name="android:layout_height">400dp</item>
+    </style>
 </resources>

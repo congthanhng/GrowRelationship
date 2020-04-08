@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -49,6 +50,7 @@ public class AddGroupDialog extends DialogFragment implements View.OnClickListen
 
         dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.getContext().getTheme().applyStyle(R.style.MyAlertDialog, true);
         return dialog;
     }
 
@@ -56,11 +58,24 @@ public class AddGroupDialog extends DialogFragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_close_add_group :{
-                dialog.cancel();
+                dismiss();
             }break;
             case R.id.btn_save_add_group:{
                 Toast.makeText(getContext(),"save new item",Toast.LENGTH_SHORT).show();
+
             }break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        //user to set width and height of dialog
+        Window window = getDialog().getWindow();
+        if(window == null) return;
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = 600;
+        params.height = 600;
+        window.setAttributes(params);
+        super.onResume();
     }
 }

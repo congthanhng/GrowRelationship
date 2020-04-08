@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -40,19 +42,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void mapView(){
+    public void mapView() {
 
         // button add
-        btnAddGroup = (Button)findViewById(R.id.btn_add_group);
+        btnAddGroup = (Button) findViewById(R.id.btn_add_group);
 
         //RecyclerView init
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewGroupPeople);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,SPAN_COUNT);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, SPAN_COUNT);
         final GroupPeopleRecyclerAdapter adapter = new GroupPeopleRecyclerAdapter(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.hasFixedSize();
-        recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,SPAN_COUNT)); // spacing between items
+        recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING, SPAN_COUNT)); // spacing between items
 
 
         //init viewModel
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void listenerEvent(){
+    public void listenerEvent() {
         // add group button listener
         btnAddGroup.setOnClickListener(mOnClickListener);
     }
@@ -75,13 +77,36 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.btn_add_group: {
-                    Toast.makeText(getApplicationContext(),"addGroup",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "addGroup", Toast.LENGTH_SHORT).show();
+//                    showDialog();
                     AddGroupDialog addGroupDialog = new AddGroupDialog();
-                    addGroupDialog.show(getSupportFragmentManager(),"group");
-                }break;
+                    addGroupDialog.show(getSupportFragmentManager(), "group");
+                }
+                break;
             }
         }
     };
+
+    public void showDialog() {
+        boolean isLargeLayout = getResources().getBoolean(R.bool.large_layout);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AddGroupDialog newFragment = new AddGroupDialog();
+
+        if (isLargeLayout) {
+            // The device is using a large layout, so show the fragment as a dialog
+            newFragment.show(fragmentManager, "group");
+        } else {
+            // The device is smaller, so show the fragment fullscreen
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            // For a little polish, specify a transition animation
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            // To make it fullscreen, use the 'content' root view as the container
+            // for the fragment, which is always the root view for the activity
+            transaction.add(android.R.id.content, newFragment)
+                    .addToBackStack(null).commit();
+        }
+
+    }
 }
