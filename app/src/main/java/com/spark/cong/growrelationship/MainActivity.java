@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.spark.cong.growrelationship.Adapter.GroupPeopleRecyclerViewAdapter;
+import com.spark.cong.growrelationship.Adapter.GroupPeopleRecyclerAdapter;
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeole;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupPeopleViewModel;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
@@ -33,10 +33,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void mapView(){
+
+
+
         //RecyclerView init
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewGroupPeople);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,SPAN_COUNT);
-        final GroupPeopleRecyclerViewAdapter adapter = new GroupPeopleRecyclerViewAdapter();
+        final GroupPeopleRecyclerAdapter adapter = new GroupPeopleRecyclerAdapter(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.hasFixedSize();

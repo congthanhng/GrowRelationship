@@ -1,5 +1,6 @@
 package com.spark.cong.growrelationship.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -18,9 +19,16 @@ import com.spark.cong.growrelationship.R;
 
 import java.util.List;
 
-public class GroupPeopleRecyclerViewAdapter extends RecyclerView.Adapter<GroupPeopleRecyclerViewAdapter.GpeopleViewHolder> {
+import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOPLE;
+
+public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeopleRecyclerAdapter.GpeopleViewHolder> {
 
     private List<GroupPeole> lstGroupPeople;
+    private Context context;
+
+    public GroupPeopleRecyclerAdapter(Context context) {
+        this.context = context;
+    }
 
     @NonNull
     @Override
@@ -36,13 +44,13 @@ public class GroupPeopleRecyclerViewAdapter extends RecyclerView.Adapter<GroupPe
             final String nameOfGroupPeople = groupPeole.getName();
             holder.txt_g_name.setText(nameOfGroupPeople);
 
+            //item onClick listener
             holder.cardView_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(holder.itemView.getContext(), "You select " + nameOfGroupPeople, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(holder.itemView.getContext(), PeopleActivity.class);
-                    holder.itemView.getContext().startActivity(intent);
-
+                    Intent intent = new Intent(context, PeopleActivity.class);
+                    ((Activity) context).startActivityForResult(intent, REQUEST_CODE_PEOPLE); //cast context to activity type to use startActivityForResult()
                 }
             });
         }
@@ -72,5 +80,7 @@ public class GroupPeopleRecyclerViewAdapter extends RecyclerView.Adapter<GroupPe
             txt_g_name = (TextView) itemView.findViewById(R.id.txt_g_name);
             cardView_name = (CardView) itemView.findViewById(R.id.cardView_g_name);
         }
+
+
     }
 }
