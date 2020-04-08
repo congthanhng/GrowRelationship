@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeole;
@@ -16,7 +17,7 @@ public interface GroupPeopleDAO {
     @Query("SELECT * FROM group_people")
     LiveData<List<GroupPeole>> getAllGroupPeople();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertGroupPeople(GroupPeole groupPeole);
 
     @Delete

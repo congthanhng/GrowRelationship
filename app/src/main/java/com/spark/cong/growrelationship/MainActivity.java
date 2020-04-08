@@ -24,7 +24,7 @@ import java.util.List;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AddGroupDialog.EditNameGroupListener {
     private RecyclerView recyclerView;
     private GroupPeopleViewModel groupPeopleViewModel;
     private Button btnAddGroup;
@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * init, set and map view
+     */
     public void mapView() {
 
         // button add
@@ -69,11 +72,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * init, set listener of Views
+     */
     public void listenerEvent() {
         // add group button listener
         btnAddGroup.setOnClickListener(mOnClickListener);
     }
 
+    /**
+     * Init listener
+     */
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -89,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * show dialog flexiable with others screen size
+     */
     public void showDialog() {
         boolean isLargeLayout = getResources().getBoolean(R.bool.large_layout);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -108,5 +120,13 @@ public class MainActivity extends AppCompatActivity {
                     .addToBackStack(null).commit();
         }
 
+    }
+
+    //data from dialog addGroup
+    @Override
+    public void onFinishEditDialog(String inputText) {
+        Toast.makeText(getApplicationContext(), inputText,Toast.LENGTH_SHORT).show();
+        GroupPeole groupPeole = new GroupPeole(inputText);
+        groupPeopleViewModel.insertGroupPeople(groupPeole);
     }
 }
