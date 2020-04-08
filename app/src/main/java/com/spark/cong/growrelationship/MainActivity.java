@@ -1,6 +1,9 @@
 package com.spark.cong.growrelationship;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -21,6 +24,7 @@ import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private GroupPeopleViewModel groupPeopleViewModel;
+    private Button btnAddGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +34,15 @@ public class MainActivity extends AppCompatActivity {
         //init and map view
         mapView();
 
+        //listener
+        listenerEvent();
+
     }
 
     public void mapView(){
 
-
+        // button add
+        btnAddGroup = (Button)findViewById(R.id.btn_add_group);
 
         //RecyclerView init
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewGroupPeople);
@@ -44,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.hasFixedSize();
         recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,SPAN_COUNT)); // spacing between items
+
 
         //init viewModel
         groupPeopleViewModel = new ViewModelProvider(this).get(GroupPeopleViewModel.class);
@@ -56,4 +65,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void listenerEvent(){
+        // add button listener
+        btnAddGroup.setOnClickListener(mOnClickListener);
+    }
+
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btn_add_group: {
+                    Toast.makeText(getApplicationContext(),"addGroup",Toast.LENGTH_SHORT).show();
+                }break;
+            }
+        }
+    };
 }

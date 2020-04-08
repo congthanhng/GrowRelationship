@@ -45,7 +45,7 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
             holder.txt_g_name.setText(nameOfGroupPeople);
 
             //item onClick listener
-            holder.cardView_name.setOnClickListener(new View.OnClickListener() {
+            holder.txt_g_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(holder.itemView.getContext(), "You select " + nameOfGroupPeople, Toast.LENGTH_SHORT).show();
@@ -73,12 +73,12 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
     //viewHolder
     public class GpeopleViewHolder extends RecyclerView.ViewHolder {
         private TextView txt_g_name;
-        private CardView cardView_name;
+//        private CardView cardView_name;
 
         public GpeopleViewHolder(@NonNull View itemView) {
             super(itemView);
             txt_g_name = (TextView) itemView.findViewById(R.id.txt_g_name);
-            cardView_name = (CardView) itemView.findViewById(R.id.cardView_g_name);
+//            cardView_name = (CardView) itemView.findViewById(R.id.cardView_g_name);
         }
 
 
