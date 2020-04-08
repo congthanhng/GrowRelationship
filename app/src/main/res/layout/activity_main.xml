@@ -17,8 +17,9 @@
         app:layout_constraintTop_toTopOf="parent"
         android:text="+"
         android:textSize="36sp"
-        android:layout_margin="16dp"
-        android:background="@drawable/bg_item_gridview"/>
+        android:layout_margin="10dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/bg_item_gridview" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewGroupPeople"
@@ -28,7 +29,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintVertical_bias="0.0"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_add_group"
         tools:listitem="@layout/item_group_people" />
