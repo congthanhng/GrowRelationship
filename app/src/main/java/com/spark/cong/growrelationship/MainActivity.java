@@ -1,5 +1,6 @@
 package com.spark.cong.growrelationship;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.spark.cong.growrelationship.Activity.PeopleActivity;
 import com.spark.cong.growrelationship.Adapter.GroupPeopleRecyclerAdapter;
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeole;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupPeopleViewModel;
@@ -24,12 +26,14 @@ import com.spark.cong.growrelationship.Dialog.AddGroupDialog;
 import java.util.List;
 
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
+import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
 
 public class MainActivity extends AppCompatActivity implements AddGroupDialog.EditNameGroupListener, ItemClickListener {
     private RecyclerView recyclerView;
     private GroupPeopleViewModel groupPeopleViewModel;
     private Button btnAddGroup;
+    private List<GroupPeole> listGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
         mapView();
 
         //listener
-        listenerEvent();
+        mapListener();
 
     }
 
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
             @Override
             public void onChanged(List<GroupPeole> groupPeoles) {
                 adapter.setData(groupPeoles);
+                listGroup = groupPeoles;
             }
         });
     }
@@ -77,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
     /**
      * init, set listener of Views
      */
-    public void listenerEvent() {
+    public void mapListener() {
         // add group button listener
         btnAddGroup.setOnClickListener(mOnClickListener);
     }
@@ -134,6 +139,30 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
 
     @Override
     public void onClick(View view, int position) {
-        Log.d("TEST", "onClick: clicked" + position);
+        switch (view.getId()){
+            case R.id.btn_delete_group : {
+                Toast.makeText(getApplicationContext(),"do you want to delete?",Toast.LENGTH_SHORT).show();
+                groupPeopleViewModel.deleteGroupById(listGroup.get(position).getId());
+            }break;
+            case R.id.btn_edit_group:{
+                Toast.makeText(getApplicationContext(),"do you want to dedit?",Toast.LENGTH_SHORT).show();
+            }break;
+            default: {
+                Log.d("TEST", "onClick: clicked" + position);
+                Intent intent = new Intent(this, PeopleActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_PEOPLE);
+            }
+        }
+
+        /*Log.d("TEST", "onClick: clicked" + position);
+        Intent intent = new Intent(this, PeopleActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_PEOPLE);*/
+    }
+
+    @Override
+    public void onLongClick(View view, int position) {
+
+        Log.d("TEST", "onLongClick: clicked" + position);
+
     }
 }

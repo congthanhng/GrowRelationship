@@ -35,6 +35,16 @@ public class GroupPeopleRepository {
         new DeleteAllGroupPeopleAsyncTask(mGroupPeopleDAO).execute();
     }
 
+    //delete a record
+    public void deleteGroupById(int groupId){
+        new DeleteGroupAsyncTask(mGroupPeopleDAO).execute(groupId);
+    }
+
+    //update a record
+    public void updateGroup(GroupPeole groupPeole){
+        new UpdateGroupAsyncTask(mGroupPeopleDAO).execute(groupPeole);
+    }
+
     //asynctask insert
     public static class InsertGroupPeopleAsyncTask extends AsyncTask<GroupPeole,Void,Void>{
         private GroupPeopleDAO groupPeopleDAO;
@@ -52,6 +62,28 @@ public class GroupPeopleRepository {
         @Override
         protected Void doInBackground(Void... voids) {
             groupPeopleDAO.deleteAllGroupPeople();
+            return null;
+        }
+    }
+    //asynctask delete a group
+    public static class DeleteGroupAsyncTask extends AsyncTask<Integer,Void,Void>{
+        private GroupPeopleDAO groupPeopleDAO;
+        DeleteGroupAsyncTask(GroupPeopleDAO groupPeopleDAO){this.groupPeopleDAO = groupPeopleDAO;}
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            groupPeopleDAO.deleteGroupById(integers[0]);
+            return null;
+        }
+    }
+
+    //asynctask update a group
+    public static class UpdateGroupAsyncTask extends AsyncTask<GroupPeole,Void,Void>{
+        private GroupPeopleDAO groupPeopleDAO;
+        UpdateGroupAsyncTask(GroupPeopleDAO groupPeopleDAO){this.groupPeopleDAO = groupPeopleDAO;}
+        @Override
+        protected Void doInBackground(GroupPeole... groupPeoles) {
+            groupPeopleDAO.updateGroup(groupPeoles[0]);
             return null;
         }
     }

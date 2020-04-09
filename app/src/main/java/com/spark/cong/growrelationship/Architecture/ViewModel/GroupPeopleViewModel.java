@@ -31,8 +31,16 @@ public class GroupPeopleViewModel extends AndroidViewModel {
         mGroupPeopleRepository.deleteAllGroupPeople();
     }
 
+    //delete a recoed
+    public void deleteGroupById(int groupId){mGroupPeopleRepository.deleteGroupById(groupId);}
+
     //insert a record
     public void insertGroupPeople(GroupPeole groupPeole){
         mGroupPeopleRepository.insertGroupPeople(groupPeole);
+    }
+
+    //update a record
+    public void updateGroup(GroupPeole groupPeole){
+        mGroupPeopleRepository.updateGroup(groupPeole);
     }
 }

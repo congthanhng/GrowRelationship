@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,8 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
             GroupPeole groupPeole = lstGroupPeople.get(position);
             final String nameOfGroupPeople = groupPeole.getName();
             holder.txt_g_name.setText(nameOfGroupPeople);
+            holder.btnEditGroup.setVisibility(View.GONE);
+            holder.btnDeleteGroup.setVisibility(View.GONE);
 
             //item onClick listener
             /*holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -74,23 +77,51 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
     }
 
     //viewHolder
-    public class GpeopleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class GpeopleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
         private TextView txt_g_name;
         private ItemClickListener listener;
+        private ImageButton btnDeleteGroup,btnEditGroup;
 //        private CardView cardView_name;
 
         public GpeopleViewHolder(@NonNull View itemView, ItemClickListener listeners) {
             super(itemView);
             txt_g_name = (TextView) itemView.findViewById(R.id.txt_g_name);
+            btnDeleteGroup = (ImageButton) itemView.findViewById(R.id.btn_delete_group);
+            btnEditGroup = (ImageButton) itemView.findViewById(R.id.btn_edit_group);
             this.listener = listeners;
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+            btnEditGroup.setOnClickListener(this);
+            btnDeleteGroup.setOnClickListener(this);
 //            cardView_name = (CardView) itemView.findViewById(R.id.cardView_g_name);
         }
 
         @Override
         public void onClick(View v) {
-            listener.onClick(v,getAdapterPosition());
+            switch (v.getId()){
+                case R.id.btn_delete_group : {
+                    btnDeleteGroup.setVisibility(View.GONE);
+                    btnEditGroup.setVisibility(View.GONE);
+                }
+                case R.id.btn_edit_group:{
+                    btnDeleteGroup.setVisibility(View.GONE);
+                    btnEditGroup.setVisibility(View.GONE);
+                    listener.onClick(v,getAdapterPosition());
+                }break;
+                default: {
+                    listener.onClick(v,getAdapterPosition());
+                }
+            }
+//            listener.onClick(v,getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            listener.onLongClick(v,getAdapterPosition());
+            btnDeleteGroup.setVisibility(View.VISIBLE);
+            btnEditGroup.setVisibility(View.VISIBLE);
+            return true;
         }
     }
 
