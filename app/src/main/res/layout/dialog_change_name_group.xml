@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="3"/>
         <TextView
-            android:id="@+id/txt_add_group"
+            android:id="@+id/txt_edit_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -25,10 +25,10 @@
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:text="ADD NEW GROUP"/>
+            android:text="EDIT GROUP"/>
 
         <ImageButton
-            android:id="@+id/btn_close_add_group"
+            android:id="@+id/btn_close_edit_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -52,10 +52,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:hint="input name"/>
+            android:hint="input name to change"/>
     </LinearLayout>
     <Button
-        android:id="@+id/btn_save_add_group"
+        android:id="@+id/btn_save_edit_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_item_gridview"

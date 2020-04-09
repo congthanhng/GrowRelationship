@@ -1,5 +1,7 @@
 package com.spark.cong.growrelationship;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -22,6 +25,7 @@ import com.spark.cong.growrelationship.Architecture.ViewModel.GroupPeopleViewMod
 import com.spark.cong.growrelationship.Commons.ItemClickListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
 import com.spark.cong.growrelationship.Dialog.AddGroupDialog;
+import com.spark.cong.growrelationship.Dialog.ConfirmDeleteGroupDialog;
 
 import java.util.List;
 
@@ -138,13 +142,25 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
     }
 
     @Override
-    public void onClick(View view, int position) {
+    public void onClick(View view,final int position) {
         switch (view.getId()){
             case R.id.btn_delete_group : {
-                Toast.makeText(getApplicationContext(),"do you want to delete?",Toast.LENGTH_SHORT).show();
-                groupPeopleViewModel.deleteGroupById(listGroup.get(position).getId());
+//                Toast.makeText(getApplicationContext(),"do you want to delete?",Toast.LENGTH_SHORT).show();
+//                ConfirmDeleteGroupDialog confirmDeleteGroupDialog = new ConfirmDeleteGroupDialog();
+//                confirmDeleteGroupDialog.show(getSupportFragmentManager(), "confirm_delete");
+                new AlertDialog.Builder(this)
+                        .setMessage(R.string.confirm_delete_group)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                groupPeopleViewModel.deleteGroupById(listGroup.get(position).getId());
+                            }
+                        }).setNegativeButton(R.string.no,null).show();
+//                groupPeopleViewModel.deleteGroupById(listGroup.get(position).getId());
             }break;
             case R.id.btn_edit_group:{
+//                new Dialog(this)
+//                        .setContentView(R.layout.dialog_add_group);
                 Toast.makeText(getApplicationContext(),"do you want to dedit?",Toast.LENGTH_SHORT).show();
             }break;
             default: {
