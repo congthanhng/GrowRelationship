@@ -1,6 +1,7 @@
 package com.spark.cong.growrelationship;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.spark.cong.growrelationship.Adapter.GroupPeopleRecyclerAdapter;
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeole;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupPeopleViewModel;
+import com.spark.cong.growrelationship.Commons.ItemClickListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
 import com.spark.cong.growrelationship.Dialog.AddGroupDialog;
 
@@ -24,7 +26,7 @@ import java.util.List;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
 
-public class MainActivity extends AppCompatActivity implements AddGroupDialog.EditNameGroupListener {
+public class MainActivity extends AppCompatActivity implements AddGroupDialog.EditNameGroupListener, ItemClickListener {
     private RecyclerView recyclerView;
     private GroupPeopleViewModel groupPeopleViewModel;
     private Button btnAddGroup;
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
         //RecyclerView init
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewGroupPeople);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, SPAN_COUNT);
-        final GroupPeopleRecyclerAdapter adapter = new GroupPeopleRecyclerAdapter(this);
+        final GroupPeopleRecyclerAdapter adapter = new GroupPeopleRecyclerAdapter(this,this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.hasFixedSize();
@@ -128,5 +130,10 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
         Toast.makeText(getApplicationContext(), inputText,Toast.LENGTH_SHORT).show();
         GroupPeole groupPeole = new GroupPeole(inputText);
         groupPeopleViewModel.insertGroupPeople(groupPeole);
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        Log.d("TEST", "onClick: clicked" + position);
     }
 }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.spark.cong.growrelationship.Activity.PeopleActivity;
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeole;
+import com.spark.cong.growrelationship.Commons.ItemClickListener;
 import com.spark.cong.growrelationship.R;
 
 import java.util.List;
@@ -25,16 +26,18 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
 
     private List<GroupPeole> lstGroupPeople;
     private Context context;
+    private ItemClickListener mListener;
 
-    public GroupPeopleRecyclerAdapter(Context context) {
+    public GroupPeopleRecyclerAdapter(Context context, ItemClickListener listener) {
         this.context = context;
+        this.mListener = listener;
     }
 
     @NonNull
     @Override
     public GpeopleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group_people, parent, false);
-        return new GpeopleViewHolder(v);
+        return new GpeopleViewHolder(v, mListener);
     }
 
     @Override
@@ -45,14 +48,14 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
             holder.txt_g_name.setText(nameOfGroupPeople);
 
             //item onClick listener
-            holder.txt_g_name.setOnClickListener(new View.OnClickListener() {
+            /*holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(holder.itemView.getContext(), "You select " + nameOfGroupPeople, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, PeopleActivity.class);
                     ((Activity) context).startActivityForResult(intent, REQUEST_CODE_PEOPLE); //cast context to activity type to use startActivityForResult()
                 }
-            });
+            });*/
         }
     }
 
@@ -71,16 +74,24 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
     }
 
     //viewHolder
-    public class GpeopleViewHolder extends RecyclerView.ViewHolder {
+    public class GpeopleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView txt_g_name;
+        private ItemClickListener listener;
 //        private CardView cardView_name;
 
-        public GpeopleViewHolder(@NonNull View itemView) {
+        public GpeopleViewHolder(@NonNull View itemView, ItemClickListener listeners) {
             super(itemView);
             txt_g_name = (TextView) itemView.findViewById(R.id.txt_g_name);
+            this.listener = listeners;
+
+            itemView.setOnClickListener(this);
 //            cardView_name = (CardView) itemView.findViewById(R.id.cardView_g_name);
         }
 
-
+        @Override
+        public void onClick(View v) {
+            listener.onClick(v,getAdapterPosition());
+        }
     }
+
 }
