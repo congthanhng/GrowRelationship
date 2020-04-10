@@ -1,35 +1,28 @@
 package com.spark.cong.growrelationship.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.spark.cong.growrelationship.Activity.PeopleActivity;
-import com.spark.cong.growrelationship.Architecture.Entity.GroupPeole;
+import com.spark.cong.growrelationship.Architecture.Entity.Group;
 import com.spark.cong.growrelationship.Commons.ItemClickListener;
 import com.spark.cong.growrelationship.R;
 
 import java.util.List;
 
-import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOPLE;
+public class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdapter.GpeopleViewHolder> {
 
-public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeopleRecyclerAdapter.GpeopleViewHolder> {
-
-    private List<GroupPeole> lstGroupPeople;
+    private List<Group> lstGroupPeople;
     private Context context;
     private ItemClickListener mListener;
 
-    public GroupPeopleRecyclerAdapter(Context context, ItemClickListener listener) {
+    public GroupRecyclerAdapter(Context context, ItemClickListener listener) {
         this.context = context;
         this.mListener = listener;
     }
@@ -44,8 +37,8 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
     @Override
     public void onBindViewHolder(@NonNull final GpeopleViewHolder holder, int position) {
         if (lstGroupPeople != null) {
-            GroupPeole groupPeole = lstGroupPeople.get(position);
-            final String nameOfGroupPeople = groupPeole.getName();
+            Group group = lstGroupPeople.get(position);
+            final String nameOfGroupPeople = group.getGroupName();
             holder.txt_g_name.setText(nameOfGroupPeople);
             holder.btnEditGroup.setVisibility(View.GONE);
             holder.btnDeleteGroup.setVisibility(View.GONE);
@@ -71,8 +64,8 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
     }
 
     //setData
-    public void setData(List<GroupPeole> groupPeoles) {
-        this.lstGroupPeople = groupPeoles;
+    public void setData(List<Group> groups) {
+        this.lstGroupPeople = groups;
         notifyDataSetChanged();
     }
 

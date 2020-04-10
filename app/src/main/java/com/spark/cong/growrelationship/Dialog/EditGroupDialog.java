@@ -17,17 +17,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.spark.cong.growrelationship.Architecture.Entity.GroupPeole;
+import com.spark.cong.growrelationship.Architecture.Entity.Group;
 import com.spark.cong.growrelationship.R;
 
 public class EditGroupDialog extends DialogFragment implements View.OnClickListener{
     private ImageButton btnCloseEditGroup;
     private Button btnSaveEditGroup;
     private EditText edtChangeName;
-    private final GroupPeole groupPeole;
+    private Group group;
 
-    public EditGroupDialog(GroupPeole groupPeole){
-        this.groupPeole = groupPeole;
+    public EditGroupDialog(Group group){
+        this.group = group;
     }
 
     @Nullable
@@ -46,7 +46,7 @@ public class EditGroupDialog extends DialogFragment implements View.OnClickListe
         edtChangeName = (EditText) view.findViewById(R.id.edt_edit_name_group);
 
         //init value
-        edtChangeName.setText(groupPeole.getName());
+        edtChangeName.setText(group.getGroupName());
 
         //Listener
         btnSaveEditGroup.setOnClickListener(this);
@@ -74,7 +74,7 @@ public class EditGroupDialog extends DialogFragment implements View.OnClickListe
                 String change = edtChangeName.getText().toString();
                 if(!TextUtils.isEmpty(edtChangeName.getText().toString())){
                     EditGroupListener listener = (EditGroupListener) getActivity();
-                    listener.onFinnishEdit(groupPeole,change);
+                    listener.onFinnishEdit(group,change);
                     dismiss();
                 }else{
                     Toast.makeText(getContext(),"Don't emty",Toast.LENGTH_SHORT).show();
@@ -85,6 +85,6 @@ public class EditGroupDialog extends DialogFragment implements View.OnClickListe
     }
 
     public interface EditGroupListener {
-        public void onFinnishEdit(GroupPeole groupPeole, String change);
+        public void onFinnishEdit(Group group, String change);
     }
 }

@@ -1,15 +1,11 @@
 package com.spark.cong.growrelationship;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -22,26 +18,24 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.spark.cong.growrelationship.Activity.PeopleActivity;
-import com.spark.cong.growrelationship.Adapter.GroupPeopleRecyclerAdapter;
-import com.spark.cong.growrelationship.Architecture.Entity.GroupPeole;
-import com.spark.cong.growrelationship.Architecture.ViewModel.GroupPeopleViewModel;
+import com.spark.cong.growrelationship.Adapter.GroupRecyclerAdapter;
+import com.spark.cong.growrelationship.Architecture.Entity.Group;
+import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
 import com.spark.cong.growrelationship.Commons.ItemClickListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
 import com.spark.cong.growrelationship.Dialog.AddGroupDialog;
-import com.spark.cong.growrelationship.Dialog.ConfirmDeleteGroupDialog;
 import com.spark.cong.growrelationship.Dialog.EditGroupDialog;
 
 import java.util.List;
 
-import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
-import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOPLE;
-import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
+import static com.spark.cong.growrelationship.Commons.Constant.*;
+
 
 public class MainActivity extends AppCompatActivity implements AddGroupDialog.EditNameGroupListener, ItemClickListener, EditGroupDialog.EditGroupListener {
     private RecyclerView recyclerView;
-    private GroupPeopleViewModel groupPeopleViewModel;
+    private GroupViewModel groupViewModel;
     private Button btnAddGroup;
-    private List<GroupPeole> listGroup;
+    private List<Group> listGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +59,9 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
         btnAddGroup = (Button) findViewById(R.id.btn_add_group);
 
         //RecyclerView init
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewGroupPeople);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewGroup);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, SPAN_COUNT);
-        final GroupPeopleRecyclerAdapter adapter = new GroupPeopleRecyclerAdapter(this, this);
+        final GroupRecyclerAdapter adapter = new GroupRecyclerAdapter(this, this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.hasFixedSize();
@@ -75,14 +69,14 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
 
 
         //init viewModel
-        groupPeopleViewModel = new ViewModelProvider(this).get(GroupPeopleViewModel.class);
+        groupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
 
         //LiveData
-        groupPeopleViewModel.getAllGroupPeople().observe(this, new Observer<List<GroupPeole>>() {
+        groupViewModel.getAllGroup().observe(this, new Observer<List<Group>>() {
             @Override
-            public void onChanged(List<GroupPeole> groupPeoles) {
-                adapter.setData(groupPeoles);
-                listGroup = groupPeoles;
+            public void onChanged(List<Group> groups) {
+                adapter.setData(groups);
+                listGroup = groups;
             }
         });
     }
@@ -141,8 +135,8 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
     @Override
     public void onFinishEditDialog(String inputText) {
         Toast.makeText(getApplicationContext(), inputText, Toast.LENGTH_SHORT).show();
-        GroupPeole groupPeole = new GroupPeole(inputText);
-        groupPeopleViewModel.insertGroupPeople(groupPeole);
+        Group group = new Group(inputText);
+        groupViewModel.insertGroup(group);
     }
 
     @Override
@@ -157,10 +151,10 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                groupPeopleViewModel.deleteGroupById(listGroup.get(position).getId());
+                                groupViewModel.deleteGroupById(listGroup.get(position).getGroupId());
                             }
                         }).setNegativeButton(R.string.no, null).show();
-//                groupPeopleViewModel.deleteGroupById(listGroup.get(position).getId());
+//                GroupViewModel.deleteGroupById(listGroup.get(position).getId());
             }
             break;
             case R.id.btn_edit_group: {
@@ -176,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
                         if(!TextUtils.isEmpty(edtEditChange.getText().toString())){
                             GroupPeole groupPeole = listGroup.get(position);
                             groupPeole.setName(edtEditChange.getText().toString());
-                            groupPeopleViewModel.updateGroup(groupPeole);
+                            GroupViewModel.updateGroup(groupPeole);
                         }else dialog.dismiss();
                     }
                 });
@@ -189,14 +183,17 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
 
 
 //                Toast.makeText(getApplicationContext(), "do you want to dedit?", Toast.LENGTH_SHORT).show();
-                GroupPeole groupPeole = listGroup.get(position);
-                EditGroupDialog editGroupDialog = new EditGroupDialog(groupPeole);
+                Group group = listGroup.get(position);
+                EditGroupDialog editGroupDialog = new EditGroupDialog(group);
                 editGroupDialog.show(getSupportFragmentManager(),"edit_group");
             }
             break;
             default: {
                 Log.d("TEST", "onClick: clicked" + position);
                 Intent intent = new Intent(this, PeopleActivity.class);
+                Bundle bundle = new Bundle();
+                intent.putExtra(INTENT_MAIN_TO_PEOPLE,bundle);
+                bundle.putInt(BUNDLE_MAIN_TO_PEOPLE,listGroup.get(position).getGroupId());
                 startActivityForResult(intent, REQUEST_CODE_PEOPLE);
             }
         }
@@ -214,8 +211,8 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
     }
 
     @Override
-    public void onFinnishEdit(GroupPeole groupPeole, String change) {
-        groupPeole.setName(change);
-        groupPeopleViewModel.updateGroup(groupPeole);
+    public void onFinnishEdit(Group group, String change) {
+        group.setGroupName(change);
+        groupViewModel.updateGroup(group);
     }
 }

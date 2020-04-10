@@ -9,14 +9,14 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.spark.cong.growrelationship.Architecture.Dao.GroupPeopleDAO;
-import com.spark.cong.growrelationship.Architecture.Entity.GroupPeole;
+import com.spark.cong.growrelationship.Architecture.Dao.GroupDAO;
+import com.spark.cong.growrelationship.Architecture.Entity.Group;
 
-@Database(entities = {GroupPeole.class},version = 1,exportSchema = false)
+@Database(entities = {Group.class},version = 1,exportSchema = false)
 public abstract class GrowDatabase extends RoomDatabase {
     private static String NAME_OF_DB = "GROW_RELATIONSHIP";
 
-    public abstract GroupPeopleDAO groupPeopleDAO();
+    public abstract GroupDAO groupDAO();
     private static GrowDatabase sINSTANCE;
 
     public static GrowDatabase getInstance(final Context context){
@@ -36,20 +36,20 @@ public abstract class GrowDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            new OnCreateDBAsyncTask(sINSTANCE.groupPeopleDAO()).execute();
+            new OnCreateDBAsyncTask(sINSTANCE.groupDAO()).execute();
         }
     };
 
     private static class OnCreateDBAsyncTask extends AsyncTask<Void,Void,Void> {
-        private GroupPeopleDAO groupPeopleDAO;
-        private OnCreateDBAsyncTask(GroupPeopleDAO groupPeopleDAO){this.groupPeopleDAO = groupPeopleDAO;}
+        private GroupDAO groupDAO;
+        private OnCreateDBAsyncTask(GroupDAO groupDAO){this.groupDAO = groupDAO;}
         @Override
         protected Void doInBackground(Void... voids) {
-            sINSTANCE.groupPeopleDAO().insertGroupPeople(new GroupPeole("Family"));
-            sINSTANCE.groupPeopleDAO().insertGroupPeople(new GroupPeole("Friend"));
-            sINSTANCE.groupPeopleDAO().insertGroupPeople(new GroupPeole("Work"));
-            sINSTANCE.groupPeopleDAO().insertGroupPeople(new GroupPeole("Gym"));
-            sINSTANCE.groupPeopleDAO().insertGroupPeople(new GroupPeole("Football"));
+            sINSTANCE.groupDAO().insertGroup(new Group("Family"));
+            sINSTANCE.groupDAO().insertGroup(new Group("Friend"));
+            sINSTANCE.groupDAO().insertGroup(new Group("Work"));
+            sINSTANCE.groupDAO().insertGroup(new Group("Gym"));
+            sINSTANCE.groupDAO().insertGroup(new Group("Football"));
             return null;
         }
     }
