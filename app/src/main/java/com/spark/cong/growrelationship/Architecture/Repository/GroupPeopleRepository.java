@@ -12,13 +12,11 @@ import java.util.List;
 
 public class GroupPeopleRepository {
     private GroupPeopleDAO groupPeopleDAO;
-    private LiveData<List<GroupPeople>> mGetPeopleByGroupId;
 
-    public GroupPeopleRepository(int groupId, Application application){
+    public GroupPeopleRepository(Application application){
         GrowDatabase database = GrowDatabase.getInstance(application);
         groupPeopleDAO = database.groupPeopleDAO();
-        mGetPeopleByGroupId = groupPeopleDAO.getPeopleByGroupId(groupId);
     }
 
-    public LiveData<List<GroupPeople>> getPeopleByGroupId(){return mGetPeopleByGroupId;}
+    public LiveData<List<GroupPeople>> getAllGroupPeople(){return groupPeopleDAO.getAllGroupPeople();}
 }

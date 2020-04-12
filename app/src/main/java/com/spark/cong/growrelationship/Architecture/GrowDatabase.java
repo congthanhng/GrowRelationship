@@ -11,6 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.spark.cong.growrelationship.Architecture.Dao.GroupDAO;
 import com.spark.cong.growrelationship.Architecture.Dao.GroupPeopleDAO;
+import com.spark.cong.growrelationship.Architecture.Dao.PeopleDAO;
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
 import com.spark.cong.growrelationship.Architecture.Entity.People;
@@ -20,6 +21,7 @@ public abstract class GrowDatabase extends RoomDatabase {
     private static String NAME_OF_DB = "GROW_RELATIONSHIP";
 
     public abstract GroupDAO groupDAO();
+    public abstract PeopleDAO peopleDAO();
     public abstract GroupPeopleDAO groupPeopleDAO();
     private static GrowDatabase sINSTANCE;
 

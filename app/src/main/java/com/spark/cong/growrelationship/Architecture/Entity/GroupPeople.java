@@ -3,9 +3,24 @@ package com.spark.cong.growrelationship.Architecture.Entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "group_people")
+import static androidx.room.ForeignKey.*;
+
+@Entity(tableName = "group_people",foreignKeys = {
+        @ForeignKey(
+                entity = Group.class,
+                parentColumns = "group_id",
+                childColumns = "group_id",
+                onDelete = CASCADE),
+        @ForeignKey(
+                entity = People.class,
+                parentColumns = "people_id",
+                childColumns = "people_id",
+                onDelete = CASCADE)
+
+})
 public class GroupPeople {
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -16,6 +31,7 @@ public class GroupPeople {
     @ColumnInfo(name = "group_id")
     private int groupId;
 
+    @NonNull
     @ColumnInfo(name = "people_id")
     private int peopleId;
 
