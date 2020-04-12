@@ -3,6 +3,7 @@ package com.spark.cong.growrelationship.Dialog;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,13 @@ public class EditGroupDialog extends DialogFragment implements View.OnClickListe
     private EditText edtChangeName;
     private Group group;
 
-    public EditGroupDialog(Group group){
-        this.group = group;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments()!= null){
+            group = (Group) getArguments().getSerializable("edit_group");
+            Log.i("TAG", "onCreate: getArgument"+ group.getGroupName());
+        }
     }
 
     @Nullable

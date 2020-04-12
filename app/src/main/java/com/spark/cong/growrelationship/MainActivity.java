@@ -37,12 +37,13 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
     private Button btnAddGroup;
     private List<Group> listGroup;
 
+    //onCreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //init and map view
+        //init, set and map view
         mapView();
 
         //listener
@@ -66,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
         recyclerView.setAdapter(adapter);
         recyclerView.hasFixedSize();
         recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING, SPAN_COUNT)); // spacing between items
-
 
         //init viewModel
         groupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
@@ -184,7 +184,10 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
 
 //                Toast.makeText(getApplicationContext(), "do you want to dedit?", Toast.LENGTH_SHORT).show();
                 Group group = listGroup.get(position);
-                EditGroupDialog editGroupDialog = new EditGroupDialog(group);
+                EditGroupDialog editGroupDialog = new EditGroupDialog();
+                Bundle editGroupBundle = new Bundle();
+                editGroupBundle.putSerializable("edit_group",group);
+                editGroupDialog.setArguments(editGroupBundle);
                 editGroupDialog.show(getSupportFragmentManager(),"edit_group");
             }
             break;
