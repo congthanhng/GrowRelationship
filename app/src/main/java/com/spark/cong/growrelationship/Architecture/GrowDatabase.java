@@ -10,13 +10,17 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.spark.cong.growrelationship.Architecture.Dao.GroupDAO;
+import com.spark.cong.growrelationship.Architecture.Dao.GroupPeopleDAO;
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
+import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
+import com.spark.cong.growrelationship.Architecture.Entity.People;
 
-@Database(entities = {Group.class},version = 1,exportSchema = false)
+@Database(entities = {Group.class, GroupPeople.class, People.class},version = 1,exportSchema = false)
 public abstract class GrowDatabase extends RoomDatabase {
     private static String NAME_OF_DB = "GROW_RELATIONSHIP";
 
     public abstract GroupDAO groupDAO();
+    public abstract GroupPeopleDAO groupPeopleDAO();
     private static GrowDatabase sINSTANCE;
 
     public static GrowDatabase getInstance(final Context context){
