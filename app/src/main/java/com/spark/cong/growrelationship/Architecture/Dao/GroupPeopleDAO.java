@@ -17,5 +17,5 @@ public interface GroupPeopleDAO {
 
     //get all people in Group by groupid
     @Query("SELECT * FROM group_people WHERE group_id = :groupId")
-    LiveData<List<GroupPeople>> getPeopleByGroupId(int groupId);
+    LiveData<List<GroupPeople>> getAllPeopleByGroupId(int groupId);
 }

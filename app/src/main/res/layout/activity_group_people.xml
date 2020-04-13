@@ -6,4 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".Activity.GroupPeopleActivity">
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="People"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/button_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+"
+        app:layout_constraintTop_toBottomOf="@+id/text_test"
+        android:background="@drawable/bg_item_gridview"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_GroupPeople"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_test"
+        tools:listitem="@layout/item_group_people"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

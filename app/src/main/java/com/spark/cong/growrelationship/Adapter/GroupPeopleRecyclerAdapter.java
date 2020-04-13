@@ -1,6 +1,7 @@
 package com.spark.cong.growrelationship.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,11 @@ import com.spark.cong.growrelationship.R;
 import java.util.List;
 
 public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeopleRecyclerAdapter.GroupPeopleViewHolder>  {
-    private List<GroupPeople> lstGroupPeoplel;
+    private List<GroupPeople> lstGroupPeople;
     private Context context;
+    public GroupPeopleRecyclerAdapter(Context context){
+        this.context = context;
+    }
     @NonNull
     @Override
     public GroupPeopleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -26,24 +30,30 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
 
     @Override
     public void onBindViewHolder(@NonNull GroupPeopleViewHolder holder, int position) {
-
+        int text = lstGroupPeople.get(position).getGroupId();
+        Log.i("TEST", "onBindViewHolder: group name "+ text);
+        holder.txtGPName.setText(text+"");
     }
 
     @Override
     public int getItemCount() {
-        if(lstGroupPeoplel.size()!= 0 && lstGroupPeoplel != null){
-            return lstGroupPeoplel.size();
+        if(lstGroupPeople != null){
+            return lstGroupPeople.size();
         }
         return 0;
     }
 
+    public void setData(List<GroupPeople> listGroupPeople){
+        this.lstGroupPeople = listGroupPeople;
+        notifyDataSetChanged();
+    }
     //ViewHolder
     public class GroupPeopleViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView txtName;
+        private TextView txtGPName;
         public GroupPeopleViewHolder(@NonNull View itemView) {
             super(itemView);
-//            txtName = (TextView) itemView.findViewById(R.id.txt_group_people_name);
+            txtGPName = (TextView) itemView.findViewById(R.id.txt_gp_name);
         }
     }
 }

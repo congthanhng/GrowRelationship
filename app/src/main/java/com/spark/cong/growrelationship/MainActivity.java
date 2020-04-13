@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.spark.cong.growrelationship.Activity.GroupPeopleActivity;
 import com.spark.cong.growrelationship.Activity.PeopleActivity;
 import com.spark.cong.growrelationship.Adapter.GroupRecyclerAdapter;
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
@@ -193,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
             break;
             default: {
                 Log.d("TEST", "onClick: clicked" + position);
-                Intent intent = new Intent(this, PeopleActivity.class);
+                Intent intent = new Intent(this, GroupPeopleActivity.class);
                 Bundle bundle = new Bundle();
                 intent.putExtra(INTENT_MAIN_TO_PEOPLE,bundle);
                 bundle.putInt(BUNDLE_MAIN_TO_PEOPLE,listGroup.get(position).getGroupId());

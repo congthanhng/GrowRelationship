@@ -53,7 +53,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/item_group_people" />
+        tools:listitem="@layout/item_group" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
