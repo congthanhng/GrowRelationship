@@ -2,6 +2,8 @@ package com.spark.cong.growrelationship.Architecture.Dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
@@ -18,4 +20,7 @@ public interface GroupPeopleDAO {
     //get all people in Group by groupid
     @Query("SELECT * FROM group_people WHERE group_id = :groupId")
     LiveData<List<GroupPeople>> getAllPeopleByGroupId(int groupId);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertGroupPeople(GroupPeople groupPeople);
 }

@@ -26,4 +26,8 @@ public class GroupPeopleViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<GroupPeople>> getAllGroupPeopleByGroupId(int groupId) {return groupPeopleRepository.getAllGroupPeopleByGroupId(groupId);}
+
+    public void insertGroupPeople(GroupPeople groupPeople){
+        groupPeopleRepository.insertGroupPeople(groupPeople);
+    }
 }

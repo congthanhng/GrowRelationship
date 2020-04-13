@@ -3,6 +3,8 @@ package com.spark.cong.growrelationship.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +26,7 @@ import static com.spark.cong.growrelationship.Commons.Constant.BUNDLE_MAIN_TO_PE
 import static com.spark.cong.growrelationship.Commons.Constant.INTENT_MAIN_TO_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 
-public class GroupPeopleActivity extends AppCompatActivity {
+public class GroupPeopleActivity extends AppCompatActivity implements View.OnClickListener{
 
     private int groupId;
     private List<GroupPeople> lstGroupPeople;
@@ -55,6 +57,10 @@ public class GroupPeopleActivity extends AppCompatActivity {
 //        adapter.setData(listGroupPeopleFake());
         groupPeopleRecycler.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,1));
 
+        //button
+        Button btnAdd = (Button) findViewById(R.id.button_test);
+        btnAdd.setOnClickListener(this);
+
         //ViewModel
         groupPeopleViewModel = new ViewModelProvider(this).get(GroupPeopleViewModel.class);
         //observe data
@@ -84,5 +90,15 @@ public class GroupPeopleActivity extends AppCompatActivity {
         lstPeoPle.add(new GroupPeople(4,1));
         lstPeoPle.add(new GroupPeople(5,1));
         return lstPeoPle;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.button_test :{
+                GroupPeople  groupPeople= new GroupPeople(this.groupId, 6);
+                groupPeopleViewModel.insertGroupPeople(groupPeople);
+            }break;
+        }
     }
 }
