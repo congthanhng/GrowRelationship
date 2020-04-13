@@ -28,7 +28,7 @@ public class GroupPeople {
     private int groupPeopleId;
 
     @NonNull
-    @ColumnInfo(name = "group_id")
+    @ColumnInfo(name = "group_id",index = true)
     private int groupId;
 
     @NonNull
