@@ -16,10 +16,15 @@ public class People {
     @ColumnInfo(name = "people_name")
     private String peopleName;
 
+    /*---------------------------------------------------------*/
+    //Constructer
     public People(String peopleName) {
         this.peopleName = peopleName;
     }
+    public People(){}
 
+    /*---------------------------------------------------------*/
+    //getter & setter
     public int getPeopleId() {
         return peopleId;
     }

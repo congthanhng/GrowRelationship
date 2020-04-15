@@ -45,17 +45,17 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
         setContentView(R.layout.activity_main);
 
         //init, set and map view
-        mapView();
+        setMapView();
 
         //listener
-        mapListener();
+        setListener();
 
     }
 
     /**
      * init, set and map view
      */
-    public void mapView() {
+    public void setMapView() {
 
         // button add
         btnAddGroup = (Button) findViewById(R.id.btn_add_group);
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
     /**
      * init, set listener of Views
      */
-    public void mapListener() {
+    public void setListener() {
         // add group button listener
         btnAddGroup.setOnClickListener(mOnClickListener);
     }

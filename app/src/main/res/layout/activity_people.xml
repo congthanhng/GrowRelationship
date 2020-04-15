@@ -5,6 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.PeopleActivity">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_test_people"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_test_people"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="People"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/button_test_people"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+"
+        app:layout_constraintTop_toBottomOf="@+id/text_test_people"
+        android:background="@drawable/bg_item_gridview"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_people"
@@ -13,5 +35,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/button_test_people"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/item_group_people"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

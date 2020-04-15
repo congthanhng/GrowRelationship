@@ -22,4 +22,9 @@ public class PeopleViewModel extends AndroidViewModel {
     public LiveData<List<People>> getAllPeople(){
         return peopleRepository.getAllPeople();
     }
+
+    public void insertPeople(People people){
+        peopleRepository.insertPeople(people);
+    }
+
 }

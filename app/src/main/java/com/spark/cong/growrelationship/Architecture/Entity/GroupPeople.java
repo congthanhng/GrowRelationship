@@ -32,7 +32,7 @@ public class GroupPeople {
     private int groupId;
 
     @NonNull
-    @ColumnInfo(name = "people_id")
+    @ColumnInfo(name = "people_id",index = true)
     private int peopleId;
 
     public GroupPeople(int groupId, int peopleId) {

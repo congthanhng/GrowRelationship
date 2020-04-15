@@ -22,9 +22,8 @@ import com.spark.cong.growrelationship.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.spark.cong.growrelationship.Commons.Constant.BUNDLE_MAIN_TO_PEOPLE;
-import static com.spark.cong.growrelationship.Commons.Constant.INTENT_MAIN_TO_PEOPLE;
-import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
+import static com.spark.cong.growrelationship.Commons.Constant.*;
+
 
 public class GroupPeopleActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -74,6 +73,11 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    /**
+     * listener when click back home
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == android.R.id.home){
@@ -82,6 +86,7 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         return super.onOptionsItemSelected(item);
     }
 
+    //mock data
     public List<GroupPeople> listGroupPeopleFake(){
         List<GroupPeople> lstPeoPle = new ArrayList<>();
         lstPeoPle.add(new GroupPeople(1,1));
@@ -96,8 +101,10 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_test :{
-                GroupPeople  groupPeople= new GroupPeople(this.groupId, 6);
-                groupPeopleViewModel.insertGroupPeople(groupPeople);
+//                GroupPeople  groupPeople= new GroupPeople(this.groupId, 6);
+//                groupPeopleViewModel.insertGroupPeople(groupPeople);
+                Intent intent = new Intent(GroupPeopleActivity.this,PeopleActivity.class);
+                startActivityForResult(intent,REQUEST_CODE_GROUP_TO_PEOPLE);
             }break;
         }
     }
