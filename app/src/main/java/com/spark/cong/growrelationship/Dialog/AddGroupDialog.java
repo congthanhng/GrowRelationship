@@ -2,6 +2,8 @@ package com.spark.cong.growrelationship.Dialog;
 
 import android.app.Dialog;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,6 +53,7 @@ public class AddGroupDialog extends DialogFragment implements View.OnClickListen
         btnSaveAddGroup = (Button) view.findViewById(R.id.btn_save_add_group);
         edtNameGroup = (EditText) view.findViewById(R.id.edt_input_name_group);
 
+
         //listener
         btnCloseAddGroup.setOnClickListener(this);
         btnSaveAddGroup.setOnClickListener(this);
@@ -65,8 +68,14 @@ public class AddGroupDialog extends DialogFragment implements View.OnClickListen
 
         dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         //dialog.getContext().getTheme().applyStyle(R.style.MyAlertDialog, true);
+
         dialog.setCanceledOnTouchOutside(false);// prevent close dialog when touch outside
+
+        //set the background of the dialog's root view.
+        // because Android puts your dialog layout within a root view that hides the corners in your custom layout
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         return dialog;
     }
 
@@ -104,7 +113,6 @@ public class AddGroupDialog extends DialogFragment implements View.OnClickListen
         if (window == null) return;
         WindowManager.LayoutParams params = window.getAttributes();
         params.width = getScreenWidth - (getScreenWidth / 6);
-//        params.height = 600;
         window.setAttributes(params);
         super.onResume();
     }
