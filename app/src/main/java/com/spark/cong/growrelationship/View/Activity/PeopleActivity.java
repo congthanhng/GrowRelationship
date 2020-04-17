@@ -1,4 +1,4 @@
-package com.spark.cong.growrelationship.Activity;
+package com.spark.cong.growrelationship.View.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -18,8 +17,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.spark.cong.growrelationship.Adapter.PeopleRecyclerAdapter;
-import com.spark.cong.growrelationship.Architecture.Entity.Group;
+import com.spark.cong.growrelationship.View.Adapter.PeopleRecyclerAdapter;
 import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;

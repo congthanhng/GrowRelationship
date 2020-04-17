@@ -1,4 +1,4 @@
-package com.spark.cong.growrelationship.Dialog;
+package com.spark.cong.growrelationship.View.Dialog;
 
 import android.app.Dialog;
 import android.content.res.Resources;
@@ -15,14 +15,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.spark.cong.growrelationship.MainActivity;
 import com.spark.cong.growrelationship.R;
 
 public class AddGroupDialog extends DialogFragment implements View.OnClickListener {

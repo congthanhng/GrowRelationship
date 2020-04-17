@@ -1,4 +1,4 @@
-package com.spark.cong.growrelationship.Adapter;
+package com.spark.cong.growrelationship.View.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

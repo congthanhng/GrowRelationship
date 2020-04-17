@@ -17,15 +17,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.spark.cong.growrelationship.Activity.GroupPeopleActivity;
-import com.spark.cong.growrelationship.Activity.PeopleActivity;
-import com.spark.cong.growrelationship.Adapter.GroupRecyclerAdapter;
+import com.spark.cong.growrelationship.View.Activity.GroupPeopleActivity;
+import com.spark.cong.growrelationship.View.Adapter.GroupRecyclerAdapter;
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
 import com.spark.cong.growrelationship.Commons.ItemClickListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
-import com.spark.cong.growrelationship.Dialog.AddGroupDialog;
-import com.spark.cong.growrelationship.Dialog.EditGroupDialog;
+import com.spark.cong.growrelationship.View.Dialog.AddGroupDialog;
+import com.spark.cong.growrelationship.View.Dialog.EditGroupDialog;
 
 import java.util.List;
 

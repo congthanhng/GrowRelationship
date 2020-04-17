@@ -1,4 +1,4 @@
-package com.spark.cong.growrelationship.Activity;
+package com.spark.cong.growrelationship.View.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.spark.cong.growrelationship.Adapter.GroupPeopleRecyclerAdapter;
+import com.spark.cong.growrelationship.View.Adapter.GroupPeopleRecyclerAdapter;
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupPeopleViewModel;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;

@@ -1,4 +1,4 @@
-package com.spark.cong.growrelationship.Dialog;
+package com.spark.cong.growrelationship.View.Dialog;
 
 import android.content.res.Resources;
 import android.os.Bundle;
