@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
-import com.spark.cong.growrelationship.Commons.ItemClickListener;
+import com.spark.cong.growrelationship.Commons.GroupItemClickListener;
 import com.spark.cong.growrelationship.R;
 
 import java.util.List;
@@ -20,9 +20,9 @@ public class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdap
 
     private List<Group> lstGroupPeople;
     private Context context;
-    private ItemClickListener mListener;
+    private GroupItemClickListener mListener;
 
-    public GroupRecyclerAdapter(Context context, ItemClickListener listener) {
+    public GroupRecyclerAdapter(Context context, GroupItemClickListener listener) {
         this.context = context;
         this.mListener = listener;
     }
@@ -72,11 +72,11 @@ public class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdap
     //viewHolder
     public class GpeopleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
         private TextView txt_g_name;
-        private ItemClickListener listener;
+        private GroupItemClickListener listener;
         private ImageButton btnDeleteGroup,btnEditGroup;
 //        private CardView cardView_name;
 
-        public GpeopleViewHolder(@NonNull View itemView, ItemClickListener listeners) {
+        public GpeopleViewHolder(@NonNull View itemView, GroupItemClickListener listeners) {
             super(itemView);
             txt_g_name = (TextView) itemView.findViewById(R.id.txt_g_name);
             btnDeleteGroup = (ImageButton) itemView.findViewById(R.id.btn_delete_group);

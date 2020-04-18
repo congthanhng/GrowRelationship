@@ -21,7 +21,6 @@ public class People {
     public People(String peopleName) {
         this.peopleName = peopleName;
     }
-    public People(){}
 
     /*---------------------------------------------------------*/
     //getter & setter
