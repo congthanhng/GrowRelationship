@@ -27,13 +27,10 @@ public class AddGroupDialog extends DialogFragment implements View.OnClickListen
     private Button btnSaveAddGroup;
     private EditText edtNameGroup;
     private Dialog dialog;
+    private EditNameGroupListener listener;
 
-    public static AddGroupDialog sINSTANCE;
-    public static AddGroupDialog getInstance(){
-        if(sINSTANCE == null){
-            sINSTANCE = new AddGroupDialog();
-        }
-        return sINSTANCE;
+    public AddGroupDialog(EditNameGroupListener listener){
+        this.listener = listener;
     }
 
     @Nullable
@@ -93,7 +90,6 @@ public class AddGroupDialog extends DialogFragment implements View.OnClickListen
                 String nameGroup = edtNameGroup.getText().toString();
                 if(!TextUtils.isEmpty(edtNameGroup.getText())){
                     // Return input text back to activity through the implemented listener
-                    EditNameGroupListener listener = (EditNameGroupListener)getActivity();
                     listener.onFinishEditDialog(nameGroup);
                 }
                 dismiss();

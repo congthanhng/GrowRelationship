@@ -18,6 +18,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.spark.cong.growrelationship.Commons.GroupListener;
 import com.spark.cong.growrelationship.View.Activity.GroupPeopleActivity;
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
@@ -35,7 +36,7 @@ import java.util.List;
 import static com.spark.cong.growrelationship.Commons.Constant.*;
 
 
-public class MainActivity extends AppCompatActivity implements AddGroupDialog.EditNameGroupListener, GroupItemClickListener, EditGroupDialog.EditGroupListener, PeopleFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements  GroupItemClickListener, EditGroupDialog.EditGroupListener, PeopleFragment.OnListFragmentInteractionListener, GroupListener {
     private RecyclerView recyclerView;
     private GroupViewModel groupViewModel;
     private Button btnAddGroup;
@@ -72,39 +73,52 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
 
         //add Fragment to tab
         addFragmentToViewPaper();
+
         mViewpaper2.setAdapter(tabAdapter);
         //link Tablayout to ViewPaper2
         new TabLayoutMediator(mTabs, mViewpaper2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                tab.setText("tab" + position);
+                switch (position){
+                    //new feed
+                    case 0 : {
+                        tab.setIcon(R.drawable.icon_friendship);
+                    }break;
+                    //people
+                    case 1:{
+                        tab.setIcon(R.drawable.ic_person_outline_black_24dp);
+                    }break;
+                    //group
+                    case 2:{
+                        tab.setIcon(R.drawable.ic_people_outline_black_24dp);
+                    }break;
+                }
             }
         }).attach();
 
 
-        // button add
-//        btnAddGroup = (Button) findViewById(R.id.btn_add_group);
+    }
+    /**
+     * init, set listener of Views
+     */
+    public void setListener() {
 
-        //RecyclerView init
-//        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewGroup);
-//        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, SPAN_COUNT);
-//        final GroupRecyclerAdapter adapter = new GroupRecyclerAdapter(this, this);
-//        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.hasFixedSize();
-//        recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING, SPAN_COUNT)); // spacing between items
+        //set listener when item tab selected
+        mViewpaper2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                //set icon when tab is selected or not
+                for (int i = 0; i < TAB_SIZE; i++){
+                    if(i == position){
+                        mTabs.getTabAt(i).setIcon(tabSelected[i]);
+                    }else {
+                        mTabs.getTabAt(i).setIcon(tabUnSelected[i]);
+                    }
+                }
+            }
+        });
 
-        //init viewModel
-//        groupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
-
-        //LiveData
-//        groupViewModel.getAllGroup().observe(this, new Observer<List<Group>>() {
-//            @Override
-//            public void onChanged(List<Group> groups) {
-//                adapter.setData(groups);
-//                listGroup = groups;
-//            }
-//        });
     }
 
     /**
@@ -114,23 +128,6 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
         tabAdapter.addFragment(InteractiveFragment.newInstance("ok","nothing"));
         tabAdapter.addFragment(GroupFragment.newInstance());
         tabAdapter.addFragment(PeopleFragment.newInstance(1));
-    }
-
-
-    /**
-     * init, set listener of Views
-     */
-    public void setListener() {
-        // add group button listener
-//        btnAddGroup.setOnClickListener(mOnClickListener);
-
-        //set listener when item tab selected
-        mViewpaper2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-            }
-        });
     }
 
     /**
@@ -143,45 +140,21 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
                 case R.id.btn_add_group: {
                     Toast.makeText(getApplicationContext(), "addGroup", Toast.LENGTH_SHORT).show();
 //                    showDialog();
-                    AddGroupDialog addGroupDialog = new AddGroupDialog();
-                    addGroupDialog.show(getSupportFragmentManager(), "group");
+//                    AddGroupDialog addGroupDialog = new AddGroupDialog(this);
+//                    addGroupDialog.show(getSupportFragmentManager(), "group");
                 }
                 break;
             }
         }
     };
 
-    /**
-     * show dialog flexiable with others screen size
-     */
-    public void showDialog() {
-        boolean isLargeLayout = getResources().getBoolean(R.bool.large_layout);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        AddGroupDialog newFragment = new AddGroupDialog();
-
-        if (isLargeLayout) {
-            // The device is using a large layout, so show the fragment as a dialog
-            newFragment.show(fragmentManager, "group");
-        } else {
-            // The device is smaller, so show the fragment fullscreen
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            // For a little polish, specify a transition animation
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            // To make it fullscreen, use the 'content' root view as the container
-            // for the fragment, which is always the root view for the activity
-            transaction.add(android.R.id.content, newFragment)
-                    .addToBackStack(null).commit();
-        }
-
-    }
-
     //data from dialog addGroup
-    @Override
-    public void onFinishEditDialog(String inputText) {
-        Toast.makeText(getApplicationContext(), inputText, Toast.LENGTH_SHORT).show();
-        Group group = new Group(inputText);
-        groupViewModel.insertGroup(group);
-    }
+//    @Override
+//    public void onFinishEditDialog(String inputText) {
+//        Toast.makeText(getApplicationContext(), inputText, Toast.LENGTH_SHORT).show();
+//        Group group = new Group(inputText);
+//        groupViewModel.insertGroup(group);
+//    }
 
     @Override
     public void onClick(View view, final int position) {
@@ -266,5 +239,18 @@ public class MainActivity extends AppCompatActivity implements AddGroupDialog.Ed
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
         Toast.makeText(getApplicationContext(),""+item.content.toString(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClickGroupListener(View v) {
+        switch (v.getId()){
+            case R.id.btn_add_group:{
+                Toast.makeText(getApplicationContext(), "you want to add", Toast.LENGTH_SHORT).show();
+                Log.i("TESTLISTENER", "onClickGroupListener: hfghfghhf");
+//                AddGroupDialog addGroupDialog = new AddGroupDialog();
+//                addGroupDialog.show(getSupportFragmentManager(), "group");
+            }break;
+        }
+
     }
 }
