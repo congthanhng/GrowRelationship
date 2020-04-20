@@ -1,6 +1,7 @@
 package com.spark.cong.growrelationship.View.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,11 @@ import com.spark.cong.growrelationship.R;
 import java.util.List;
 
 public class PeopleRecyclerAdapter extends RecyclerView.Adapter<PeopleRecyclerAdapter.PeopleViewHolder> {
-    private Context context;
     private List<People> mPeoples;
+    private Context context;
     public PeopleRecyclerAdapter(Context context){
-        this.context= context;
+        this.context = context;
     }
-
     @NonNull
     @Override
     public PeopleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,8 +46,11 @@ public class PeopleRecyclerAdapter extends RecyclerView.Adapter<PeopleRecyclerAd
 
     //setData
     public void setData(List<People> lstPeople){
-        this.mPeoples = lstPeople;
-        notifyDataSetChanged();
+        Log.i("sdfsf", "setData: sdfafaf");
+        if(lstPeople!=null){
+            this.mPeoples = lstPeople;
+            notifyDataSetChanged();
+        }
     }
 
     //view holder
