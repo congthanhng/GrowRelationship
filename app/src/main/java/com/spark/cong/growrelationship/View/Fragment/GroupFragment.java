@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
 import com.spark.cong.growrelationship.Commons.GroupItemClickListener;
+import com.spark.cong.growrelationship.Commons.GroupItemLongClickListener;
 import com.spark.cong.growrelationship.Commons.GroupListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
 import com.spark.cong.growrelationship.R;
@@ -38,13 +39,12 @@ import java.util.List;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
 
-public class GroupFragment extends Fragment implements GroupItemClickListener,View.OnClickListener, AddGroupDialog.EditNameGroupListener {
+public class GroupFragment extends Fragment implements GroupItemClickListener, GroupItemLongClickListener,View.OnClickListener, AddGroupDialog.EditNameGroupListener {
     private GroupViewModel mViewModel;
     private RecyclerView recyclerView;
     private Button btnAddGroup;
     private List<Group> listGroup;
     private GroupRecyclerAdapter adapter;
-    private GroupListener listener;
     private FragmentActivity myContext;
 
     public static GroupFragment newInstance() {
@@ -55,11 +55,10 @@ public class GroupFragment extends Fragment implements GroupItemClickListener,Vi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_group, container, false);
-
         //recyclerView
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerViewGroup);
         recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(),SPAN_COUNT));
-        adapter = new GroupRecyclerAdapter(view.getContext(),this);
+        adapter = new GroupRecyclerAdapter(view.getContext(),this,this);
         recyclerView.setAdapter(adapter);
         recyclerView.hasFixedSize();
         recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING, SPAN_COUNT)); // spacing between items
@@ -81,8 +80,13 @@ public class GroupFragment extends Fragment implements GroupItemClickListener,Vi
         mViewModel.getAllGroup().observe(getViewLifecycleOwner(), new Observer<List<Group>>() {
             @Override
             public void onChanged(List<Group> groups) {
-                adapter.setData(groups);
-                listGroup = groups;
+                if(groups!=null){
+                    adapter.setData(groups);
+                    listGroup = groups;
+                }else{
+                    Toast.makeText(getContext(),"Please create a new group",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         // TODO: Use the ViewModel
@@ -95,19 +99,8 @@ public class GroupFragment extends Fragment implements GroupItemClickListener,Vi
     }
 
     @Override
-    public void onClick(View view, int position) {
-
-    }
-
-    @Override
-    public void onLongClick(View view, int position) {
-        Log.d("TEST", "onLongClick: clicked" + position);
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()){
-
             //show AddGroupDialog
             case R.id.btn_add_group:{
                 AddGroupDialog addGroupDialog = new AddGroupDialog(this);
@@ -125,35 +118,20 @@ public class GroupFragment extends Fragment implements GroupItemClickListener,Vi
         mViewModel.insertGroup(group);
     }
 
+    //item click listener
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(myContext,"itemClick"+position,Toast.LENGTH_SHORT).show();
+    }
 
-//    public void showDialog(){
-//        dialog = new Dialog(getActivity());
-//        View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_add_group,null);
-//        dialog.setContentView(v);
-//
-//        ImageButton btnCloseDialog = (ImageButton) getView().findViewById(R.id.btn_close_add_group);
-//        Button btnSaveDialog = (Button) getView().findViewById(R.id.btn_save_add_group);
-//        final EditText edtNameGroup = (EditText) getView().findViewById(R.id.edt_input_name_group);
-//
-//        btnCloseDialog.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//        btnSaveDialog.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(!TextUtils.isEmpty(edtNameGroup.getText().toString())){
-//                    dialog.dismiss();
-//                    mViewModel.insertGroup(new Group(edtNameGroup.getText().toString()));
-//                }
-//                else{
-//                    Toast.makeText(getContext(),"Please input text before Save",Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//        dialog.show();
-//    }
+    //item long click listener
+    @Override
+    public void onItemLongClick(View view, int position) {
+        Toast.makeText(myContext,"itemLongClick"+position,Toast.LENGTH_SHORT).show();
+        GroupBottomSheetFragment groupBottomSheetFragment = new GroupBottomSheetFragment();
+        groupBottomSheetFragment.show(myContext.getSupportFragmentManager(),"group_bottom_sheet");
+
+    }
+
 
 }

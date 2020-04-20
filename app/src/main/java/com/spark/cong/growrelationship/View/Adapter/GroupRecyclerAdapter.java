@@ -12,46 +12,38 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
 import com.spark.cong.growrelationship.Commons.GroupItemClickListener;
+import com.spark.cong.growrelationship.Commons.GroupItemLongClickListener;
 import com.spark.cong.growrelationship.R;
 
 import java.util.List;
 
-public class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdapter.GpeopleViewHolder> {
+public class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdapter.GroupViewHolder> {
 
     private List<Group> lstGroupPeople;
     private Context context;
-    private GroupItemClickListener mListener;
+    private GroupItemClickListener itemClickListener;
+    private GroupItemLongClickListener itemLongClickListener;
 
-    public GroupRecyclerAdapter(Context context, GroupItemClickListener listener) {
+    public GroupRecyclerAdapter(Context context, GroupItemClickListener listener,GroupItemLongClickListener longListener) {
         this.context = context;
-        this.mListener = listener;
+        this.itemClickListener = listener;
+        this.itemLongClickListener = longListener;
     }
 
     @NonNull
     @Override
-    public GpeopleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group, parent, false);
-        return new GpeopleViewHolder(v, mListener);
+        return new GroupViewHolder(v, itemClickListener,itemLongClickListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final GpeopleViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final GroupViewHolder holder, int position) {
         if (lstGroupPeople != null) {
             Group group = lstGroupPeople.get(position);
             final String nameOfGroupPeople = group.getGroupName();
             holder.txt_g_name.setText(nameOfGroupPeople);
-            holder.btnEditGroup.setVisibility(View.GONE);
-            holder.btnDeleteGroup.setVisibility(View.GONE);
 
-            //item onClick listener
-            /*holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(holder.itemView.getContext(), "You select " + nameOfGroupPeople, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, PeopleActivity.class);
-                    ((Activity) context).startActivityForResult(intent, REQUEST_CODE_PEOPLE); //cast context to activity type to use startActivityForResult()
-                }
-            });*/
         }
     }
 
@@ -65,45 +57,35 @@ public class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdap
 
     //setData
     public void setData(List<Group> groups) {
-        this.lstGroupPeople = groups;
-        notifyDataSetChanged();
+        if (groups!=null){
+            this.lstGroupPeople = groups;
+            notifyDataSetChanged();
+        }
     }
 
     //viewHolder
-    public class GpeopleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
+    public class GroupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
         private TextView txt_g_name;
-        private GroupItemClickListener listener;
-        private ImageButton btnDeleteGroup,btnEditGroup;
+        private GroupItemClickListener itemClick;
+        private GroupItemLongClickListener itemLongClick;
 //        private CardView cardView_name;
 
-        public GpeopleViewHolder(@NonNull View itemView, GroupItemClickListener listeners) {
+        public GroupViewHolder(@NonNull View itemView, GroupItemClickListener itemClick, GroupItemLongClickListener itemLongClick) {
             super(itemView);
             txt_g_name = (TextView) itemView.findViewById(R.id.txt_g_name);
-            btnDeleteGroup = (ImageButton) itemView.findViewById(R.id.btn_delete_group);
-            btnEditGroup = (ImageButton) itemView.findViewById(R.id.btn_edit_group);
-            this.listener = listeners;
+            this.itemClick = itemClick;
+            this.itemLongClick = itemLongClick;
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-            btnEditGroup.setOnClickListener(this);
-            btnDeleteGroup.setOnClickListener(this);
 //            cardView_name = (CardView) itemView.findViewById(R.id.cardView_g_name);
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.btn_delete_group : {
-                    btnDeleteGroup.setVisibility(View.GONE);
-                    btnEditGroup.setVisibility(View.GONE);
-                }
-                case R.id.btn_edit_group:{
-                    btnDeleteGroup.setVisibility(View.GONE);
-                    btnEditGroup.setVisibility(View.GONE);
-                    listener.onClick(v,getAdapterPosition());
-                }break;
                 default: {
-                    listener.onClick(v,getAdapterPosition());
+                    itemClick.onItemClick(v,getAdapterPosition());
                 }
             }
 //            listener.onClick(v,getAdapterPosition());
@@ -111,9 +93,7 @@ public class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdap
 
         @Override
         public boolean onLongClick(View v) {
-            listener.onLongClick(v,getAdapterPosition());
-            btnDeleteGroup.setVisibility(View.VISIBLE);
-            btnEditGroup.setVisibility(View.VISIBLE);
+            itemLongClick.onItemLongClick(v,getAdapterPosition());
             return true;
         }
     }
