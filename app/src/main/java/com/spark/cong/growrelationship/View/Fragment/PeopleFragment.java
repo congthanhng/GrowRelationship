@@ -92,7 +92,7 @@ public class PeopleFragment extends Fragment implements View.OnClickListener {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,SPAN_COUNT));
+        recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,1));
         adapter = new PeopleRecyclerAdapter(view.getContext());
 //            recyclerView.setAdapter(new PeopleRecyclerAdapter(DummyContent.ITEMS, mListener));
         recyclerView.setAdapter(adapter);
