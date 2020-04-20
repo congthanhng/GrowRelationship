@@ -2,9 +2,13 @@ package com.spark.cong.growrelationship.View.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
@@ -34,7 +39,7 @@ import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class PeopleFragment extends Fragment {
+public class PeopleFragment extends Fragment implements View.OnClickListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -42,6 +47,8 @@ public class PeopleFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
+    private Button button;
+    private TextInputEditText editText;
     private PeopleViewModel mViewModel;
     private RecyclerView recyclerView;
     private PeopleRecyclerAdapter adapter;
@@ -78,7 +85,6 @@ public class PeopleFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_people, container, false);
 
         // Set the adapter
-
         Context context = view.getContext();
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_people);
         if (mColumnCount <= 1) {
@@ -91,6 +97,9 @@ public class PeopleFragment extends Fragment {
 //            recyclerView.setAdapter(new PeopleRecyclerAdapter(DummyContent.ITEMS, mListener));
         recyclerView.setAdapter(adapter);
 
+        button = (Button)view.findViewById(R.id.button_test_people);
+        editText= (TextInputEditText) view.findViewById(R.id.edt_test_people);
+        button.setOnClickListener(this);
         return view;
     }
 
@@ -126,6 +135,31 @@ public class PeopleFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.button_test_people:{
+                if(!TextUtils.isEmpty(editText.getText().toString())){
+                    mViewModel.insertPeople(new People(editText.getText().toString()));
+                    editText.setText("");
+                    closeKeyBoard();
+
+                }else{
+                    Toast.makeText(getContext(),"Please input before add",Toast.LENGTH_SHORT).show();
+                }
+            }break;
+        }
+
+    }
+    //close keyboard after saved
+    public void closeKeyBoard(){
+        View view = getActivity().getCurrentFocus();
+        if(view != null){
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+        }
     }
 
     /**

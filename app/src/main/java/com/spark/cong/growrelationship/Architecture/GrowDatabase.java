@@ -56,7 +56,7 @@ public abstract class GrowDatabase extends RoomDatabase {
             sINSTANCE.groupDAO().insertGroup(new Group("Work"));
             sINSTANCE.groupDAO().insertGroup(new Group("Gym"));
             sINSTANCE.groupDAO().insertGroup(new Group("Football"));
-            sINSTANCE.peopleDAO().insertPeople(new People("TCong"));
+//            sINSTANCE.peopleDAO().insertPeople(new People("TCong"));
             return null;
         }
     }
