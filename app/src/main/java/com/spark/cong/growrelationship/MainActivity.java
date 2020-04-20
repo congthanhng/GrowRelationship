@@ -37,7 +37,7 @@ import java.util.List;
 import static com.spark.cong.growrelationship.Commons.Constant.*;
 
 
-public class MainActivity extends AppCompatActivity implements  GroupItemClickListener, EditGroupDialog.EditGroupListener, PeopleFragment.OnListFragmentInteractionListener, GroupListener {
+public class MainActivity extends AppCompatActivity implements  EditGroupDialog.EditGroupListener, PeopleFragment.OnListFragmentInteractionListener, GroupListener {
     private RecyclerView recyclerView;
     private GroupViewModel groupViewModel;
     private Button btnAddGroup;
@@ -79,20 +79,7 @@ public class MainActivity extends AppCompatActivity implements  GroupItemClickLi
         new TabLayoutMediator(mTabs, mViewpaper2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                switch (position){
-                    //new feed
-                    case 0 : {
-                        tab.setIcon(R.drawable.icon_friendship);
-                    }break;
-                    //people
-                    case 1:{
-                        tab.setIcon(R.drawable.ic_person_outline_black_24dp);
-                    }break;
-                    //group
-                    case 2:{
-                        tab.setIcon(R.drawable.ic_people_outline_black_24dp);
-                    }break;
-                }
+//                tab.setIcon(tabUnSelected[position]);
             }
         }).attach();
 
@@ -126,8 +113,8 @@ public class MainActivity extends AppCompatActivity implements  GroupItemClickLi
      */
     public void addFragmentToViewPaper(){
         tabAdapter.addFragment(InteractiveFragment.newInstance("ok","nothing"));
-        tabAdapter.addFragment(GroupFragment.newInstance());
         tabAdapter.addFragment(PeopleFragment.newInstance(1));
+        tabAdapter.addFragment(GroupFragment.newInstance());
     }
 
     /**
@@ -156,79 +143,54 @@ public class MainActivity extends AppCompatActivity implements  GroupItemClickLi
 //        groupViewModel.insertGroup(group);
 //    }
 
-    @Override
-    public void onClick(View view, final int position) {
-        switch (view.getId()) {
-            case R.id.btn_delete_group: {
-//                Toast.makeText(getApplicationContext(),"do you want to delete?",Toast.LENGTH_SHORT).show();
-//                ConfirmDeleteGroupDialog confirmDeleteGroupDialog = new ConfirmDeleteGroupDialog();
-//                confirmDeleteGroupDialog.show(getSupportFragmentManager(), "confirm_delete");
-                new AlertDialog.Builder(this)
-                        .setMessage(R.string.confirm_delete_group)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                groupViewModel.deleteGroupById(listGroup.get(position).getGroupId());
-                            }
-                        }).setNegativeButton(R.string.no, null).show();
-//                GroupViewModel.deleteGroupById(listGroup.get(position).getId());
-            }
-            break;
-            case R.id.btn_edit_group: {
-                /*final Dialog dialog = new Dialog(getApplicationContext());
-                dialog.setContentView(R.layout.dialog_add_group);
-                Button btnSaveEdit = (Button) dialog.findViewById(R.id.btn_save_add_group);
-                final EditText edtEditChange = (EditText)dialog.findViewById(R.id.edt_input_name_group);
-                ImageButton btnCloseEdit = (ImageButton)dialog.findViewById(R.id.btn_close_add_group);
-                dialog.show();
-                btnSaveEdit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(!TextUtils.isEmpty(edtEditChange.getText().toString())){
-                            GroupPeole groupPeole = listGroup.get(position);
-                            groupPeole.setName(edtEditChange.getText().toString());
-                            GroupViewModel.updateGroup(groupPeole);
-                        }else dialog.dismiss();
-                    }
-                });
-                btnCloseEdit.setOnClickListener(new View.OnClickListener() {
-                    @Override-
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });*/
+//    @Override
+//    public void onClick(View view, final int position) {
+//        switch (view.getId()) {
+//            case R.id.btn_delete_group: {
+////
+//                new AlertDialog.Builder(this)
+//                        .setMessage(R.string.confirm_delete_group)
+//                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                groupViewModel.deleteGroupById(listGroup.get(position).getGroupId());
+//                            }
+//                        }).setNegativeButton(R.string.no, null).show();
+////                GroupViewModel.deleteGroupById(listGroup.get(position).getId());
+//            }
+//            break;
+//            case R.id.btn_edit_group: {
+//
+////                Toast.makeText(getApplicationContext(), "do you want to dedit?", Toast.LENGTH_SHORT).show();
+//                Group group = listGroup.get(position);
+//                EditGroupDialog editGroupDialog = new EditGroupDialog();
+//                Bundle editGroupBundle = new Bundle();
+//                editGroupBundle.putSerializable("edit_group",group);
+//                editGroupDialog.setArguments(editGroupBundle);
+//                editGroupDialog.show(getSupportFragmentManager(),"edit_group");
+//            }
+//            break;
+//            default: {
+//                Log.d("TEST", "onClick: clicked" + position);
+//                Intent intent = new Intent(this, GroupPeopleActivity.class);
+//                Bundle bundle = new Bundle();
+//                intent.putExtra(INTENT_MAIN_TO_PEOPLE,bundle);
+//                bundle.putInt(BUNDLE_MAIN_TO_PEOPLE,listGroup.get(position).getGroupId());
+//                startActivityForResult(intent, REQUEST_CODE_PEOPLE);
+//            }
+//        }
+//
+//        /*Log.d("TEST", "onClick: clicked" + position);
+//        Intent intent = new Intent(this, PeopleActivity.class);
+//        startActivityForResult(intent, REQUEST_CODE_PEOPLE);*/
+//    }
 
-
-//                Toast.makeText(getApplicationContext(), "do you want to dedit?", Toast.LENGTH_SHORT).show();
-                Group group = listGroup.get(position);
-                EditGroupDialog editGroupDialog = new EditGroupDialog();
-                Bundle editGroupBundle = new Bundle();
-                editGroupBundle.putSerializable("edit_group",group);
-                editGroupDialog.setArguments(editGroupBundle);
-                editGroupDialog.show(getSupportFragmentManager(),"edit_group");
-            }
-            break;
-            default: {
-                Log.d("TEST", "onClick: clicked" + position);
-                Intent intent = new Intent(this, GroupPeopleActivity.class);
-                Bundle bundle = new Bundle();
-                intent.putExtra(INTENT_MAIN_TO_PEOPLE,bundle);
-                bundle.putInt(BUNDLE_MAIN_TO_PEOPLE,listGroup.get(position).getGroupId());
-                startActivityForResult(intent, REQUEST_CODE_PEOPLE);
-            }
-        }
-
-        /*Log.d("TEST", "onClick: clicked" + position);
-        Intent intent = new Intent(this, PeopleActivity.class);
-        startActivityForResult(intent, REQUEST_CODE_PEOPLE);*/
-    }
-
-    @Override
-    public void onLongClick(View view, int position) {
-
-        Log.d("TEST", "onLongClick: clicked" + position);
-
-    }
+//    @Override
+//    public void onLongClick(View view, int position) {
+//
+//        Log.d("TEST", "onLongClick: clicked" + position);
+//
+//    }
 
     @Override
     public void onFinnishEdit(Group group, String change) {
