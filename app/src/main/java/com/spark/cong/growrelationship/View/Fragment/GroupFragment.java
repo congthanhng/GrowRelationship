@@ -91,6 +91,7 @@ public class GroupFragment extends Fragment implements GroupItemClickListener,Vi
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        myContext = getActivity();
     }
 
     @Override

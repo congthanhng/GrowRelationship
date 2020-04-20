@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements  GroupItemClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //init, set and map view
         setMapView();
 
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements  GroupItemClickLi
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                //set icon when tab is selected or not
+                //set icon when tab is selected or not+
                 for (int i = 0; i < TAB_SIZE; i++){
                     if(i == position){
                         mTabs.getTabAt(i).setIcon(tabSelected[i]);

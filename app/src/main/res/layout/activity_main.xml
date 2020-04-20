@@ -33,6 +33,16 @@
             android:text="Wednesday" />
     </com.google.android.material.tabs.TabLayout>
 
+    <View
+        android:id="@+id/divine_top"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#A6A4A4"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tab_main" />
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpapter_of_tab"
         android:layout_width="match_parent"
@@ -40,7 +50,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tab_main"/>
+        app:layout_constraintTop_toBottomOf="@+id/divine_top"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
