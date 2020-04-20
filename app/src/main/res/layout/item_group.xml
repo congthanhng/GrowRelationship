@@ -14,24 +14,6 @@
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:background="@drawable/bg_item_gridview"/>
 
-    <ImageButton
-        android:id="@+id/btn_delete_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_close_black_20dp"
-        android:background="@null"
-        android:layout_margin="5dp"
-        android:layout_gravity="end"
-        />
-    <ImageButton
-        android:id="@+id/btn_edit_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_edit_black_20dp"
-        android:background="@null"
-        android:layout_margin="5dp"
-        android:layout_gravity="end|center_vertical"
-        />
 
 
 </FrameLayout>
