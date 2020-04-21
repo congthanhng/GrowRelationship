@@ -31,4 +31,7 @@ public class Constant {
     };
 
     public static final int TAB_SIZE = 3;
+
+    public static String POPUP_CONSTANT = "mPopup";
+    public static String POPUP_FORCE_SHOW_ICON = "setForceShowIcon";
 }

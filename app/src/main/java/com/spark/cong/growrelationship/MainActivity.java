@@ -4,14 +4,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,12 +38,14 @@ import com.spark.cong.growrelationship.View.Fragment.InteractiveFragment;
 import com.spark.cong.growrelationship.View.Fragment.PeopleFragment;
 import com.spark.cong.growrelationship.View.Dummy.DummyContent;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import static com.spark.cong.growrelationship.Commons.Constant.*;
 
 
-public class MainActivity extends AppCompatActivity implements  EditGroupDialog.EditGroupListener, PeopleFragment.OnListFragmentInteractionListener, GroupListener {
+public class MainActivity extends AppCompatActivity implements  EditGroupDialog.EditGroupListener, PeopleFragment.OnListFragmentInteractionListener, PopupMenu.OnMenuItemClickListener {
     private RecyclerView recyclerView;
     private GroupViewModel groupViewModel;
     private Button btnAddGroup;
@@ -45,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements  EditGroupDialog.
     private TabLayout mTabs;
     private ViewPager2 mViewpaper2;
     private TabFragmentAdapter tabAdapter;
+    private ImageView imgAvatarAccount;
+    private FrameLayout layoutAvatarAccount;
 
     //onCreate
     @Override
@@ -117,23 +127,32 @@ public class MainActivity extends AppCompatActivity implements  EditGroupDialog.
         tabAdapter.addFragment(GroupFragment.newInstance());
     }
 
-    /**
-     * Init listener
-     */
-    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.btn_add_group: {
-                    Toast.makeText(getApplicationContext(), "addGroup", Toast.LENGTH_SHORT).show();
-//                    showDialog();
-//                    AddGroupDialog addGroupDialog = new AddGroupDialog(this);
-//                    addGroupDialog.show(getSupportFragmentManager(), "group");
+    //show popupMenu when click avatar account (config listener in layout xml)
+    public void showPopup(View v){
+        PopupMenu popupMenu = new PopupMenu(this,v);
+        popupMenu.setOnMenuItemClickListener(this);
+        popupMenu.inflate(R.menu.popup_menu_avatar_account);
+
+        //show icon with text item menu
+        try {
+            // Reflection apis to enforce show icon
+            Field[] fields = popupMenu.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if (field.getName().equals(POPUP_CONSTANT)) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popupMenu);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod(POPUP_FORCE_SHOW_ICON, boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
                 }
-                break;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    };
+        popupMenu.show();
+
+    }
 
     //data from dialog addGroup
 //    @Override
@@ -203,16 +222,27 @@ public class MainActivity extends AppCompatActivity implements  EditGroupDialog.
         Toast.makeText(getApplicationContext(),""+item.content.toString(),Toast.LENGTH_SHORT).show();
     }
 
+
+    //menu item listener
     @Override
-    public void onClickGroupListener(View v) {
-        switch (v.getId()){
-            case R.id.btn_add_group:{
-                Toast.makeText(getApplicationContext(), "you want to add", Toast.LENGTH_SHORT).show();
-                Log.i("TESTLISTENER", "onClickGroupListener: hfghfghhf");
-//                AddGroupDialog addGroupDialog = new AddGroupDialog();
-//                addGroupDialog.show(getSupportFragmentManager(), "group");
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.account_profile:{
+                Toast.makeText(getApplicationContext(),"Your profile",Toast.LENGTH_SHORT).show();
+            }break;
+            case R.id.settings:{
+                Toast.makeText(getApplicationContext(),"Settings",Toast.LENGTH_SHORT).show();
+            }break;
+            case R.id.support_help:{
+                Toast.makeText(getApplicationContext(),"Help",Toast.LENGTH_SHORT).show();
+            }break;
+            case R.id.about_us:{
+                Toast.makeText(getApplicationContext(),"About us",Toast.LENGTH_SHORT).show();
+            }break;
+            case R.id.account_logout:{
+                Toast.makeText(getApplicationContext(),"Log out",Toast.LENGTH_SHORT).show();
             }break;
         }
-
+        return false;
     }
 }
