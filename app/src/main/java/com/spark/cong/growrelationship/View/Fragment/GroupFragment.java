@@ -133,5 +133,9 @@ public class GroupFragment extends Fragment implements GroupItemClickListener, G
 
     }
 
+    public void addNewGroup(){
+        AddGroupDialog addGroupDialog = new AddGroupDialog(this);
+        addGroupDialog.show(myContext.getSupportFragmentManager(), "group");
+    }
 
 }

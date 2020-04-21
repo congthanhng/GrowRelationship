@@ -40,4 +40,8 @@ public class TabFragmentAdapter extends FragmentStateAdapter {
         lstFragment.add(fragment);
     }
 
+    public List<Fragment> getLstFragment(){
+        return lstFragment;
+    }
+
 }

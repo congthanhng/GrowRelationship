@@ -34,4 +34,10 @@ public class Constant {
 
     public static String POPUP_CONSTANT = "mPopup";
     public static String POPUP_FORCE_SHOW_ICON = "setForceShowIcon";
+
+    public static final int[] fabIconArray = {
+            R.drawable.ic_add_white_24dp,
+            R.drawable.ic_person_add_white_24dp,
+            R.drawable.ic_group_add_white_24dp
+    };
 }
