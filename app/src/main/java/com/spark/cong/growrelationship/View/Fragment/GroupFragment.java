@@ -1,34 +1,27 @@
 package com.spark.cong.growrelationship.View.Fragment;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
-import com.spark.cong.growrelationship.Commons.GroupItemClickListener;
-import com.spark.cong.growrelationship.Commons.GroupItemLongClickListener;
-import com.spark.cong.growrelationship.Commons.GroupListener;
+import com.spark.cong.growrelationship.Commons.ItemClickListener;
+import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
 import com.spark.cong.growrelationship.R;
 import com.spark.cong.growrelationship.View.Adapter.GroupRecyclerAdapter;
@@ -39,16 +32,24 @@ import java.util.List;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
 
-public class GroupFragment extends Fragment implements GroupItemClickListener, GroupItemLongClickListener,View.OnClickListener, AddGroupDialog.EditNameGroupListener {
+public class GroupFragment extends Fragment implements ItemClickListener, ItemLongClickListener,View.OnClickListener, AddGroupDialog.EditNameGroupListener {
     private GroupViewModel mViewModel;
     private RecyclerView recyclerView;
-    private Button btnAddGroup;
     private List<Group> listGroup;
     private GroupRecyclerAdapter adapter;
     private FragmentActivity myContext;
 
     public static GroupFragment newInstance() {
-        return new GroupFragment();
+        GroupFragment fragment = new GroupFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -62,11 +63,6 @@ public class GroupFragment extends Fragment implements GroupItemClickListener, G
         recyclerView.setAdapter(adapter);
         recyclerView.hasFixedSize();
         recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING, SPAN_COUNT)); // spacing between items
-
-        // button add
-        btnAddGroup = (Button) view.findViewById(R.id.btn_add_group);
-
-        btnAddGroup.setOnClickListener(this);
 
         return view;
 
@@ -100,13 +96,6 @@ public class GroupFragment extends Fragment implements GroupItemClickListener, G
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            //show AddGroupDialog
-            case R.id.btn_add_group:{
-                AddGroupDialog addGroupDialog = new AddGroupDialog(this);
-                addGroupDialog.show(myContext.getSupportFragmentManager(), "group");
-            }break;
-        }
     }
 
     /*
@@ -133,6 +122,7 @@ public class GroupFragment extends Fragment implements GroupItemClickListener, G
 
     }
 
+    //show dialog addgroup when click fab
     public void addNewGroup(){
         AddGroupDialog addGroupDialog = new AddGroupDialog(this);
         addGroupDialog.show(myContext.getSupportFragmentManager(), "group");

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
+import com.spark.cong.growrelationship.Commons.ItemClickListener;
+import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
 import com.spark.cong.growrelationship.R;
 import com.spark.cong.growrelationship.View.Adapter.PeopleRecyclerAdapter;
@@ -31,7 +32,6 @@ import com.spark.cong.growrelationship.View.Dummy.DummyContent.DummyItem;
 import java.util.List;
 
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
-import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
 
 /**
  * A fragment representing a list of Items.
@@ -39,7 +39,7 @@ import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class PeopleFragment extends Fragment implements View.OnClickListener {
+public class PeopleFragment extends Fragment implements View.OnClickListener, ItemClickListener, ItemLongClickListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -92,9 +92,11 @@ public class PeopleFragment extends Fragment implements View.OnClickListener {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
+        //item spacing
         recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,1));
-        adapter = new PeopleRecyclerAdapter(view.getContext());
-//            recyclerView.setAdapter(new PeopleRecyclerAdapter(DummyContent.ITEMS, mListener));
+        adapter = new PeopleRecyclerAdapter(view.getContext(),this,this);
+
+        //recyclerView.setAdapter(new PeopleRecyclerAdapter(DummyContent.ITEMS, mListener));
         recyclerView.setAdapter(adapter);
 
         button = (Button)view.findViewById(R.id.button_test_people);
@@ -160,6 +162,17 @@ public class PeopleFragment extends Fragment implements View.OnClickListener {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(),0);
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(getContext(),"item"+position,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+        Toast.makeText(getContext(),"longItem"+position,Toast.LENGTH_SHORT).show();
+
     }
 
     /**

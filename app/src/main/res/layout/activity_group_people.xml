@@ -36,6 +36,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_test"
-        tools:listitem="@layout/item_group_people"/>
+        tools:listitem="@layout/item_people"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

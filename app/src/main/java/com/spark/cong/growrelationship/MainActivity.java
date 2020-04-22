@@ -1,12 +1,9 @@
 package com.spark.cong.growrelationship;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
@@ -17,37 +14,33 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuBuilder;
-import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.spark.cong.growrelationship.Commons.GroupListener;
-import com.spark.cong.growrelationship.View.Activity.GroupPeopleActivity;
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
-import com.spark.cong.growrelationship.Commons.GroupItemClickListener;
 import com.spark.cong.growrelationship.View.Adapter.TabFragmentAdapter;
-import com.spark.cong.growrelationship.View.Dialog.AddGroupDialog;
 import com.spark.cong.growrelationship.View.Dialog.EditGroupDialog;
+import com.spark.cong.growrelationship.View.Dummy.DummyContent;
 import com.spark.cong.growrelationship.View.Fragment.GroupFragment;
 import com.spark.cong.growrelationship.View.Fragment.InteractiveFragment;
 import com.spark.cong.growrelationship.View.Fragment.PeopleFragment;
-import com.spark.cong.growrelationship.View.Dummy.DummyContent;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static com.spark.cong.growrelationship.Commons.Constant.*;
+import static com.spark.cong.growrelationship.Commons.Constant.POPUP_CONSTANT;
+import static com.spark.cong.growrelationship.Commons.Constant.POPUP_FORCE_SHOW_ICON;
+import static com.spark.cong.growrelationship.Commons.Constant.TAB_SIZE;
+import static com.spark.cong.growrelationship.Commons.Constant.fabIconArray;
+import static com.spark.cong.growrelationship.Commons.Constant.tabSelected;
+import static com.spark.cong.growrelationship.Commons.Constant.tabUnSelected;
 
 
 public class MainActivity extends AppCompatActivity implements EditGroupDialog.EditGroupListener, PeopleFragment.OnListFragmentInteractionListener, PopupMenu.OnMenuItemClickListener, View.OnClickListener {

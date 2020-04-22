@@ -47,7 +47,6 @@ public class AddGroupDialog extends DialogFragment implements View.OnClickListen
         btnSaveAddGroup = (Button) view.findViewById(R.id.btn_save_add_group);
         edtNameGroup = (EditText) view.findViewById(R.id.edt_input_name_group);
 
-
         //listener
         btnCloseAddGroup.setOnClickListener(this);
         btnSaveAddGroup.setOnClickListener(this);

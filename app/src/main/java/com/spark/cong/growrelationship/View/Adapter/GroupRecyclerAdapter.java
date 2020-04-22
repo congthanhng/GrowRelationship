@@ -4,15 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
-import com.spark.cong.growrelationship.Commons.GroupItemClickListener;
-import com.spark.cong.growrelationship.Commons.GroupItemLongClickListener;
+import com.spark.cong.growrelationship.Commons.ItemClickListener;
+import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
 import com.spark.cong.growrelationship.R;
 
 import java.util.List;
@@ -21,10 +20,10 @@ public class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdap
 
     private List<Group> lstGroupPeople;
     private Context context;
-    private GroupItemClickListener itemClickListener;
-    private GroupItemLongClickListener itemLongClickListener;
+    private ItemClickListener itemClickListener;
+    private ItemLongClickListener itemLongClickListener;
 
-    public GroupRecyclerAdapter(Context context, GroupItemClickListener listener,GroupItemLongClickListener longListener) {
+    public GroupRecyclerAdapter(Context context, ItemClickListener listener, ItemLongClickListener longListener) {
         this.context = context;
         this.itemClickListener = listener;
         this.itemLongClickListener = longListener;
@@ -66,11 +65,11 @@ public class GroupRecyclerAdapter extends RecyclerView.Adapter<GroupRecyclerAdap
     //viewHolder
     public class GroupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
         private TextView txt_g_name;
-        private GroupItemClickListener itemClick;
-        private GroupItemLongClickListener itemLongClick;
+        private ItemClickListener itemClick;
+        private ItemLongClickListener itemLongClick;
 //        private CardView cardView_name;
 
-        public GroupViewHolder(@NonNull View itemView, GroupItemClickListener itemClick, GroupItemLongClickListener itemLongClick) {
+        public GroupViewHolder(@NonNull View itemView, ItemClickListener itemClick, ItemLongClickListener itemLongClick) {
             super(itemView);
             txt_g_name = (TextView) itemView.findViewById(R.id.txt_g_name);
             this.itemClick = itemClick;

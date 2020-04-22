@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.spark.cong.growrelationship.Commons.ItemClickListener;
+import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
 import com.spark.cong.growrelationship.View.Adapter.PeopleRecyclerAdapter;
 import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
@@ -27,7 +29,7 @@ import java.util.List;
 
 import static com.spark.cong.growrelationship.Commons.Constant.*;
 
-public class PeopleActivity extends AppCompatActivity implements View.OnClickListener{
+public class PeopleActivity extends AppCompatActivity implements View.OnClickListener, ItemClickListener, ItemLongClickListener {
 
     private Button btnAddPeople;
     private TextInputEditText edtAddPeople;
@@ -73,7 +75,7 @@ public class PeopleActivity extends AppCompatActivity implements View.OnClickLis
         recyclerView = (RecyclerView) findViewById(R.id.recycler_people);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,1);
         recyclerView.setLayoutManager(layoutManager);
-        final PeopleRecyclerAdapter adapter = new PeopleRecyclerAdapter(this);
+        final PeopleRecyclerAdapter adapter = new PeopleRecyclerAdapter(this,this,this);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,1));
@@ -124,5 +126,15 @@ public class PeopleActivity extends AppCompatActivity implements View.OnClickLis
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(),0);
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+
     }
 }

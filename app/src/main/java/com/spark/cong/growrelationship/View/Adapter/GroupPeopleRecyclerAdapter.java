@@ -24,7 +24,7 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
     @NonNull
     @Override
     public GroupPeopleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group_people,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_people,parent,false);
         return new GroupPeopleViewHolder(v);
     }
 

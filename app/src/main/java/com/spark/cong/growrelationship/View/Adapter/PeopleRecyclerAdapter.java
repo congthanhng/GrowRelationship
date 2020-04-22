@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.spark.cong.growrelationship.Architecture.Entity.People;
+import com.spark.cong.growrelationship.Commons.ItemClickListener;
+import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
 import com.spark.cong.growrelationship.R;
 
 import java.util.List;
@@ -18,14 +20,18 @@ import java.util.List;
 public class PeopleRecyclerAdapter extends RecyclerView.Adapter<PeopleRecyclerAdapter.PeopleViewHolder> {
     private List<People> mPeoples;
     private Context context;
-    public PeopleRecyclerAdapter(Context context){
+    private ItemClickListener itemClickListener;
+    private ItemLongClickListener itemLongClickListener;
+    public PeopleRecyclerAdapter(Context context, ItemClickListener listener, ItemLongClickListener longListener){
         this.context = context;
+        this.itemClickListener = listener;
+        this.itemLongClickListener = longListener;
     }
     @NonNull
     @Override
     public PeopleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group_people,parent,false);
-        return new PeopleViewHolder(v);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_people,parent,false);
+        return new PeopleViewHolder(v,itemClickListener,itemLongClickListener);
     }
 
     @Override
@@ -54,11 +60,30 @@ public class PeopleRecyclerAdapter extends RecyclerView.Adapter<PeopleRecyclerAd
     }
 
     //view holder
-    public class PeopleViewHolder extends RecyclerView.ViewHolder{
+    public class PeopleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
         private TextView txtPeopleName;
-        public PeopleViewHolder(@NonNull View itemView) {
+        private ItemClickListener itemClick;
+        private ItemLongClickListener itemLongClick;
+        public PeopleViewHolder(@NonNull View itemView, ItemClickListener itemClickListener, ItemLongClickListener itemLongClickListener) {
             super(itemView);
             txtPeopleName = (TextView) itemView.findViewById(R.id.txt_gp_name);
+            this.itemClick = itemClickListener;
+            this.itemLongClick = itemLongClickListener;
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            itemClick.onItemClick(v,getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            itemLongClick.onItemLongClick(v,getAdapterPosition());
+            return true;
+        }
+
+
     }
 }

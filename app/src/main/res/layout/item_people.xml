@@ -5,9 +5,11 @@
 
 
     <LinearLayout
+        android:id="@+id/item_people"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_item_gridview"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:orientation="horizontal">
 
         <ImageView
@@ -18,7 +20,6 @@
             android:layout_weight="3"
             android:background="@drawable/bg_item_oval"
             android:scaleType="fitXY" />
-        />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,9 +31,9 @@
             <TextView
                 android:id="@+id/txt_gp_name"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:layout_margin="10dp"
                 android:gravity="left|center_vertical"
                 android:text="Family"
                 android:textSize="26sp"/>
