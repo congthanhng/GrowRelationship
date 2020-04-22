@@ -19,4 +19,8 @@ public interface PeopleDAO {
     //insert
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertPeople(People people);
+
+    //getPeopleById
+    @Query("SELECT * FROM people WHERE people_id = :id LIMIT 1")
+    People getPeopleById(int id);
 }

@@ -14,21 +14,39 @@ import java.util.List;
 public class PeopleRepository {
     private PeopleDAO peopleDAO;
 
+    /* -------------------------constructor--------------------------*/
     public PeopleRepository(Application application){
         GrowDatabase db = GrowDatabase.getInstance(application);
         peopleDAO = db.peopleDAO();
     }
 
+
+    /* -------------------------function--------------------------*/
     //get all
     public LiveData<List<People>> getAllPeople(){
         return peopleDAO.getAllPeople();
     }
 
-    //insert People
+    //insert a row
     public void insertPeople(People people){
         new InsertPeopleAsyncTask(peopleDAO).execute(people);
     }
 
+    //get row by id
+    public People getPeopleById(int id){
+        
+        try {
+            People people = new GetPeopleByIdAsyncTask(peopleDAO).execute(id).get();
+            return people;
+        }catch (Exception e){
+            throw new RuntimeException("error to get people");
+        }
+
+    }
+
+
+    /* -------------------------synchronous--------------------------*/
+    //synchronous of insertPeople
     public class InsertPeopleAsyncTask extends AsyncTask<People,Void,Void>{
         private PeopleDAO peopleDAO;
         public InsertPeopleAsyncTask(PeopleDAO peopleDAO){
@@ -40,4 +58,17 @@ public class PeopleRepository {
             return null;
         }
     }
+    //synchronous of getPeopleById
+    public class GetPeopleByIdAsyncTask extends AsyncTask<Integer,Void, People>{
+        private PeopleDAO peopleDAO;
+        public GetPeopleByIdAsyncTask(PeopleDAO peopleDAO){
+            this.peopleDAO = peopleDAO;
+        }
+        @Override
+        protected People doInBackground(Integer... integers) {
+            return peopleDAO.getPeopleById(integers[0]);
+        }
+
+    }
+
 }

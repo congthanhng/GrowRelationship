@@ -1,6 +1,7 @@
 package com.spark.cong.growrelationship.View.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -25,13 +26,17 @@ import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
 import com.spark.cong.growrelationship.Commons.ItemClickListener;
 import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
+import com.spark.cong.growrelationship.Commons.impl.CommonImpl;
 import com.spark.cong.growrelationship.R;
+import com.spark.cong.growrelationship.View.Activity.PeopleActivity;
 import com.spark.cong.growrelationship.View.Adapter.PeopleRecyclerAdapter;
 import com.spark.cong.growrelationship.View.Dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
+import static com.spark.cong.growrelationship.Commons.Constant.INTENT_MAIN_TO_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
+import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOPLE;
 
 /**
  * A fragment representing a list of Items.
@@ -47,11 +52,13 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
+    private CommonImpl mCommon = CommonImpl.getInstance();
     private Button button;
     private TextInputEditText editText;
     private PeopleViewModel mViewModel;
     private RecyclerView recyclerView;
     private PeopleRecyclerAdapter adapter;
+    private List<People> mLstPeople;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -115,6 +122,7 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
             public void onChanged(List<People> peoples) {
                 if (peoples != null) {
                     adapter.setData(peoples);
+                    mLstPeople = peoples;
                 } else {
                     Toast.makeText(getContext(), "Please create a new ", Toast.LENGTH_SHORT).show();
                 }
@@ -146,7 +154,7 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
                 if(!TextUtils.isEmpty(editText.getText().toString())){
                     mViewModel.insertPeople(new People(editText.getText().toString()));
                     editText.setText("");
-                    closeKeyBoard();
+                    mCommon.closeKeyboard(v,getActivity());
 
                 }else{
                     Toast.makeText(getContext(),"Please input before add",Toast.LENGTH_SHORT).show();
@@ -155,18 +163,15 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
         }
 
     }
-    //close keyboard after saved
-    public void closeKeyBoard(){
-        View view = getActivity().getCurrentFocus();
-        if(view != null){
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
-        }
-    }
 
+    //item click listener. Go to people activity
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(getContext(),"item"+position,Toast.LENGTH_SHORT).show();
+    //Toast.makeText(getContext(),"item"+position,Toast.LENGTH_SHORT).show();
+        int peopleId = mLstPeople.get(position).getPeopleId();
+        Intent intent = new Intent(getActivity(), PeopleActivity.class);
+        intent.putExtra(INTENT_MAIN_TO_PEOPLE,peopleId);
+        startActivityForResult(intent,REQUEST_CODE_PEOPLE);
     }
 
     @Override

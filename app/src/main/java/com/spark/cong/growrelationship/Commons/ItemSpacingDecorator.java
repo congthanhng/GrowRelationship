@@ -24,15 +24,15 @@ public class ItemSpacingDecorator extends RecyclerView.ItemDecoration {
     public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
         final int position = parent.getChildLayoutPosition(view);
-        Log.i("ItemDecorator", "getItemOffsets: "+ position);
+//        Log.i("ItemDecorator", "getItemOffsets: "+ position);
         final int column = position % mSpanCount;
-        Log.i("ItemDecorator", "getItemOffsets: "+ column);
+//        Log.i("ItemDecorator", "getItemOffsets: "+ column);
         final int parentWidth = parent.getWidth();
         outRect.left =mSpacing - column * mSpacing / mSpanCount;
-        Log.i("ItemDecorator", "getItemOffsets: "+ outRect.left);
+//        Log.i("ItemDecorator", "getItemOffsets: "+ outRect.left);
 
         outRect.right = (column + 1) * mSpacing / mSpanCount;
-        Log.i("ItemDecorator", "getItemOffsets: "+ outRect.right);
+//        Log.i("ItemDecorator", "getItemOffsets: "+ outRect.right);
 
         if (position < mSpanCount) {
             outRect.top = mSpacing;
