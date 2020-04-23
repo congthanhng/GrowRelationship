@@ -36,7 +36,7 @@
                 android:layout_margin="10dp"
                 android:gravity="left|center_vertical"
                 android:text="Family"
-                android:textSize="26sp"/>
+                android:textSize="18sp"/>
 
             <ImageView
                 android:layout_width="match_parent"

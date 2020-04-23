@@ -53,8 +53,8 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
     private OnListFragmentInteractionListener mListener;
 
     private CommonImpl mCommon = CommonImpl.getInstance();
-    private Button button;
-    private TextInputEditText editText;
+//    private Button button;
+//    private TextInputEditText editText;
     private PeopleViewModel mViewModel;
     private RecyclerView recyclerView;
     private PeopleRecyclerAdapter adapter;
@@ -106,9 +106,9 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
         //recyclerView.setAdapter(new PeopleRecyclerAdapter(DummyContent.ITEMS, mListener));
         recyclerView.setAdapter(adapter);
 
-        button = (Button)view.findViewById(R.id.button_test_people);
-        editText= (TextInputEditText) view.findViewById(R.id.edt_test_people);
-        button.setOnClickListener(this);
+//        button = (Button)view.findViewById(R.id.button_test_people);
+//        editText= (TextInputEditText) view.findViewById(R.id.edt_test_people);
+//        button.setOnClickListener(this);
         return view;
     }
 
@@ -149,18 +149,18 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.button_test_people:{
-                if(!TextUtils.isEmpty(editText.getText().toString())){
-                    mViewModel.insertPeople(new People(editText.getText().toString()));
-                    editText.setText("");
-                    mCommon.closeKeyboard(v,getActivity());
-
-                }else{
-                    Toast.makeText(getContext(),"Please input before add",Toast.LENGTH_SHORT).show();
-                }
-            }break;
-        }
+//        switch (v.getId()){
+//            case R.id.button_test_people:{
+//                if(!TextUtils.isEmpty(editText.getText().toString())){
+//                    mViewModel.insertPeople(new People(editText.getText().toString()));
+//                    editText.setText("");
+//                    mCommon.closeKeyboard(v,getActivity());
+//
+//                }else{
+//                    Toast.makeText(getContext(),"Please input before add",Toast.LENGTH_SHORT).show();
+//                }
+//            }break;
+//        }
 
     }
 
