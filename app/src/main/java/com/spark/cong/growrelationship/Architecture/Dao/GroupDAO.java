@@ -28,4 +28,8 @@ public interface GroupDAO {
 
     @Update
     void updateGroup(Group group);
+
+    //get group by id
+    @Query("SELECT * FROM `group` WHERE group_id = :groupId LIMIT 1")
+    Group getGroupById(int groupId);
 }

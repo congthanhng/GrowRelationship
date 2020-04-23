@@ -44,4 +44,9 @@ public class GroupViewModel extends AndroidViewModel {
     public void updateGroup(Group group){
         mGroupRepository.updateGroup(group);
     }
+
+    //get row by Id
+    public Group getGroupById(int groupId){
+        return mGroupRepository.getGroupById(groupId);
+    }
 }

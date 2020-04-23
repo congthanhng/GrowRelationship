@@ -30,6 +30,7 @@ import com.spark.cong.growrelationship.Commons.impl.CommonImpl;
 import com.spark.cong.growrelationship.R;
 import com.spark.cong.growrelationship.View.Activity.PeopleActivity;
 import com.spark.cong.growrelationship.View.Adapter.PeopleRecyclerAdapter;
+import com.spark.cong.growrelationship.View.Dialog.AddGroupDialog;
 import com.spark.cong.growrelationship.View.Dummy.DummyContent.DummyItem;
 
 import java.util.List;
@@ -44,7 +45,7 @@ import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOP
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class PeopleFragment extends Fragment implements View.OnClickListener, ItemClickListener, ItemLongClickListener {
+public class PeopleFragment extends Fragment implements View.OnClickListener, ItemClickListener, ItemLongClickListener,AddGroupDialog.EditNameGroupListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -182,6 +183,12 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
 
     }
 
+    @Override
+    public void onFinishEditDialog(String inputText) {
+        People people = new People(inputText);
+        mViewModel.insertPeople(people);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -195,5 +202,10 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(DummyItem item);
+    }
+
+    public void addNewPeople(){
+        AddGroupDialog addGroupDialog = new AddGroupDialog(this);
+        addGroupDialog.show(getActivity().getSupportFragmentManager(), "people");
     }
 }

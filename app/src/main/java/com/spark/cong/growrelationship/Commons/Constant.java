@@ -17,11 +17,15 @@ public class Constant {
 
     /*--------------------request code-------------------------*/
     public static final int REQUEST_CODE_PEOPLE = 123;
+    public static final int REQUEST_CODE_GROUP = 124;
+    public static final int REQUEST_CODE_GROUP_PEOPLE = 124;
     public static final int REQUEST_CODE_GROUP_TO_PEOPLE = 125;
 
 
     /*-------------------intent and bundle-------------------------*/
-    public static final String INTENT_MAIN_TO_PEOPLE = "intent_group";
+    public static final String INTENT_MAIN_TO_PEOPLE = "intent_people";
+    public static final String INTENT_MAIN_TO_GROUP = "intent_group";
+    public static final String INTENT_MAIN_TO_GROUP_PEOPLE = "intent_group_people";
     public static final String BUNDLE_MAIN_TO_PEOPLE = "bundle_group";
 
 

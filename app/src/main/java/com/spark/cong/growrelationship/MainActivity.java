@@ -307,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements EditGroupDialog.E
                     break;
                     case 1: {
                         Toast.makeText(getApplicationContext(), "tab" + (mPosition + 1), Toast.LENGTH_SHORT).show();
+                        fabPeopleListener();
                     }
                     break;
                     case 2: {
@@ -321,9 +322,8 @@ public class MainActivity extends AppCompatActivity implements EditGroupDialog.E
     }
 
     public void fabGroupListener() {
-        GroupFragment groupFragment;
         try {
-            groupFragment = (GroupFragment) tabAdapter.getLstFragment().get(2);
+            GroupFragment groupFragment = (GroupFragment) tabAdapter.getLstFragment().get(2);
 
             if (groupFragment != null) {
                 groupFragment.addNewGroup();
@@ -335,5 +335,17 @@ public class MainActivity extends AppCompatActivity implements EditGroupDialog.E
 //        if(groupFragment !=null){
 //            groupFragment.addNewGroup();
 //        }
+    }
+    public void fabPeopleListener(){
+        try {
+            PeopleFragment fragment = (PeopleFragment) tabAdapter.getLstFragment().get(1);
+
+            if(fragment !=null){
+                fragment.addNewPeople();
+            }
+        }catch (Exception e){
+            Log.e("Exeption", "fabPeopleListener: " + e);
+
+        }
     }
 }

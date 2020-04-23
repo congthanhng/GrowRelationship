@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,17 +20,23 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
+import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
 import com.spark.cong.growrelationship.Commons.ItemClickListener;
 import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
 import com.spark.cong.growrelationship.R;
+import com.spark.cong.growrelationship.View.Activity.GroupActivity;
+import com.spark.cong.growrelationship.View.Activity.GroupPeopleActivity;
 import com.spark.cong.growrelationship.View.Adapter.GroupRecyclerAdapter;
 import com.spark.cong.growrelationship.View.Dialog.AddGroupDialog;
 
 import java.util.List;
 
+import static com.spark.cong.growrelationship.Commons.Constant.INTENT_MAIN_TO_GROUP_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
+import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_GROUP;
+import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_GROUP_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
 
 public class GroupFragment extends Fragment implements ItemClickListener, ItemLongClickListener,View.OnClickListener, AddGroupDialog.EditNameGroupListener {
@@ -110,7 +117,13 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
     //item click listener
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(myContext,"itemClick"+position,Toast.LENGTH_SHORT).show();
+        int groupId = listGroup.get(position).getGroupId();
+//        Toast.makeText(myContext,"itemClick"+position,Toast.LENGTH_SHORT).show();
+        if(groupId >= 0){
+            Intent intent = new Intent(getActivity(), GroupPeopleActivity.class);
+            intent.putExtra(INTENT_MAIN_TO_GROUP_PEOPLE,groupId);
+            startActivityForResult(intent,REQUEST_CODE_GROUP_PEOPLE);
+        }
     }
 
     //item long click listener

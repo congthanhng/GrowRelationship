@@ -5,14 +5,18 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.spark.cong.growrelationship.Architecture.Entity.Group;
+import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
 import com.spark.cong.growrelationship.View.Adapter.GroupPeopleRecyclerAdapter;
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupPeopleViewModel;
@@ -27,17 +31,21 @@ import static com.spark.cong.growrelationship.Commons.Constant.*;
 
 public class GroupPeopleActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private int groupId;
+    private int mGroupId;
     private List<GroupPeople> lstGroupPeople;
-    private GroupPeopleViewModel groupPeopleViewModel;
+    private GroupPeopleViewModel mViewModel;
+    private GroupViewModel mGroupViewModel;
+    private TextView txtTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_people);
-        Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra(INTENT_MAIN_TO_PEOPLE);
-        groupId = bundle.getInt(BUNDLE_MAIN_TO_PEOPLE);
+
+        if(getIntent()!=null){
+            mGroupId = getIntent().getIntExtra(INTENT_MAIN_TO_GROUP_PEOPLE,-1);
+        }
+
 
         //set and map View
         mapView();
@@ -48,28 +56,41 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //RecyclerView
-        RecyclerView groupPeopleRecycler = (RecyclerView) findViewById(R.id.recyclerView_GroupPeople);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1);
-        groupPeopleRecycler.setLayoutManager(layoutManager);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView_GroupPeople);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
         final GroupPeopleRecyclerAdapter adapter = new GroupPeopleRecyclerAdapter(this);
-        groupPeopleRecycler.setAdapter(adapter);
-//        adapter.setData(listGroupPeopleFake());
-        groupPeopleRecycler.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,1));
+        recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,1));
 
         //button
         Button btnAdd = (Button) findViewById(R.id.button_test);
         btnAdd.setOnClickListener(this);
 
+        //TextView
+        txtTitle = (TextView) findViewById(R.id.title_group);
+
         //ViewModel
-        groupPeopleViewModel = new ViewModelProvider(this).get(GroupPeopleViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(GroupPeopleViewModel.class);
+        mGroupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
         //observe data
-        groupPeopleViewModel.getAllGroupPeopleByGroupId(groupId).observe(this, new Observer<List<GroupPeople>>() {
-            @Override
-            public void onChanged(List<GroupPeople> groupPeople) {
-                adapter.setData(groupPeople);
-                lstGroupPeople = groupPeople;
-            }
-        });
+        if(mGroupId >= 0){
+            mViewModel.getAllGroupPeopleByGroupId(mGroupId).observe(this, new Observer<List<GroupPeople>>() {
+                @Override
+                public void onChanged(List<GroupPeople> groupPeople) {
+                    adapter.setData(groupPeople);
+                    lstGroupPeople = groupPeople;
+                }
+            });
+        }
+
+        //set title of list group
+        try {
+            Group group = mGroupViewModel.getGroupById(mGroupId);
+            txtTitle.setText(group.getGroupName().toString());
+        }catch (Exception e){
+
+        }
 
     }
 
