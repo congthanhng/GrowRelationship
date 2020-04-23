@@ -10,39 +10,40 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_item_gridview"
         android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="10dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/img_avatar_people"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:layout_weight="3"
-            android:background="@drawable/bg_item_oval"
-            android:scaleType="fitXY" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_account_circle_black_24dp"
+            android:layout_gravity="center_vertical"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical">
 
             <TextView
                 android:id="@+id/txt_gp_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_margin="10dp"
                 android:gravity="left|center_vertical"
                 android:text="Family"
                 android:textSize="18sp"/>
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="5"
                 android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
         </LinearLayout>
     </LinearLayout>
