@@ -177,6 +177,8 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
     @Override
     public void onItemLongClick(View view, int position) {
         Toast.makeText(getContext(),"longItem"+position,Toast.LENGTH_SHORT).show();
+        GroupBottomSheetFragment groupBottomSheetFragment = new GroupBottomSheetFragment();
+        groupBottomSheetFragment.show(getActivity().getSupportFragmentManager(),"people_bottom_sheet");
 
     }
 
