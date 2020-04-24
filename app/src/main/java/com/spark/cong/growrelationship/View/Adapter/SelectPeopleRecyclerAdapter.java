@@ -1,6 +1,7 @@
 package com.spark.cong.growrelationship.View.Adapter;
 
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.List;
 
 public class SelectPeopleRecyclerAdapter  extends RecyclerView.Adapter<SelectPeopleRecyclerAdapter.SelectPeopleViewHolder>{
     private List<People> mList;
+    private SparseBooleanArray itemCheckArray = new SparseBooleanArray();
 
     @NonNull
     @Override
@@ -29,6 +31,7 @@ public class SelectPeopleRecyclerAdapter  extends RecyclerView.Adapter<SelectPeo
     @Override
     public void onBindViewHolder(@NonNull SelectPeopleViewHolder holder, int position) {
         holder.txtSelectPeople.setText(mList.get(position).getPeopleName());
+        holder.checkBoxItem.setChecked(itemCheckArray.get(position,false));
     }
 
     @Override
@@ -39,17 +42,7 @@ public class SelectPeopleRecyclerAdapter  extends RecyclerView.Adapter<SelectPeo
             return 0;
         }
     }
-
-    public class SelectPeopleViewHolder extends RecyclerView.ViewHolder{
-        private CheckBox selected;
-        private TextView txtSelectPeople;
-        public SelectPeopleViewHolder(@NonNull View itemView) {
-            super(itemView);
-            selected = (CheckBox) itemView.findViewById(R.id.checkbox_people);
-            txtSelectPeople = (TextView) itemView.findViewById(R.id.txt_select_name);
-        }
-    }
-
+    //set Data
     public void setData(List<People> lstPeople){
         Log.i("sdfsf", "setData: "+lstPeople.size());
         if(lstPeople!=null){
@@ -58,4 +51,41 @@ public class SelectPeopleRecyclerAdapter  extends RecyclerView.Adapter<SelectPeo
         }
 
     }
+
+    //set state all checkBox when checkBoxAll change
+    public void setStateCheckBox(boolean stateChecked){
+        itemCheckArray.clear();
+        for(int i= 0; i < mList.size();i++){
+            itemCheckArray.put(i,stateChecked);
+        }
+        notifyDataSetChanged();
+    }
+
+    //ViewHolder
+    public class SelectPeopleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private CheckBox checkBoxItem;
+        private TextView txtSelectPeople;
+        public SelectPeopleViewHolder(@NonNull View itemView) {
+            super(itemView);
+            checkBoxItem = (CheckBox) itemView.findViewById(R.id.checkbox_people);
+            txtSelectPeople = (TextView) itemView.findViewById(R.id.txt_select_name);
+            itemView.setOnClickListener(this);
+            checkBoxItem.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            if(!itemCheckArray.get(position,false)){
+                checkBoxItem.setChecked(true);
+                itemCheckArray.put(position,true);
+            }else{
+                checkBoxItem.setChecked(false);
+                itemCheckArray.put(position,false);
+            }
+        }
+    }
+
+
 }
