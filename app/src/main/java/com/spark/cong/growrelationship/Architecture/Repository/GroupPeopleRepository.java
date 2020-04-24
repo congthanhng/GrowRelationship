@@ -13,11 +13,15 @@ import java.util.List;
 
 public class GroupPeopleRepository {
     private GroupPeopleDAO groupPeopleDAO;
+
+    /*----------------------------------Constructor-----------------------------*/
     public GroupPeopleRepository(Application application){
         GrowDatabase database = GrowDatabase.getInstance(application);
         groupPeopleDAO = database.groupPeopleDAO();
     }
 
+
+    /*----------------------------------method-----------------------------*/
     public LiveData<List<GroupPeople>> getAllGroupPeople(){return groupPeopleDAO.getAllGroupPeople();}
 
     public LiveData<List<GroupPeople>> getAllGroupPeopleByGroupId(int groupId){return groupPeopleDAO.getAllPeopleByGroupId(groupId);}
@@ -26,6 +30,20 @@ public class GroupPeopleRepository {
         new InsertGroupPeopleAsyncTask(groupPeopleDAO).execute(groupPeople);
     }
 
+    //get all PeopleId without GroupId
+    public LiveData<int[]> getAllPeopleIdWithoutGroupId(int groupId){
+//        try {
+//            return new GetAllPeopleIdWithoutGroupIdAsyncTask(groupPeopleDAO).execute(groupId).get();
+//        }catch (Exception e){
+//            throw new RuntimeException("error to get peopleId without GroupID");
+//        }
+        return groupPeopleDAO.getAllPeopleIdWithoutGroupId(groupId);
+    }
+
+
+    /*----------------------------------asyncTask-----------------------------*/
+
+    //insert
     public class InsertGroupPeopleAsyncTask extends AsyncTask<GroupPeople,Void,Void>{
         private GroupPeopleDAO groupPeopleDAO;
         public InsertGroupPeopleAsyncTask(GroupPeopleDAO groupPeopleDAO){this.groupPeopleDAO = groupPeopleDAO;}
@@ -35,4 +53,14 @@ public class GroupPeopleRepository {
             return null;
         }
     }
+
+    //get all PeopleId without GroupId
+//    public class GetAllPeopleIdWithoutGroupIdAsyncTask extends AsyncTask<Integer,Void,int[]>{
+//        private GroupPeopleDAO groupPeopleDAO;
+//        public GetAllPeopleIdWithoutGroupIdAsyncTask(GroupPeopleDAO groupPeopleDAO){this.groupPeopleDAO = groupPeopleDAO;}
+//        @Override
+//        protected int[] doInBackground(Integer... integers) {
+//            return groupPeopleDAO.getAllPeopleIdWithoutGroupId(integers[0]);
+//        }
+//    }
 }

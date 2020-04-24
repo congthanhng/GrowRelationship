@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
     private GroupPeopleViewModel mViewModel;
     private GroupViewModel mGroupViewModel;
     private TextView txtTitle;
+    private ImageButton btnAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +50,10 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
 
 
         //set and map View
-        mapView();
+        setView();
+        setListener();
     }
-    public void mapView(){
+    public void setView(){
         //set action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -63,9 +66,8 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,1));
 
-        //button
-        Button btnAdd = (Button) findViewById(R.id.button_test);
-        btnAdd.setOnClickListener(this);
+        //imagebutton
+        btnAdd = (ImageButton) findViewById(R.id.button_add);
 
         //TextView
         txtTitle = (TextView) findViewById(R.id.title_group);
@@ -73,6 +75,7 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         //ViewModel
         mViewModel = new ViewModelProvider(this).get(GroupPeopleViewModel.class);
         mGroupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
+
         //observe data
         if(mGroupId >= 0){
             mViewModel.getAllGroupPeopleByGroupId(mGroupId).observe(this, new Observer<List<GroupPeople>>() {
@@ -92,6 +95,10 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
 
         }
 
+    }
+
+    public void setListener(){
+        btnAdd.setOnClickListener(this);
     }
 
     /**
@@ -121,11 +128,10 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.button_test :{
-//                GroupPeople  groupPeople= new GroupPeople(this.groupId, 6);
-//                groupPeopleViewModel.insertGroupPeople(groupPeople);
-                Intent intent = new Intent(GroupPeopleActivity.this,PeopleActivity.class);
-                startActivityForResult(intent,REQUEST_CODE_GROUP_TO_PEOPLE);
+            case R.id.button_add :{
+                Intent intent = new Intent(GroupPeopleActivity.this,SelectPeoplesActivity.class);
+                intent.putExtra(INTENT_SELECT_PEOPLE,mGroupId);
+                startActivityForResult(intent,REQUEST_CODE_SELECT_PEOPLE);
             }break;
         }
     }

@@ -30,4 +30,9 @@ public class GroupPeopleViewModel extends AndroidViewModel {
     public void insertGroupPeople(GroupPeople groupPeople){
         groupPeopleRepository.insertGroupPeople(groupPeople);
     }
+
+    //get all peopleId without Groupid
+    public LiveData<int[]> getAllPeopleIdByWithoutGroupId(int groupId){
+       return groupPeopleRepository.getAllPeopleIdWithoutGroupId(groupId);
+    }
 }

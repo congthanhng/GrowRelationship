@@ -20,12 +20,14 @@ public class Constant {
     public static final int REQUEST_CODE_GROUP = 124;
     public static final int REQUEST_CODE_GROUP_PEOPLE = 124;
     public static final int REQUEST_CODE_GROUP_TO_PEOPLE = 125;
+    public static final int REQUEST_CODE_SELECT_PEOPLE = 126;
 
 
     /*-------------------intent and bundle-------------------------*/
     public static final String INTENT_MAIN_TO_PEOPLE = "intent_people";
     public static final String INTENT_MAIN_TO_GROUP = "intent_group";
     public static final String INTENT_MAIN_TO_GROUP_PEOPLE = "intent_group_people";
+    public static final String INTENT_SELECT_PEOPLE = "intent_select_people";
     public static final String BUNDLE_MAIN_TO_PEOPLE = "bundle_group";
 
 

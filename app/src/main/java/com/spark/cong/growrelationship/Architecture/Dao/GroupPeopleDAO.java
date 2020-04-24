@@ -23,4 +23,12 @@ public interface GroupPeopleDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertGroupPeople(GroupPeople groupPeople);
+
+    @Query("SELECT people_id FROM group_people " +
+            "WHERE people_id NOT IN (" +
+            "SELECT people_id FROM group_people WHERE group_id = :groupId) " +
+            "UNION " +
+            "SELECT people_id FROM people WHERE people_id NOT IN (" +
+            "SELECT people_id FROM group_people)")
+    LiveData<int[]> getAllPeopleIdWithoutGroupId(int groupId);
 }
