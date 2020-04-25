@@ -1,5 +1,6 @@
 package com.spark.cong.growrelationship;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -43,16 +44,10 @@ import static com.spark.cong.growrelationship.Commons.Constant.tabSelected;
 import static com.spark.cong.growrelationship.Commons.Constant.tabUnSelected;
 
 
-public class MainActivity extends AppCompatActivity implements EditGroupDialog.EditGroupListener, PeopleFragment.OnListFragmentInteractionListener, PopupMenu.OnMenuItemClickListener, View.OnClickListener {
-    private RecyclerView recyclerView;
-    private GroupViewModel groupViewModel;
-    private Button btnAddGroup;
-    private List<Group> listGroup;
+public class MainActivity extends AppCompatActivity implements  PeopleFragment.OnListFragmentInteractionListener, PopupMenu.OnMenuItemClickListener, View.OnClickListener {
     private TabLayout mTabs;
     private ViewPager2 mViewpaper2;
     private TabFragmentAdapter tabAdapter;
-    private ImageView imgAvatarAccount;
-    private FrameLayout layoutAvatarAccount;
     private FloatingActionButton fab;
     private int mPosition = 0;
 
@@ -62,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements EditGroupDialog.E
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //init, set and map view
-        setMapView();
+        setView();
 
         //listener
         setListener();
@@ -72,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements EditGroupDialog.E
     /**
      * init, set and map view
      */
-    public void setMapView() {
+    public void setView() {
 
         //fab
         fab = (FloatingActionButton) findViewById(R.id.fab_add);
@@ -165,68 +160,6 @@ public class MainActivity extends AppCompatActivity implements EditGroupDialog.E
 
     }
 
-    //data from dialog addGroup
-//    @Override
-//    public void onFinishEditDialog(String inputText) {
-//        Toast.makeText(getApplicationContext(), inputText, Toast.LENGTH_SHORT).show();
-//        Group group = new Group(inputText);
-//        groupViewModel.insertGroup(group);
-//    }
-
-//    @Override
-//    public void onClick(View view, final int position) {
-//        switch (view.getId()) {
-//            case R.id.btn_delete_group: {
-////
-//                new AlertDialog.Builder(this)
-//                        .setMessage(R.string.confirm_delete_group)
-//                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                groupViewModel.deleteGroupById(listGroup.get(position).getGroupId());
-//                            }
-//                        }).setNegativeButton(R.string.no, null).show();
-////                GroupViewModel.deleteGroupById(listGroup.get(position).getId());
-//            }
-//            break;
-//            case R.id.btn_edit_group: {
-//
-////                Toast.makeText(getApplicationContext(), "do you want to dedit?", Toast.LENGTH_SHORT).show();
-//                Group group = listGroup.get(position);
-//                EditGroupDialog editGroupDialog = new EditGroupDialog();
-//                Bundle editGroupBundle = new Bundle();
-//                editGroupBundle.putSerializable("edit_group",group);
-//                editGroupDialog.setArguments(editGroupBundle);
-//                editGroupDialog.show(getSupportFragmentManager(),"edit_group");
-//            }
-//            break;
-//            default: {
-//                Log.d("TEST", "onClick: clicked" + position);
-//                Intent intent = new Intent(this, GroupPeopleActivity.class);
-//                Bundle bundle = new Bundle();
-//                intent.putExtra(INTENT_MAIN_TO_PEOPLE,bundle);
-//                bundle.putInt(BUNDLE_MAIN_TO_PEOPLE,listGroup.get(position).getGroupId());
-//                startActivityForResult(intent, REQUEST_CODE_PEOPLE);
-//            }
-//        }
-//
-//        /*Log.d("TEST", "onClick: clicked" + position);
-//        Intent intent = new Intent(this, PeopleActivity.class);
-//        startActivityForResult(intent, REQUEST_CODE_PEOPLE);*/
-//    }
-
-//    @Override
-//    public void onLongClick(View view, int position) {
-//
-//        Log.d("TEST", "onLongClick: clicked" + position);
-//
-//    }
-
-    @Override
-    public void onFinnishEdit(Group group, String change) {
-        group.setGroupName(change);
-        groupViewModel.updateGroup(group);
-    }
 
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
@@ -272,9 +205,7 @@ public class MainActivity extends AppCompatActivity implements EditGroupDialog.E
         shrink.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
             }
-
             @Override
             public void onAnimationEnd(Animation animation) {
                 // Change FAB color and icon
