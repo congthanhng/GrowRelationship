@@ -117,8 +117,9 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.action_delete:{
+            }
             case R.id.action_open: {
-
                 //if not fragment contain this bottomSheet (activity contain this)
                 //then you should get a cast to same type listener of activity(activity implement listener of this)
                 if(!mIsFragment){
@@ -127,18 +128,15 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
                 }else{
                     mItemListener.onItemClick(v,mPositon);
                 }
-
                 dismiss();
             }break;
+
             case R.id.action_edit:{
                 Toast.makeText(getContext(),"Edit",Toast.LENGTH_SHORT).show();
                 dismiss();
 
             }break;
-            case R.id.action_delete:{
-                Toast.makeText(getContext(),"Delete",Toast.LENGTH_SHORT).show();
-                dismiss();
-            }break;
+
         }
     }
 }

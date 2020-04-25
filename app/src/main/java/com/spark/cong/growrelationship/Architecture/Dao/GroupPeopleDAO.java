@@ -2,6 +2,7 @@ package com.spark.cong.growrelationship.Architecture.Dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -31,4 +32,8 @@ public interface GroupPeopleDAO {
             "SELECT people_id FROM people WHERE people_id NOT IN (" +
             "SELECT people_id FROM group_people)")
     LiveData<int[]> getAllPeopleIdWithoutGroupId(int groupId);
+
+    //delete
+    @Delete
+    void deleteGroupPeople(GroupPeople groupPeople);
 }

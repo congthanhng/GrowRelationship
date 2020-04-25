@@ -40,6 +40,10 @@ public class GroupPeopleRepository {
         return groupPeopleDAO.getAllPeopleIdWithoutGroupId(groupId);
     }
 
+    //delete by peopleId
+    public void deleteGroupPeople(GroupPeople groupPeople){
+        new DeleteGroupPeopleAsyncTask(groupPeopleDAO).execute(groupPeople);
+    }
 
     /*----------------------------------asyncTask-----------------------------*/
 
@@ -54,13 +58,14 @@ public class GroupPeopleRepository {
         }
     }
 
-    //get all PeopleId without GroupId
-//    public class GetAllPeopleIdWithoutGroupIdAsyncTask extends AsyncTask<Integer,Void,int[]>{
-//        private GroupPeopleDAO groupPeopleDAO;
-//        public GetAllPeopleIdWithoutGroupIdAsyncTask(GroupPeopleDAO groupPeopleDAO){this.groupPeopleDAO = groupPeopleDAO;}
-//        @Override
-//        protected int[] doInBackground(Integer... integers) {
-//            return groupPeopleDAO.getAllPeopleIdWithoutGroupId(integers[0]);
-//        }
-//    }
+    //delete
+    public class DeleteGroupPeopleAsyncTask extends AsyncTask<GroupPeople,Void,Void>{
+        private GroupPeopleDAO groupPeopleDAO;
+        public DeleteGroupPeopleAsyncTask(GroupPeopleDAO groupPeopleDAO){this.groupPeopleDAO = groupPeopleDAO;}
+        @Override
+        protected Void doInBackground(GroupPeople... integers) {
+            groupPeopleDAO.deleteGroupPeople(integers[0]);
+            return null;
+        }
+    }
 }

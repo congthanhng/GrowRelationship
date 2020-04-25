@@ -21,18 +21,25 @@ public class GroupPeopleViewModel extends AndroidViewModel {
         groupPeopleRepository = new GroupPeopleRepository(application);
     }
 
+    //get all
     public LiveData<List<GroupPeople>> getAllGroupPeople(){
         return groupPeopleRepository.getAllGroupPeople();
     }
 
+    //get all by groupId
     public LiveData<List<GroupPeople>> getAllGroupPeopleByGroupId(int groupId) {return groupPeopleRepository.getAllGroupPeopleByGroupId(groupId);}
 
     public void insertGroupPeople(GroupPeople groupPeople){
         groupPeopleRepository.insertGroupPeople(groupPeople);
     }
 
-    //get all peopleId without Groupid
+    //get all peopleId without Groupid - use for SelectPeopleActivity
     public LiveData<int[]> getAllPeopleIdByWithoutGroupId(int groupId){
        return groupPeopleRepository.getAllPeopleIdWithoutGroupId(groupId);
+    }
+
+    //delete by peopleid
+    public void deleteGroupPeople(GroupPeople groupPeople){
+        groupPeopleRepository.deleteGroupPeople(groupPeople);
     }
 }

@@ -55,6 +55,7 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
 
     //parameter
     private List<People> lstPeopleOfGroup=new ArrayList<>();
+    private List<GroupPeople> lstGroupPeople;
 
     //ViewModel
     private GroupPeopleViewModel mViewModel;
@@ -114,6 +115,7 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onChanged(List<GroupPeople> groupPeople) {
 //                adapter.setData(groupPeople);
+                lstGroupPeople = groupPeople;
                 lstPeopleOfGroup.clear();
                 for (int i=0; i<groupPeople.size();i++){
                     lstPeopleOfGroup.add(mPeopleViewModel.getPeopleById(groupPeople.get(i).getPeopleId()));
@@ -156,14 +158,12 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_add: {
-                Intent intent = new Intent(GroupPeopleActivity.this, SelectPeoplesActivity.class);
-                intent.putExtra(INTENT_SELECT_PEOPLE, mGroupId);
-                startActivityForResult(intent, REQUEST_CODE_SELECT_PEOPLE);
+                callSelectPeopleActivity();
             }
             break;
         }
     }
-
+    //item click from Adapter of bottomSheet
     @Override
     public void onItemClick(View view, int position) {
         Log.i("tset", "onItemClick:sdfdsfd ");
@@ -171,6 +171,10 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
             case R.id.action_open:{
                 Toast.makeText(getApplicationContext(),"open"+position,Toast.LENGTH_SHORT).show();
                 callPeopleActivity(position);
+            }break;
+            case R.id.action_delete:{
+                Toast.makeText(getApplicationContext(),"detele"+position,Toast.LENGTH_SHORT).show();
+                mViewModel.deleteGroupPeople(lstGroupPeople.get(position));
             }break;
             default:{
                 callPeopleActivity(position);
@@ -190,6 +194,11 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         Intent intent = new Intent(GroupPeopleActivity.this,PeopleActivity.class);
         intent.putExtra(INTENT_TO_PEOPLE,lstPeopleOfGroup.get(position).getPeopleId());
         startActivityForResult(intent,REQUEST_CODE_PEOPLE_TO_GROUPPEOPLE);
+    }
+    public void callSelectPeopleActivity(){
+        Intent intent = new Intent(GroupPeopleActivity.this, SelectPeoplesActivity.class);
+        intent.putExtra(INTENT_SELECT_PEOPLE, mGroupId);
+        startActivityForResult(intent, REQUEST_CODE_SELECT_PEOPLE);
     }
 
 }
