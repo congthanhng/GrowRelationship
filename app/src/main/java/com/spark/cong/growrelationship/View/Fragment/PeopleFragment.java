@@ -35,7 +35,7 @@ import com.spark.cong.growrelationship.View.Dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
-import static com.spark.cong.growrelationship.Commons.Constant.INTENT_MAIN_TO_PEOPLE;
+import static com.spark.cong.growrelationship.Commons.Constant.INTENT_TO_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOPLE;
 
@@ -171,7 +171,7 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
     //Toast.makeText(getContext(),"item"+position,Toast.LENGTH_SHORT).show();
         int peopleId = mLstPeople.get(position).getPeopleId();
         Intent intent = new Intent(getActivity(), PeopleActivity.class);
-        intent.putExtra(INTENT_MAIN_TO_PEOPLE,peopleId);
+        intent.putExtra(INTENT_TO_PEOPLE,peopleId);
         startActivityForResult(intent,REQUEST_CODE_PEOPLE);
     }
 

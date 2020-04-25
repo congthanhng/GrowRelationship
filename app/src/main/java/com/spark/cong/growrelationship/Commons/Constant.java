@@ -21,14 +21,14 @@ public class Constant {
     public static final int REQUEST_CODE_GROUP_PEOPLE = 124;
     public static final int REQUEST_CODE_GROUP_TO_PEOPLE = 125;
     public static final int REQUEST_CODE_SELECT_PEOPLE = 126;
+    public static final int REQUEST_CODE_PEOPLE_TO_GROUPPEOPLE = 126;
 
 
     /*-------------------intent and bundle-------------------------*/
-    public static final String INTENT_MAIN_TO_PEOPLE = "intent_people";
-    public static final String INTENT_MAIN_TO_GROUP = "intent_group";
-    public static final String INTENT_MAIN_TO_GROUP_PEOPLE = "intent_group_people";
+    public static final String INTENT_TO_PEOPLE = "intent_people";
+    public static final String INTENT_TO_GROUP = "intent_group";
+    public static final String INTENT_TO_GROUP_PEOPLE = "intent_group_people";
     public static final String INTENT_SELECT_PEOPLE = "intent_select_people";
-    public static final String BUNDLE_MAIN_TO_PEOPLE = "bundle_group";
 
 
     /*------------------- TabLayout-------------------------*/
@@ -57,4 +57,9 @@ public class Constant {
             R.drawable.ic_person_add_white_24dp,
             R.drawable.ic_group_add_white_24dp
     };
+
+    /*------------------- tag BottomSheet-------------------------*/
+    public static final String TAG_ITEM_PEOPLE_OF_GROUP = "group_people_bottom_sheet";
+
+
 }

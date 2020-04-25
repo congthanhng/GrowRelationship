@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,22 +21,34 @@ import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupPeopleViewModel;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
 import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
+import com.spark.cong.growrelationship.Commons.CallView;
+import com.spark.cong.growrelationship.Commons.ItemClickListener;
+import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
+import com.spark.cong.growrelationship.Commons.impl.CallViewImpl;
 import com.spark.cong.growrelationship.R;
 import com.spark.cong.growrelationship.View.Adapter.GroupPeopleRecyclerAdapter;
+import com.spark.cong.growrelationship.View.Fragment.GroupBottomSheetFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.spark.cong.growrelationship.Commons.Constant.INTENT_MAIN_TO_GROUP_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.INTENT_SELECT_PEOPLE;
+import static com.spark.cong.growrelationship.Commons.Constant.INTENT_TO_GROUP_PEOPLE;
+import static com.spark.cong.growrelationship.Commons.Constant.INTENT_TO_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
+import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOPLE_TO_GROUPPEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_SELECT_PEOPLE;
+import static com.spark.cong.growrelationship.Commons.Constant.TAG_ITEM_PEOPLE_OF_GROUP;
 import static com.spark.cong.growrelationship.Commons.impl.ErrorMessage.NOT_FOUND_INTENT;
 import static com.spark.cong.growrelationship.Commons.impl.ErrorMessage.NOT_FOUND_PARAMETER;
 
 
-public class GroupPeopleActivity extends AppCompatActivity implements View.OnClickListener {
+public class GroupPeopleActivity extends AppCompatActivity implements View.OnClickListener, ItemClickListener, ItemLongClickListener {
+
+    /*------------------------------------global common-----------------------------*/
+    //call View
+    CallView callView = CallViewImpl.getInstance();
 
     //parameter from GroupActivity
     private int mGroupId;
@@ -59,7 +72,7 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
 
         //get data from GroupActivity, throw if not found
         if (getIntent() != null) {
-            mGroupId = getIntent().getIntExtra(INTENT_MAIN_TO_GROUP_PEOPLE, -1);
+            mGroupId = getIntent().getIntExtra(INTENT_TO_GROUP_PEOPLE, -1);
             if (mGroupId < 0) {
                 throw new RuntimeException(NOT_FOUND_PARAMETER);
             }
@@ -139,17 +152,6 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         return super.onOptionsItemSelected(item);
     }
 
-    //mock data
-    public List<GroupPeople> listGroupPeopleFake() {
-        List<GroupPeople> lstPeoPle = new ArrayList<>();
-        lstPeoPle.add(new GroupPeople(1, 1));
-        lstPeoPle.add(new GroupPeople(2, 2));
-        lstPeoPle.add(new GroupPeople(3, 1));
-        lstPeoPle.add(new GroupPeople(4, 1));
-        lstPeoPle.add(new GroupPeople(5, 1));
-        return lstPeoPle;
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -160,5 +162,19 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
             }
             break;
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        String text = lstPeopleOfGroup.get(position).getPeopleName();
+        Intent intent = new Intent(GroupPeopleActivity.this,PeopleActivity.class);
+        intent.putExtra(INTENT_TO_PEOPLE,lstPeopleOfGroup.get(position).getPeopleId());
+        startActivityForResult(intent,REQUEST_CODE_PEOPLE_TO_GROUPPEOPLE);
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+        //show bottom sheet
+        callView.callBottomSheet(getSupportFragmentManager(),TAG_ITEM_PEOPLE_OF_GROUP);
     }
 }

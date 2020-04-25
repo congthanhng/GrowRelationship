@@ -53,7 +53,7 @@ public class PeopleActivity extends AppCompatActivity {
         //get data had been transfer from previous activity
         if(getIntent()!=null){
             Intent intent = getIntent();
-            this.mPeopleId = intent.getIntExtra(INTENT_MAIN_TO_PEOPLE,-1);
+            this.mPeopleId = intent.getIntExtra(INTENT_TO_PEOPLE,-1);
         }
 
         //set and map View

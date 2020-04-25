@@ -33,7 +33,7 @@ import com.spark.cong.growrelationship.View.Dialog.AddGroupDialog;
 
 import java.util.List;
 
-import static com.spark.cong.growrelationship.Commons.Constant.INTENT_MAIN_TO_GROUP_PEOPLE;
+import static com.spark.cong.growrelationship.Commons.Constant.INTENT_TO_GROUP_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_GROUP;
 import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_GROUP_PEOPLE;
@@ -121,7 +121,7 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
 //        Toast.makeText(myContext,"itemClick"+position,Toast.LENGTH_SHORT).show();
         if(groupId >= 0){
             Intent intent = new Intent(getActivity(), GroupPeopleActivity.class);
-            intent.putExtra(INTENT_MAIN_TO_GROUP_PEOPLE,groupId);
+            intent.putExtra(INTENT_TO_GROUP_PEOPLE,groupId);
             startActivityForResult(intent,REQUEST_CODE_GROUP_PEOPLE);
         }
     }

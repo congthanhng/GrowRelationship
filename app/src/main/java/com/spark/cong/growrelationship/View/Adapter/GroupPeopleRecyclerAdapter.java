@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
 import com.spark.cong.growrelationship.Architecture.Entity.People;
+import com.spark.cong.growrelationship.Commons.ItemClickListener;
+import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
 import com.spark.cong.growrelationship.R;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
     @Override
     public GroupPeopleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_people,parent,false);
-        return new GroupPeopleViewHolder(v);
+        return new GroupPeopleViewHolder(v,parent.getContext());
     }
 
     @Override
@@ -48,12 +50,30 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
         notifyDataSetChanged();
     }
     //ViewHolder
-    public class GroupPeopleViewHolder extends RecyclerView.ViewHolder{
+    public class GroupPeopleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
 
         private TextView txtGPName;
-        public GroupPeopleViewHolder(@NonNull View itemView) {
+        private ItemClickListener clickListener;
+        private ItemLongClickListener longClickListener;
+        public GroupPeopleViewHolder(@NonNull View itemView,Context context) {
             super(itemView);
             txtGPName = (TextView) itemView.findViewById(R.id.txt_gp_name);
+            clickListener = (ItemClickListener) context;
+            longClickListener = (ItemLongClickListener)context;
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            clickListener.onItemClick(v,getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            longClickListener.onItemLongClick(v,getAdapterPosition());
+            return true;
+        }
+
     }
 }

@@ -15,7 +15,7 @@ import com.spark.cong.growrelationship.R;
 
 import java.util.List;
 
-import static com.spark.cong.growrelationship.Commons.Constant.INTENT_MAIN_TO_GROUP;
+import static com.spark.cong.growrelationship.Commons.Constant.INTENT_TO_GROUP;
 
 public class GroupActivity extends AppCompatActivity {
 
@@ -32,7 +32,7 @@ public class GroupActivity extends AppCompatActivity {
 
 
         if(getIntent()!=null){
-            mGroupId = getIntent().getIntExtra(INTENT_MAIN_TO_GROUP,-1);
+            mGroupId = getIntent().getIntExtra(INTENT_TO_GROUP,-1);
         }
 
         setView();
