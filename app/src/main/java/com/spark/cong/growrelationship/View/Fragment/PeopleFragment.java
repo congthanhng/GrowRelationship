@@ -155,13 +155,16 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
 
     }
 
-    //item click listener. Go to people activity
+    //item click listener of recycler and bottomsheet
     @Override
     public void onItemClick(View view, int position) {
     //Toast.makeText(getContext(),"item"+position,Toast.LENGTH_SHORT).show();
         switch (view.getId()){
             case R.id.action_open:{
                 callPeopleActivity(position);
+            }break;
+            case R.id.action_delete:{
+                mViewModel.deletePeople(mLstPeople.get(position));
             }break;
             default: {
                 callPeopleActivity(position);

@@ -36,4 +36,9 @@ public class PeopleViewModel extends AndroidViewModel {
        return peopleRepository.getPeopleById(id);
     }
 
+    //delete people
+    public void deletePeople(People people){
+        peopleRepository.deletePeople(people);
+    }
+
 }

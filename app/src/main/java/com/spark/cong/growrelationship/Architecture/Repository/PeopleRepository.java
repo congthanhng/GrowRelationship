@@ -44,6 +44,11 @@ public class PeopleRepository {
 
     }
 
+    //deletePeople
+    public void deletePeople(People people){
+        new DeletePeopleAsyncTask(peopleDAO).execute(people);
+    }
+
 
     /* -------------------------synchronous--------------------------*/
     //synchronous of insertPeople
@@ -71,4 +76,17 @@ public class PeopleRepository {
 
     }
 
+    //synchronous of deletePeople
+    public class DeletePeopleAsyncTask extends AsyncTask<People,Void, People>{
+        private PeopleDAO peopleDAO;
+        public DeletePeopleAsyncTask(PeopleDAO peopleDAO){
+            this.peopleDAO = peopleDAO;
+        }
+        @Override
+        protected People doInBackground(People... peoples) {
+            peopleDAO.deletePeople(peoples[0]);
+            return null;
+        }
+
+    }
 }

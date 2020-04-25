@@ -2,6 +2,7 @@ package com.spark.cong.growrelationship.Architecture.Dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -23,4 +24,8 @@ public interface PeopleDAO {
     //getPeopleById
     @Query("SELECT * FROM people WHERE people_id = :id LIMIT 1")
     People getPeopleById(int id);
+
+    //delete
+    @Delete
+    void deletePeople(People people);
 }
