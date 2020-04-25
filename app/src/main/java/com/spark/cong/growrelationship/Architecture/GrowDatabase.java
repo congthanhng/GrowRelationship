@@ -23,15 +23,26 @@ public abstract class GrowDatabase extends RoomDatabase {
     public abstract GroupDAO groupDAO();
     public abstract PeopleDAO peopleDAO();
     public abstract GroupPeopleDAO groupPeopleDAO();
-    private static GrowDatabase sINSTANCE;
+    private static volatile GrowDatabase sINSTANCE;
+    private GrowDatabase(){}
 
+    //use Double Check Locking Singleton
     public static GrowDatabase getInstance(final Context context){
+        //do something before get instance
         if(sINSTANCE == null){
-            sINSTANCE = Room.databaseBuilder(context.getApplicationContext(),GrowDatabase.class,NAME_OF_DB)
-                    .fallbackToDestructiveMigration()
-                    .addCallback(mRoomDBCallBack)
-                    .build();
+            // Do the task too long before create instance ...
+            // Block so other threads cannot come into while initialize
+            synchronized (GrowDatabase.class){
+                // Re-check again. Maybe another thread has initialized before
+                if (sINSTANCE == null) {
+                    sINSTANCE = Room.databaseBuilder(context.getApplicationContext(),GrowDatabase.class,NAME_OF_DB)
+                            .fallbackToDestructiveMigration()
+                            .addCallback(mRoomDBCallBack)
+                            .build();
+                }
+            }
         }
+        //do something after check instance
         return sINSTANCE;
     }
 
