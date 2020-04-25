@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.spark.cong.growrelationship.Commons.Constant.*;
+import static com.spark.cong.growrelationship.Commons.impl.ErrorMessage.NOT_FOUND_INTENT;
+import static com.spark.cong.growrelationship.Commons.impl.ErrorMessage.NOT_FOUND_PARAMETER;
 
 
 public class GroupPeopleActivity extends AppCompatActivity implements View.OnClickListener{
@@ -44,10 +46,15 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_people);
 
+        //get data from GroupActivity, throw if not found
         if(getIntent()!=null){
             mGroupId = getIntent().getIntExtra(INTENT_MAIN_TO_GROUP_PEOPLE,-1);
+            if(!(mGroupId >=0)){
+                throw new RuntimeException(NOT_FOUND_PARAMETER);
+            }
+        }else{
+            throw new RuntimeException(NOT_FOUND_INTENT);
         }
-
 
         //set and map View
         setView();
