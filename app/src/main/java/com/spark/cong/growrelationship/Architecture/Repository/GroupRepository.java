@@ -37,7 +37,7 @@ public class GroupRepository {
 
     //delete a record
     public void deleteGroupById(int groupId){
-        new DeleteGroupAsyncTask(mGroupDAO).execute(groupId);
+        new DeleteGroupByIdAsyncTask(mGroupDAO).execute(groupId);
     }
 
     //update a record
@@ -53,6 +53,11 @@ public class GroupRepository {
         }catch (Exception e){
             throw new RuntimeException("error to get group by id");
         }
+    }
+
+    //delete group
+    public void deleteGroup(Group group){
+        new DeleteGroupAsyncTask(mGroupDAO).execute(group);
     }
 
     /*--------------------------------synchronous--------------------------------*/
@@ -78,13 +83,13 @@ public class GroupRepository {
         }
     }
     //asynctask delete a group
-    public static class DeleteGroupAsyncTask extends AsyncTask<Integer,Void,Void>{
+    public static class DeleteGroupAsyncTask extends AsyncTask<Group,Void,Void>{
         private GroupDAO groupDAO;
         DeleteGroupAsyncTask(GroupDAO groupDAO){this.groupDAO = groupDAO;}
 
         @Override
-        protected Void doInBackground(Integer... integers) {
-            groupDAO.deleteGroupById(integers[0]);
+        protected Void doInBackground(Group... groups) {
+            groupDAO.deleteGroup(groups[0]);
             return null;
         }
     }
@@ -107,6 +112,17 @@ public class GroupRepository {
         @Override
         protected Group doInBackground(Integer... integers) {
             return groupDAO.getGroupById(integers[0]);
+        }
+    }
+
+    //asyncTask delete group
+    public static class DeleteGroupByIdAsyncTask extends AsyncTask<Integer,Void,Void>{
+        private GroupDAO groupDAO;
+        DeleteGroupByIdAsyncTask(GroupDAO groupDAO){this.groupDAO = groupDAO;}
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            groupDAO.deleteGroupById(integers[0]);
+            return null;
         }
     }
 

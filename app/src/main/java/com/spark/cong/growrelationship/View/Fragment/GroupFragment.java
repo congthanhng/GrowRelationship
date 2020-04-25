@@ -21,9 +21,11 @@ import android.widget.Toast;
 
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
+import com.spark.cong.growrelationship.Commons.CallView;
 import com.spark.cong.growrelationship.Commons.ItemClickListener;
 import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
+import com.spark.cong.growrelationship.Commons.impl.CallViewImpl;
 import com.spark.cong.growrelationship.R;
 import com.spark.cong.growrelationship.View.Activity.GroupPeopleActivity;
 import com.spark.cong.growrelationship.View.Adapter.GroupRecyclerAdapter;
@@ -35,8 +37,14 @@ import static com.spark.cong.growrelationship.Commons.Constant.INTENT_TO_GROUP_P
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_GROUP_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
+import static com.spark.cong.growrelationship.Commons.Constant.TAG_ITEM_GROUP;
+import static com.spark.cong.growrelationship.Commons.ErrorMessage.NOT_FOUND_PEOPLE;
 
 public class GroupFragment extends Fragment implements ItemClickListener, ItemLongClickListener,View.OnClickListener, AddGroupDialog.EditNameGroupListener {
+    /*------------------------------------global common-----------------------------*/
+    //callView
+    private CallView callView = CallViewImpl.getInstance();
+
     private GroupViewModel mViewModel;
     private RecyclerView recyclerView;
     private List<Group> listGroup;
@@ -114,21 +122,26 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
     //item click listener
     @Override
     public void onItemClick(View view, int position) {
-        int groupId = listGroup.get(position).getGroupId();
 //        Toast.makeText(myContext,"itemClick"+position,Toast.LENGTH_SHORT).show();
-        if(groupId >= 0){
-            Intent intent = new Intent(getActivity(), GroupPeopleActivity.class);
-            intent.putExtra(INTENT_TO_GROUP_PEOPLE,groupId);
-            startActivityForResult(intent,REQUEST_CODE_GROUP_PEOPLE);
+        switch (view.getId()){
+            case R.id.action_open:{
+                callGroupPeopleActivity(position);
+
+            }break;
+            case R.id.action_delete:{
+                mViewModel.deleteGroup(listGroup.get(position));
+            }break;
+            default: {
+                callGroupPeopleActivity(position);
+            }
         }
     }
 
     //item long click listener
     @Override
     public void onItemLongClick(View view, int position) {
-        Toast.makeText(myContext,"itemLongClick"+position,Toast.LENGTH_SHORT).show();
-        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
-        bottomSheetFragment.show(myContext.getSupportFragmentManager(),"group_bottom_sheet");
+//        Toast.makeText(myContext,"itemLongClick"+position,Toast.LENGTH_SHORT).show();
+        callView.callBottomSheet(getActivity().getSupportFragmentManager(),TAG_ITEM_GROUP,position,true,this);
 
     }
 
@@ -138,4 +151,14 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
         addGroupDialog.show(myContext.getSupportFragmentManager(), "group");
     }
 
+    public void callGroupPeopleActivity(int position){
+        int groupId = listGroup.get(position).getGroupId();
+        if(groupId >= 0){
+            Intent intent = new Intent(getActivity(), GroupPeopleActivity.class);
+            intent.putExtra(INTENT_TO_GROUP_PEOPLE,groupId);
+            startActivityForResult(intent,REQUEST_CODE_GROUP_PEOPLE);
+        } else{
+            throw new RuntimeException(NOT_FOUND_PEOPLE);
+        }
+    }
 }

@@ -40,8 +40,8 @@ import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOPLE_TO_GROUPPEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_SELECT_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.TAG_ITEM_PEOPLE_OF_GROUP;
-import static com.spark.cong.growrelationship.Commons.impl.ErrorMessage.NOT_FOUND_INTENT;
-import static com.spark.cong.growrelationship.Commons.impl.ErrorMessage.NOT_FOUND_PARAMETER;
+import static com.spark.cong.growrelationship.Commons.ErrorMessage.NOT_FOUND_INTENT;
+import static com.spark.cong.growrelationship.Commons.ErrorMessage.NOT_FOUND_PARAMETER;
 
 
 public class GroupPeopleActivity extends AppCompatActivity implements View.OnClickListener, ItemClickListener, ItemLongClickListener {

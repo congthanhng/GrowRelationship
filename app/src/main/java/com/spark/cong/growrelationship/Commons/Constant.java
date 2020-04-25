@@ -61,6 +61,7 @@ public class Constant {
     /*------------------- tag BottomSheet-------------------------*/
     public static final String TAG_ITEM_PEOPLE_OF_GROUP = "group_people_bottom_sheet";
     public static final String TAG_ITEM_PEOPLE = "people_bottom_sheet";
+    public static final String TAG_ITEM_GROUP = "group_bottom_sheet";
 
 
 }

@@ -2,6 +2,7 @@ package com.spark.cong.growrelationship.Architecture.Dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -32,4 +33,8 @@ public interface GroupDAO {
     //get group by id
     @Query("SELECT * FROM `group` WHERE group_id = :groupId LIMIT 1")
     Group getGroupById(int groupId);
+
+    //delete group
+    @Delete
+    void deleteGroup(Group group);
 }
