@@ -2,6 +2,7 @@ package com.spark.cong.growrelationship.View.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -28,7 +29,6 @@ import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
 import com.spark.cong.growrelationship.Commons.impl.CallViewImpl;
 import com.spark.cong.growrelationship.R;
 import com.spark.cong.growrelationship.View.Adapter.GroupPeopleRecyclerAdapter;
-import com.spark.cong.growrelationship.View.Fragment.GroupBottomSheetFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,15 +166,30 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onItemClick(View view, int position) {
+        Log.i("tset", "onItemClick:sdfdsfd ");
+        switch (view.getId()){
+            case R.id.action_open:{
+                Toast.makeText(getApplicationContext(),"open"+position,Toast.LENGTH_SHORT).show();
+                callPeopleActivity(position);
+            }break;
+            default:{
+                callPeopleActivity(position);
+            }
+        }
+
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+        //show bottom sheet
+        callView.callBottomSheet(getSupportFragmentManager(),TAG_ITEM_PEOPLE_OF_GROUP,position);
+    }
+
+    public void callPeopleActivity(int position){
         String text = lstPeopleOfGroup.get(position).getPeopleName();
         Intent intent = new Intent(GroupPeopleActivity.this,PeopleActivity.class);
         intent.putExtra(INTENT_TO_PEOPLE,lstPeopleOfGroup.get(position).getPeopleId());
         startActivityForResult(intent,REQUEST_CODE_PEOPLE_TO_GROUPPEOPLE);
     }
 
-    @Override
-    public void onItemLongClick(View view, int position) {
-        //show bottom sheet
-        callView.callBottomSheet(getSupportFragmentManager(),TAG_ITEM_PEOPLE_OF_GROUP);
-    }
 }

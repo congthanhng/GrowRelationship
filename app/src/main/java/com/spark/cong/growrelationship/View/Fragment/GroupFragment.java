@@ -20,13 +20,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
-import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
 import com.spark.cong.growrelationship.Commons.ItemClickListener;
 import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
 import com.spark.cong.growrelationship.R;
-import com.spark.cong.growrelationship.View.Activity.GroupActivity;
 import com.spark.cong.growrelationship.View.Activity.GroupPeopleActivity;
 import com.spark.cong.growrelationship.View.Adapter.GroupRecyclerAdapter;
 import com.spark.cong.growrelationship.View.Dialog.AddGroupDialog;
@@ -35,7 +33,6 @@ import java.util.List;
 
 import static com.spark.cong.growrelationship.Commons.Constant.INTENT_TO_GROUP_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
-import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_GROUP;
 import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_GROUP_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.SPAN_COUNT;
 
@@ -130,8 +127,8 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
     @Override
     public void onItemLongClick(View view, int position) {
         Toast.makeText(myContext,"itemLongClick"+position,Toast.LENGTH_SHORT).show();
-        GroupBottomSheetFragment groupBottomSheetFragment = new GroupBottomSheetFragment();
-        groupBottomSheetFragment.show(myContext.getSupportFragmentManager(),"group_bottom_sheet");
+        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
+        bottomSheetFragment.show(myContext.getSupportFragmentManager(),"group_bottom_sheet");
 
     }
 

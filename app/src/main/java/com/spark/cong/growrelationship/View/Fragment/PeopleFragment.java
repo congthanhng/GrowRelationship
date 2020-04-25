@@ -3,12 +3,9 @@ package com.spark.cong.growrelationship.View.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,7 +17,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
 import com.spark.cong.growrelationship.Commons.ItemClickListener;
@@ -178,8 +174,8 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
     @Override
     public void onItemLongClick(View view, int position) {
         Toast.makeText(getContext(),"longItem"+position,Toast.LENGTH_SHORT).show();
-        GroupBottomSheetFragment groupBottomSheetFragment = new GroupBottomSheetFragment();
-        groupBottomSheetFragment.show(getActivity().getSupportFragmentManager(),"people_bottom_sheet");
+        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
+        bottomSheetFragment.show(getActivity().getSupportFragmentManager(),"people_bottom_sheet");
 
     }
 
