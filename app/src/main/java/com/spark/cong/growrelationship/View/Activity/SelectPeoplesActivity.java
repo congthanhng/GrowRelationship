@@ -8,11 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 
+import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
 import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupPeopleViewModel;
 import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
@@ -105,8 +107,13 @@ public class SelectPeoplesActivity extends AppCompatActivity implements View.OnC
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case R.id.confirm_save:{
-
+            case R.id.save_selected:{
+                List<Integer> lst = adapter.getCheckArray();
+                if(!lst.isEmpty()){
+                    for (int i =0; i<lst.size();i++){
+                        mViewModel.insertGroupPeople(new GroupPeople(mGroupId,lst.get(i)));
+                    }
+                }
                 finish();
             }break;
             case android.R.id.home:{
