@@ -270,7 +270,6 @@ public class MainActivity extends AppCompatActivity implements  PeopleFragment.O
     public void fabPeopleListener(){
         try {
             PeopleFragment fragment = (PeopleFragment) tabAdapter.getLstFragment().get(1);
-
             if(fragment !=null){
                 fragment.addNewPeople();
             }

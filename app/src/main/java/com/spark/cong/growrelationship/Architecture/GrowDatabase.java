@@ -23,8 +23,7 @@ public abstract class GrowDatabase extends RoomDatabase {
     public abstract GroupDAO groupDAO();
     public abstract PeopleDAO peopleDAO();
     public abstract GroupPeopleDAO groupPeopleDAO();
-    private static volatile GrowDatabase sINSTANCE;
-    private GrowDatabase(){}
+    private static volatile GrowDatabase sINSTANCE; //volatile help notification change to all thread if this param used by threads
 
     //use Double Check Locking Singleton
     public static GrowDatabase getInstance(final Context context){
