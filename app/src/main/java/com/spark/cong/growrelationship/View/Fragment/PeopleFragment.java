@@ -19,11 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
+import com.spark.cong.growrelationship.Commons.CallView;
 import com.spark.cong.growrelationship.Commons.ItemClickListener;
 import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
+import com.spark.cong.growrelationship.Commons.impl.CallViewImpl;
 import com.spark.cong.growrelationship.Commons.impl.CommonImpl;
 import com.spark.cong.growrelationship.R;
+import com.spark.cong.growrelationship.View.Activity.GroupPeopleActivity;
 import com.spark.cong.growrelationship.View.Activity.PeopleActivity;
 import com.spark.cong.growrelationship.View.Adapter.PeopleRecyclerAdapter;
 import com.spark.cong.growrelationship.View.Dialog.AddGroupDialog;
@@ -34,6 +37,7 @@ import java.util.List;
 import static com.spark.cong.growrelationship.Commons.Constant.INTENT_TO_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOPLE;
+import static com.spark.cong.growrelationship.Commons.Constant.TAG_ITEM_PEOPLE;
 
 /**
  * A fragment representing a list of Items.
@@ -42,6 +46,8 @@ import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOP
  * interface.
  */
 public class PeopleFragment extends Fragment implements View.OnClickListener, ItemClickListener, ItemLongClickListener,AddGroupDialog.EditNameGroupListener {
+
+    private CallView callView = CallViewImpl.getInstance();
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -146,18 +152,6 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
 
     @Override
     public void onClick(View v) {
-//        switch (v.getId()){
-//            case R.id.button_test_people:{
-//                if(!TextUtils.isEmpty(editText.getText().toString())){
-//                    mViewModel.insertPeople(new People(editText.getText().toString()));
-//                    editText.setText("");
-//                    mCommon.closeKeyboard(v,getActivity());
-//
-//                }else{
-//                    Toast.makeText(getContext(),"Please input before add",Toast.LENGTH_SHORT).show();
-//                }
-//            }break;
-//        }
 
     }
 
@@ -165,17 +159,22 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
     @Override
     public void onItemClick(View view, int position) {
     //Toast.makeText(getContext(),"item"+position,Toast.LENGTH_SHORT).show();
-        int peopleId = mLstPeople.get(position).getPeopleId();
-        Intent intent = new Intent(getActivity(), PeopleActivity.class);
-        intent.putExtra(INTENT_TO_PEOPLE,peopleId);
-        startActivityForResult(intent,REQUEST_CODE_PEOPLE);
+        switch (view.getId()){
+            case R.id.action_open:{
+                callPeopleActivity(position);
+            }break;
+            default: {
+                callPeopleActivity(position);
+            }
+        }
     }
 
     @Override
     public void onItemLongClick(View view, int position) {
-        Toast.makeText(getContext(),"longItem"+position,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(),"longItem"+position,Toast.LENGTH_SHORT).show();
+        callView.callBottomSheet(getActivity().getSupportFragmentManager(),TAG_ITEM_PEOPLE,position,true,this);
         BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
-        bottomSheetFragment.show(getActivity().getSupportFragmentManager(),"people_bottom_sheet");
+//        bottomSheetFragment.show(getActivity().getSupportFragmentManager(),"people_bottom_sheet");
 
     }
 
@@ -203,5 +202,12 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
     public void addNewPeople(){
         AddGroupDialog addGroupDialog = new AddGroupDialog(this);
         addGroupDialog.show(getActivity().getSupportFragmentManager(), "people");
+    }
+
+    public void callPeopleActivity(int position){
+        int peopleId = mLstPeople.get(position).getPeopleId();
+        Intent intent = new Intent(getActivity(), PeopleActivity.class);
+        intent.putExtra(INTENT_TO_PEOPLE,peopleId);
+        startActivityForResult(intent,REQUEST_CODE_PEOPLE);
     }
 }
