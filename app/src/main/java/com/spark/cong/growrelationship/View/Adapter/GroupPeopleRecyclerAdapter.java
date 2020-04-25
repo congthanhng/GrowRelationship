@@ -11,12 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
+import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.R;
 
 import java.util.List;
 
 public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeopleRecyclerAdapter.GroupPeopleViewHolder>  {
-    private List<GroupPeople> lstGroupPeople;
+    private List<People> lstPeopleOfGroup;
     private Context context;
     public GroupPeopleRecyclerAdapter(Context context){
         this.context = context;
@@ -30,21 +31,20 @@ public class GroupPeopleRecyclerAdapter extends RecyclerView.Adapter<GroupPeople
 
     @Override
     public void onBindViewHolder(@NonNull GroupPeopleViewHolder holder, int position) {
-        int text = lstGroupPeople.get(position).getGroupId();
-        Log.i("TEST", "onBindViewHolder: group name "+ text);
+        String text = lstPeopleOfGroup.get(position).getPeopleName();
         holder.txtGPName.setText(text+"");
     }
 
     @Override
     public int getItemCount() {
-        if(lstGroupPeople != null){
-            return lstGroupPeople.size();
+        if(lstPeopleOfGroup != null){
+            return lstPeopleOfGroup.size();
         }
         return 0;
     }
 
-    public void setData(List<GroupPeople> listGroupPeople){
-        this.lstGroupPeople = listGroupPeople;
+    public void setData(List<People> listPeopleOfGroup){
+        this.lstPeopleOfGroup = listPeopleOfGroup;
         notifyDataSetChanged();
     }
     //ViewHolder

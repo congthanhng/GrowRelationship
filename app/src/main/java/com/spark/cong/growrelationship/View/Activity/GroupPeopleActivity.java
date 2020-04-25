@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -12,32 +11,44 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.spark.cong.growrelationship.Architecture.Entity.Group;
-import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
-import com.spark.cong.growrelationship.View.Adapter.GroupPeopleRecyclerAdapter;
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
+import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupPeopleViewModel;
+import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
+import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
 import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
 import com.spark.cong.growrelationship.R;
+import com.spark.cong.growrelationship.View.Adapter.GroupPeopleRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.spark.cong.growrelationship.Commons.Constant.*;
+import static com.spark.cong.growrelationship.Commons.Constant.INTENT_MAIN_TO_GROUP_PEOPLE;
+import static com.spark.cong.growrelationship.Commons.Constant.INTENT_SELECT_PEOPLE;
+import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
+import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_SELECT_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.impl.ErrorMessage.NOT_FOUND_INTENT;
 import static com.spark.cong.growrelationship.Commons.impl.ErrorMessage.NOT_FOUND_PARAMETER;
 
 
-public class GroupPeopleActivity extends AppCompatActivity implements View.OnClickListener{
+public class GroupPeopleActivity extends AppCompatActivity implements View.OnClickListener {
 
+    //parameter from GroupActivity
     private int mGroupId;
-    private List<GroupPeople> lstGroupPeople;
+
+    //parameter
+    private List<People> lstPeopleOfGroup=new ArrayList<>();
+
+    //ViewModel
     private GroupPeopleViewModel mViewModel;
     private GroupViewModel mGroupViewModel;
+    private PeopleViewModel mPeopleViewModel;
+
+    //View
     private TextView txtTitle;
     private ImageButton btnAdd;
 
@@ -47,12 +58,12 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_group_people);
 
         //get data from GroupActivity, throw if not found
-        if(getIntent()!=null){
-            mGroupId = getIntent().getIntExtra(INTENT_MAIN_TO_GROUP_PEOPLE,-1);
-            if(!(mGroupId >=0)){
+        if (getIntent() != null) {
+            mGroupId = getIntent().getIntExtra(INTENT_MAIN_TO_GROUP_PEOPLE, -1);
+            if (mGroupId < 0) {
                 throw new RuntimeException(NOT_FOUND_PARAMETER);
             }
-        }else{
+        } else {
             throw new RuntimeException(NOT_FOUND_INTENT);
         }
 
@@ -60,7 +71,8 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         setView();
         setListener();
     }
-    public void setView(){
+
+    public void setView() {
         //set action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -71,7 +83,7 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         recyclerView.setLayoutManager(layoutManager);
         final GroupPeopleRecyclerAdapter adapter = new GroupPeopleRecyclerAdapter(this);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,1));
+        recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING, 1));
 
         //imagebutton
         btnAdd = (ImageButton) findViewById(R.id.button_add);
@@ -82,64 +94,71 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         //ViewModel
         mViewModel = new ViewModelProvider(this).get(GroupPeopleViewModel.class);
         mGroupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
+        mPeopleViewModel = new ViewModelProvider(this).get(PeopleViewModel.class);
 
         //observe data
-        if(mGroupId >= 0){
-            mViewModel.getAllGroupPeopleByGroupId(mGroupId).observe(this, new Observer<List<GroupPeople>>() {
-                @Override
-                public void onChanged(List<GroupPeople> groupPeople) {
-                    adapter.setData(groupPeople);
-                    lstGroupPeople = groupPeople;
+        mViewModel.getAllGroupPeopleByGroupId(mGroupId).observe(this, new Observer<List<GroupPeople>>() {
+            @Override
+            public void onChanged(List<GroupPeople> groupPeople) {
+//                adapter.setData(groupPeople);
+                lstPeopleOfGroup.clear();
+                for (int i=0; i<groupPeople.size();i++){
+                    lstPeopleOfGroup.add(mPeopleViewModel.getPeopleById(groupPeople.get(i).getPeopleId()));
                 }
-            });
-        }
+                if(!lstPeopleOfGroup.isEmpty()){
+                    adapter.setData(lstPeopleOfGroup);
+                }
+            }
+        });
 
         //set title of list group
         try {
             Group group = mGroupViewModel.getGroupById(mGroupId);
             txtTitle.setText(group.getGroupName().toString());
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
     }
 
-    public void setListener(){
+    public void setListener() {
         btnAdd.setOnClickListener(this);
     }
 
     /**
      * listener when click back home
+     *
      * @param item
      * @return
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);
     }
 
     //mock data
-    public List<GroupPeople> listGroupPeopleFake(){
+    public List<GroupPeople> listGroupPeopleFake() {
         List<GroupPeople> lstPeoPle = new ArrayList<>();
-        lstPeoPle.add(new GroupPeople(1,1));
-        lstPeoPle.add(new GroupPeople(2,2));
-        lstPeoPle.add(new GroupPeople(3,1));
-        lstPeoPle.add(new GroupPeople(4,1));
-        lstPeoPle.add(new GroupPeople(5,1));
+        lstPeoPle.add(new GroupPeople(1, 1));
+        lstPeoPle.add(new GroupPeople(2, 2));
+        lstPeoPle.add(new GroupPeople(3, 1));
+        lstPeoPle.add(new GroupPeople(4, 1));
+        lstPeoPle.add(new GroupPeople(5, 1));
         return lstPeoPle;
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.button_add :{
-                Intent intent = new Intent(GroupPeopleActivity.this,SelectPeoplesActivity.class);
-                intent.putExtra(INTENT_SELECT_PEOPLE,mGroupId);
-                startActivityForResult(intent,REQUEST_CODE_SELECT_PEOPLE);
-            }break;
+        switch (v.getId()) {
+            case R.id.button_add: {
+                Intent intent = new Intent(GroupPeopleActivity.this, SelectPeoplesActivity.class);
+                intent.putExtra(INTENT_SELECT_PEOPLE, mGroupId);
+                startActivityForResult(intent, REQUEST_CODE_SELECT_PEOPLE);
+            }
+            break;
         }
     }
 }
