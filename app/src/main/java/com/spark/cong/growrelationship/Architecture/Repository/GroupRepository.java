@@ -11,6 +11,9 @@ import com.spark.cong.growrelationship.Architecture.GrowDatabase;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Single;
+
 public class GroupRepository {
     private GroupDAO mGroupDAO;
     private LiveData<List<Group>> mAllGroup;
@@ -26,8 +29,9 @@ public class GroupRepository {
     public LiveData<List<Group>>getAllGroup(){return mAllGroup;}
 
     //insert
-    public void insertGroup(Group group){
-        new InsertGroupAsyncTask(mGroupDAO).execute(group);
+    public Completable insertGroup(Group group){
+            return mGroupDAO.insertGroup(group);
+//        new InsertGroupAsyncTask(mGroupDAO).execute(group);
     }
 
     //delete all record
@@ -62,15 +66,15 @@ public class GroupRepository {
 
     /*--------------------------------synchronous--------------------------------*/
     //asynctask insert
-    public static class InsertGroupAsyncTask extends AsyncTask<Group,Void,Void>{
-        private GroupDAO groupDAO;
-        InsertGroupAsyncTask(GroupDAO groupDAO){this.groupDAO = groupDAO;}
-        @Override
-        protected Void doInBackground(Group... groups) {
-            groupDAO.insertGroup(groups[0]);
-            return null;
-        }
-    }
+//    public static class InsertGroupAsyncTask extends AsyncTask<Group,Void,Void>{
+//        private GroupDAO groupDAO;
+//        InsertGroupAsyncTask(GroupDAO groupDAO){this.groupDAO = groupDAO;}
+//        @Override
+//        protected Void doInBackground(Group... groups) {
+//            groupDAO.insertGroup(groups[0]);
+//            return null;
+//        }
+//    }
 
     //asynctask delete all record
     public static class DeleteAllGroupAsyncTask extends AsyncTask<Void,Void,Void>{

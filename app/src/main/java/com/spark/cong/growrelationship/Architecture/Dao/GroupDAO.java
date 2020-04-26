@@ -12,6 +12,9 @@ import com.spark.cong.growrelationship.Architecture.Entity.Group;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Single;
+
 @Dao
 public interface GroupDAO {
 
@@ -19,7 +22,7 @@ public interface GroupDAO {
     LiveData<List<Group>> getAllGroup();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertGroup(Group group);
+    Completable insertGroup(Group group);
 
     @Query("DELETE FROM `Group` WHERE group_id = :groupId")
     void deleteGroupById(int groupId);

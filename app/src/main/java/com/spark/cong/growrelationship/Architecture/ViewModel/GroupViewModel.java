@@ -11,6 +11,9 @@ import com.spark.cong.growrelationship.Architecture.Repository.GroupRepository;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Single;
+
 public class GroupViewModel extends AndroidViewModel {
     private GroupRepository mGroupRepository;
     private LiveData<List<Group>> mAllGroup;
@@ -51,8 +54,8 @@ public class GroupViewModel extends AndroidViewModel {
 
     /*----------------------------------Insert-------------------------------------*/
     //insert a record
-    public void insertGroup(Group group){
-        mGroupRepository.insertGroup(group);
+    public Completable insertGroup(Group group){
+        return mGroupRepository.insertGroup(group);
     }
 
 

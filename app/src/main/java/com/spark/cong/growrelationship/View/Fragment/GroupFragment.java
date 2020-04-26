@@ -33,6 +33,14 @@ import com.spark.cong.growrelationship.View.Dialog.AddGroupDialog;
 
 import java.util.List;
 
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableCompletableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+
 import static com.spark.cong.growrelationship.Commons.Constant.INTENT_TO_GROUP_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_GROUP_PEOPLE;
@@ -45,12 +53,21 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
     //callView
     private CallView callView = CallViewImpl.getInstance();
 
+    /*------------------------------------ViewModel-----------------------------*/
     private GroupViewModel mViewModel;
+
+    /*------------------------------------View-----------------------------*/
     private RecyclerView recyclerView;
+
+    /*------------------------------------param-----------------------------*/
     private List<Group> listGroup;
     private GroupRecyclerAdapter adapter;
     private FragmentActivity myContext;
 
+    /*------------------------------------RxJava-----------------------------*/
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    /*------------------------------------constructor-----------------------------*/
     public static GroupFragment newInstance() {
         GroupFragment fragment = new GroupFragment();
         Bundle args = new Bundle();
@@ -107,6 +124,18 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
+
+    }
+
+    @Override
     public void onClick(View v) {
     }
 
@@ -116,7 +145,23 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
     @Override
     public void onFinishEditDialog(String inputText) {
         Group group = new Group(inputText);
-        mViewModel.insertGroup(group);
+        Disposable disposable = mViewModel.insertGroup(group)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new DisposableCompletableObserver() {
+
+                    @Override
+                    public void onComplete() {
+                        Toast.makeText(getContext(),"insert successfull",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(getContext(),"insert fail",Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+        compositeDisposable.add(disposable);
     }
 
     //item click listener
