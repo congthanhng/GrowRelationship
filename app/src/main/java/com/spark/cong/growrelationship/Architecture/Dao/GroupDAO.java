@@ -13,6 +13,7 @@ import com.spark.cong.growrelationship.Architecture.Entity.Group;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 @Dao
@@ -25,7 +26,7 @@ public interface GroupDAO {
 
     //get group by id
     @Query("SELECT * FROM `group` WHERE group_id = :groupId LIMIT 1")
-    Group getGroupById(int groupId);
+    Flowable<Group> getGroupById(int groupId);
 
 
     /*----------------------------------insert-------------------------------------*/

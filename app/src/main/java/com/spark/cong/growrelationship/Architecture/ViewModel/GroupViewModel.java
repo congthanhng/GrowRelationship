@@ -12,6 +12,7 @@ import com.spark.cong.growrelationship.Architecture.Repository.GroupRepository;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 import io.reactivex.functions.Action;
 
@@ -33,7 +34,7 @@ public class GroupViewModel extends AndroidViewModel {
         return mAllGroup;
     }
     //get row by Id
-    public Group getGroupById(int groupId){
+    public Flowable<Group> getGroupById(int groupId){
         return mGroupRepository.getGroupById(groupId);
     }
 

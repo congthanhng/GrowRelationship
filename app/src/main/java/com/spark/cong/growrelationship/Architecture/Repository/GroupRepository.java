@@ -12,6 +12,7 @@ import com.spark.cong.growrelationship.Architecture.GrowDatabase;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 public class GroupRepository {
@@ -51,13 +52,8 @@ public class GroupRepository {
     }
 
     // get row by Id
-    public Group getGroupById(int groupId){
-        try {
-            Group group = new GetGroupByIdAsyncTask(mGroupDAO).execute(groupId).get();
-            return group;
-        }catch (Exception e){
-            throw new RuntimeException("error to get group by id");
-        }
+    public Flowable<Group> getGroupById(int groupId){
+        return mGroupDAO.getGroupById(groupId);
     }
 
     //delete group
@@ -77,17 +73,7 @@ public class GroupRepository {
             return null;
         }
     }
-    //asynctask delete a group
-    public static class DeleteGroupAsyncTask extends AsyncTask<Group,Void,Void>{
-        private GroupDAO groupDAO;
-        DeleteGroupAsyncTask(GroupDAO groupDAO){this.groupDAO = groupDAO;}
 
-        @Override
-        protected Void doInBackground(Group... groups) {
-            groupDAO.deleteGroup(groups[0]);
-            return null;
-        }
-    }
 
     //asynctask update a group
     public static class UpdateGroupAsyncTask extends AsyncTask<Group,Void,Void>{
@@ -99,16 +85,4 @@ public class GroupRepository {
             return null;
         }
     }
-
-    //asyncTask getGroupById
-    public static class GetGroupByIdAsyncTask extends AsyncTask<Integer,Void,Group>{
-        private GroupDAO groupDAO;
-        GetGroupByIdAsyncTask(GroupDAO groupDAO){this.groupDAO = groupDAO;}
-        @Override
-        protected Group doInBackground(Integer... integers) {
-            return groupDAO.getGroupById(integers[0]);
-        }
-    }
-
-
 }

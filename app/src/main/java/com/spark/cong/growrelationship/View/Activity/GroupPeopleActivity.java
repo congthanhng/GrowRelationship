@@ -30,8 +30,17 @@ import com.spark.cong.growrelationship.Commons.impl.CallViewImpl;
 import com.spark.cong.growrelationship.R;
 import com.spark.cong.growrelationship.View.Adapter.GroupPeopleRecyclerAdapter;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.FlowableSubscriber;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 import static com.spark.cong.growrelationship.Commons.Constant.INTENT_SELECT_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.INTENT_TO_GROUP_PEOPLE;
@@ -56,6 +65,7 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
     //parameter
     private List<People> lstPeopleOfGroup=new ArrayList<>();
     private List<GroupPeople> lstGroupPeople;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     //ViewModel
     private GroupPeopleViewModel mViewModel;
@@ -65,6 +75,7 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
     //View
     private TextView txtTitle;
     private ImageButton btnAdd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +95,12 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         //set and map View
         setView();
         setListener();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
     }
 
     public void setView() {
@@ -127,12 +144,28 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         });
 
         //set title of list group
-        try {
-            Group group = mGroupViewModel.getGroupById(mGroupId);
-            txtTitle.setText(group.getGroupName().toString());
-        } catch (Exception e) {
+            compositeDisposable.add(mGroupViewModel.getGroupById(mGroupId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(new DisposableSubscriber<Group>() {
+                @Override
+                public void onNext(Group group) {
+                    txtTitle.setText(group.getGroupName());
+                }
 
-        }
+                @Override
+                public void onError(Throwable t) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            }));
+//            Group group = mGroupViewModel.getGroupById(mGroupId);
+//            txtTitle.setText(group.getGroupName().toString());
+
 
     }
 
