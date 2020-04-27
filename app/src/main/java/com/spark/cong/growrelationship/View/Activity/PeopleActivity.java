@@ -1,36 +1,26 @@
 package com.spark.cong.growrelationship.View.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.spark.cong.growrelationship.Commons.ItemClickListener;
-import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
-import com.spark.cong.growrelationship.Commons.impl.CommonImpl;
-import com.spark.cong.growrelationship.View.Adapter.PeopleRecyclerAdapter;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
-import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
+import com.spark.cong.growrelationship.Commons.impl.CommonImpl;
 import com.spark.cong.growrelationship.R;
 
-import java.util.List;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 
-import static com.spark.cong.growrelationship.Commons.Constant.*;
+import static com.spark.cong.growrelationship.Commons.Constant.INTENT_TO_PEOPLE;
 
 public class PeopleActivity extends AppCompatActivity {
 
@@ -41,6 +31,7 @@ public class PeopleActivity extends AppCompatActivity {
 
     //test
     private EditText editText;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
 //    private int groupId;
 //    private List<Group> lstPeople;
@@ -51,25 +42,32 @@ public class PeopleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_people);
 
         //get data had been transfer from previous activity
-        if(getIntent()!=null){
+        if (getIntent() != null) {
             Intent intent = getIntent();
-            this.mPeopleId = intent.getIntExtra(INTENT_TO_PEOPLE,-1);
+            this.mPeopleId = intent.getIntExtra(INTENT_TO_PEOPLE, -1);
         }
 
         //set and map View
-        setMapView();
+        setView();
         setListener();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
     }
 
     /**
      * listener when click back home
+     *
      * @param item
      * @return
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         //back to main activity
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -78,34 +76,56 @@ public class PeopleActivity extends AppCompatActivity {
     /**
      * init, set and map view
      */
-    public void setMapView(){
+    public void setView() {
         //set action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //viewModel
         mViewModel = new ViewModelProvider(this).get(PeopleViewModel.class);
-        editText = (EditText)findViewById(R.id.edt_test_people);
+        editText =  findViewById(R.id.edt_test_people);
 
         //get data of people
-        if(mPeopleId >= 0){
-            mPeople = mViewModel.getPeopleById(mPeopleId);
-            if(mPeople != null){
+        if (mPeopleId >= 0) {
+            getPeopleById(mPeopleId);
+            if (mPeople != null) {
                 editText.setText(mPeople.getPeopleName());
 
-            }else{
-                Toast.makeText(getApplicationContext(),"null",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "null", Toast.LENGTH_SHORT).show();
 
             }
-        }else{
-            Toast.makeText(getApplicationContext(),"Please check your data transfer,",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Please check your data transfer,", Toast.LENGTH_SHORT).show();
         }
 
         //test
     }
 
+    private void getPeopleById(final int id) {
+        compositeDisposable.add(mViewModel.getPeopleById(id)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeWith(new DisposableSubscriber<People>() {
+            @Override
+            public void onNext(People people) {
+                mPeople = people;
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        }));
+    }
+
     //listener
-    public void setListener(){
+    public void setListener() {
         //button
 
     }

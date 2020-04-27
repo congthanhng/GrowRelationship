@@ -11,6 +11,8 @@ import com.spark.cong.growrelationship.Architecture.Entity.People;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+
 @Dao
 public interface PeopleDAO {
     //get all
@@ -23,7 +25,7 @@ public interface PeopleDAO {
 
     //getPeopleById
     @Query("SELECT * FROM people WHERE people_id = :id LIMIT 1")
-    People getPeopleById(int id);
+    Flowable<People> getPeopleById(int id);
 
     //delete
     @Delete

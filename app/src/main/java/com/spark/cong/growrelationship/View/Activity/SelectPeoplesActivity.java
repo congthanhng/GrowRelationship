@@ -75,7 +75,7 @@ public class SelectPeoplesActivity extends AppCompatActivity implements View.OnC
                 if(lstPeopleId != null){
                     lstPeopleSelect.clear();
                     for(int item:lstPeopleId){
-                        lstPeopleSelect.add(mPeopleViewModel.getPeopleById(item));
+//                        lstPeopleSelect.add(mPeopleViewModel.getPeopleById(item));
                     }
                 }
                 if(lstPeopleSelect!=null){

@@ -126,22 +126,32 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         mViewModel = new ViewModelProvider(this).get(GroupPeopleViewModel.class);
         mGroupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
         mPeopleViewModel = new ViewModelProvider(this).get(PeopleViewModel.class);
-
+        mViewModel.setGroupId(mGroupId);
         //observe data
-        mViewModel.getAllGroupPeopleByGroupId(mGroupId).observe(this, new Observer<List<GroupPeople>>() {
+        mViewModel.getAllGroupPeopleByGroupId().observe(this, new Observer<List<GroupPeople>>() {
             @Override
             public void onChanged(List<GroupPeople> groupPeople) {
 //                adapter.setData(groupPeople);
                 lstGroupPeople = groupPeople;
                 lstPeopleOfGroup.clear();
                 for (int i=0; i<groupPeople.size();i++){
-                    lstPeopleOfGroup.add(mPeopleViewModel.getPeopleById(groupPeople.get(i).getPeopleId()));
+//                    lstPeopleOfGroup.add(mPeopleViewModel.getPeopleById(groupPeople.get(i).getPeopleId()));
+                    Log.i("sdfdssf", "onChanged: "+ groupPeople.get(i).getPeopleId());
                 }
                 if(!lstPeopleOfGroup.isEmpty()){
                     adapter.setData(lstPeopleOfGroup);
                 }
             }
         });
+//        mViewModel.lstGroupPeople().observe(this, new Observer<List<GroupPeople>>() {
+//            @Override
+//            public void onChanged(List<GroupPeople> groupPeople) {
+//                for(int i=0;i< groupPeople.size();i++){
+//                    Log.i("sdf", "onChanged: "+ groupPeople.get(i).getPeopleId());
+//
+//                }
+//            }
+//        });
 
         //set title of list group
             compositeDisposable.add(mGroupViewModel.getGroupById(mGroupId)

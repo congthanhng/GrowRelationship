@@ -22,7 +22,7 @@ public class GroupPeopleRepository {
 
 
     /*----------------------------------method-----------------------------*/
-    public LiveData<List<GroupPeople>> getAllGroupPeople(){return groupPeopleDAO.getAllGroupPeople();}
+    public List<GroupPeople> getAllGroupPeople(){return groupPeopleDAO.getAllGroupPeople();}
 
     public LiveData<List<GroupPeople>> getAllGroupPeopleByGroupId(int groupId){return groupPeopleDAO.getAllPeopleByGroupId(groupId);}
 

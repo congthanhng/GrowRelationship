@@ -34,6 +34,13 @@ import com.spark.cong.growrelationship.View.Dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Action;
+import io.reactivex.observers.DisposableCompletableObserver;
+import io.reactivex.schedulers.Schedulers;
+
 import static com.spark.cong.growrelationship.Commons.Constant.INTENT_TO_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOPLE;
@@ -62,6 +69,7 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
     private RecyclerView recyclerView;
     private PeopleRecyclerAdapter adapter;
     private List<People> mLstPeople;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -155,6 +163,12 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
+    }
+
     //item click listener of recycler and bottomsheet
     @Override
     public void onItemClick(View view, int position) {
@@ -164,12 +178,34 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
                 callPeopleActivity(position);
             }break;
             case R.id.action_delete:{
-                mViewModel.deletePeople(mLstPeople.get(position));
+                deletePeople(position);
             }break;
             default: {
                 callPeopleActivity(position);
             }
         }
+    }
+
+    private void deletePeople(final int position) {
+        final People people = mLstPeople.get(position);
+        compositeDisposable.add(Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                mViewModel.deletePeople(people);
+            }
+        }).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeWith(new DisposableCompletableObserver() {
+            @Override
+            public void onComplete() {
+                Toast.makeText(getContext(),"delete successful",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        }));
     }
 
     @Override
@@ -183,8 +219,27 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
 
     @Override
     public void onFinishEditDialog(String inputText) {
-        People people = new People(inputText);
-        mViewModel.insertPeople(people);
+        final People people = new People(inputText);
+        compositeDisposable.add(Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                mViewModel.insertPeople(people);
+            }
+        })
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeWith(new DisposableCompletableObserver() {
+            @Override
+            public void onComplete() {
+                Toast.makeText(getContext(),"insert successful",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        }));
+
     }
 
     /**

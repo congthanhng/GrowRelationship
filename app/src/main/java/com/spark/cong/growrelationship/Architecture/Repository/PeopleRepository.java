@@ -11,6 +11,8 @@ import com.spark.cong.growrelationship.Architecture.GrowDatabase;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+
 public class PeopleRepository {
     private PeopleDAO peopleDAO;
 
@@ -29,64 +31,18 @@ public class PeopleRepository {
 
     //insert a row
     public void insertPeople(People people){
-        new InsertPeopleAsyncTask(peopleDAO).execute(people);
+        peopleDAO.insertPeople(people);
     }
 
     //get row by id
-    public People getPeopleById(int id){
-        
-        try {
-            People people = new GetPeopleByIdAsyncTask(peopleDAO).execute(id).get();
-            return people;
-        }catch (Exception e){
-            throw new RuntimeException("error to get people");
-        }
+    public Flowable<People> getPeopleById(int id){
+
+        return peopleDAO.getPeopleById(id);
 
     }
 
     //deletePeople
     public void deletePeople(People people){
-        new DeletePeopleAsyncTask(peopleDAO).execute(people);
-    }
-
-
-    /* -------------------------synchronous--------------------------*/
-    //synchronous of insertPeople
-    public class InsertPeopleAsyncTask extends AsyncTask<People,Void,Void>{
-        private PeopleDAO peopleDAO;
-        public InsertPeopleAsyncTask(PeopleDAO peopleDAO){
-            this.peopleDAO = peopleDAO;
-        }
-        @Override
-        protected Void doInBackground(People... peoples) {
-            peopleDAO.insertPeople(peoples[0]);
-            return null;
-        }
-    }
-    //synchronous of getPeopleById
-    public class GetPeopleByIdAsyncTask extends AsyncTask<Integer,Void, People>{
-        private PeopleDAO peopleDAO;
-        public GetPeopleByIdAsyncTask(PeopleDAO peopleDAO){
-            this.peopleDAO = peopleDAO;
-        }
-        @Override
-        protected People doInBackground(Integer... integers) {
-            return peopleDAO.getPeopleById(integers[0]);
-        }
-
-    }
-
-    //synchronous of deletePeople
-    public class DeletePeopleAsyncTask extends AsyncTask<People,Void, People>{
-        private PeopleDAO peopleDAO;
-        public DeletePeopleAsyncTask(PeopleDAO peopleDAO){
-            this.peopleDAO = peopleDAO;
-        }
-        @Override
-        protected People doInBackground(People... peoples) {
-            peopleDAO.deletePeople(peoples[0]);
-            return null;
-        }
-
+        peopleDAO.deletePeople(people);
     }
 }
