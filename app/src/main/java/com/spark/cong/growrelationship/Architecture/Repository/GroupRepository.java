@@ -29,8 +29,8 @@ public class GroupRepository {
     public LiveData<List<Group>>getAllGroup(){return mAllGroup;}
 
     //insert
-    public Completable insertGroup(Group group){
-            return mGroupDAO.insertGroup(group);
+    public void insertGroup(Group group){
+        mGroupDAO.insertGroup(group);
 //        new InsertGroupAsyncTask(mGroupDAO).execute(group);
     }
 
@@ -41,7 +41,8 @@ public class GroupRepository {
 
     //delete a record
     public void deleteGroupById(int groupId){
-        new DeleteGroupByIdAsyncTask(mGroupDAO).execute(groupId);
+//        new DeleteGroupByIdAsyncTask(mGroupDAO).execute(groupId);
+        mGroupDAO.deleteGroupById(groupId);
     }
 
     //update a record
@@ -61,20 +62,10 @@ public class GroupRepository {
 
     //delete group
     public void deleteGroup(Group group){
-        new DeleteGroupAsyncTask(mGroupDAO).execute(group);
+//        new DeleteGroupAsyncTask(mGroupDAO).execute(group);
+        mGroupDAO.deleteGroup(group);
     }
 
-    /*--------------------------------synchronous--------------------------------*/
-    //asynctask insert
-//    public static class InsertGroupAsyncTask extends AsyncTask<Group,Void,Void>{
-//        private GroupDAO groupDAO;
-//        InsertGroupAsyncTask(GroupDAO groupDAO){this.groupDAO = groupDAO;}
-//        @Override
-//        protected Void doInBackground(Group... groups) {
-//            groupDAO.insertGroup(groups[0]);
-//            return null;
-//        }
-//    }
 
     //asynctask delete all record
     public static class DeleteAllGroupAsyncTask extends AsyncTask<Void,Void,Void>{
@@ -119,15 +110,5 @@ public class GroupRepository {
         }
     }
 
-    //asyncTask delete group
-    public static class DeleteGroupByIdAsyncTask extends AsyncTask<Integer,Void,Void>{
-        private GroupDAO groupDAO;
-        DeleteGroupByIdAsyncTask(GroupDAO groupDAO){this.groupDAO = groupDAO;}
-        @Override
-        protected Void doInBackground(Integer... integers) {
-            groupDAO.deleteGroupById(integers[0]);
-            return null;
-        }
-    }
 
 }

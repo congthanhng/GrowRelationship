@@ -13,6 +13,7 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.functions.Action;
 
 public class GroupViewModel extends AndroidViewModel {
     private GroupRepository mGroupRepository;
@@ -43,19 +44,31 @@ public class GroupViewModel extends AndroidViewModel {
         mGroupRepository.deleteAllGroup();
     }
     //delete by group id
-    public void deleteGroupById(int groupId){
-        mGroupRepository.deleteGroupById(groupId);
+    public Completable deleteGroupById(final int groupId){
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                mGroupRepository.deleteGroupById(groupId);
+
+            }
+        });
     }
+
     //delete a group
-    public void deleteGroup(Group group){
-        mGroupRepository.deleteGroup(group);
+    public Completable deleteGroup(final Group group){
+        return Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                mGroupRepository.deleteGroup(group);
+            }
+        });
     }
 
 
     /*----------------------------------Insert-------------------------------------*/
     //insert a record
-    public Completable insertGroup(Group group){
-        return mGroupRepository.insertGroup(group);
+    public void insertGroup(final Group group){
+        mGroupRepository.insertGroup(group);
     }
 
 

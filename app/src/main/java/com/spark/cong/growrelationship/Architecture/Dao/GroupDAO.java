@@ -18,26 +18,40 @@ import io.reactivex.Single;
 @Dao
 public interface GroupDAO {
 
+    /*----------------------------------select -------------------------------------*/
+    //get all
     @Query("SELECT * FROM `Group`")
     LiveData<List<Group>> getAllGroup();
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    Completable insertGroup(Group group);
-
-    @Query("DELETE FROM `Group` WHERE group_id = :groupId")
-    void deleteGroupById(int groupId);
-
-    @Query("DELETE FROM `Group`")
-    void deleteAllGroup();
-
-    @Update
-    void updateGroup(Group group);
 
     //get group by id
     @Query("SELECT * FROM `group` WHERE group_id = :groupId LIMIT 1")
     Group getGroupById(int groupId);
 
-    //delete group
+
+    /*----------------------------------insert-------------------------------------*/
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertGroup(Group group);
+
+
+    /*----------------------------------delete-------------------------------------*/
+    //delete by id
+    @Query("DELETE FROM `Group` WHERE group_id = :groupId")
+    void deleteGroupById(int groupId);
+
+    //delete all
+    @Query("DELETE FROM `Group`")
+    void deleteAllGroup();
+
+    //delete a row
     @Delete
     void deleteGroup(Group group);
+
+
+    /*----------------------------------update-------------------------------------*/
+    @Update
+    void updateGroup(Group group);
+
+
+
+
 }
