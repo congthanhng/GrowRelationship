@@ -117,10 +117,10 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING, 1));
 
         //imagebutton
-        btnAdd = (ImageButton) findViewById(R.id.button_add);
+        btnAdd = findViewById(R.id.button_add);
 
         //TextView
-        txtTitle = (TextView) findViewById(R.id.title_group);
+        txtTitle = findViewById(R.id.title_group);
 
         //ViewModel
         mViewModel = new ViewModelProvider(this).get(GroupPeopleViewModel.class);
