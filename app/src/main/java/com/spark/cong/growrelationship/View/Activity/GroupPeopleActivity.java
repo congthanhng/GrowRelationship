@@ -2,7 +2,6 @@ package com.spark.cong.growrelationship.View.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -21,7 +20,6 @@ import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
 import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupPeopleViewModel;
 import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
-import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
 import com.spark.cong.growrelationship.Commons.CallView;
 import com.spark.cong.growrelationship.Commons.ItemClickListener;
 import com.spark.cong.growrelationship.Commons.ItemLongClickListener;
@@ -30,15 +28,14 @@ import com.spark.cong.growrelationship.Commons.impl.CallViewImpl;
 import com.spark.cong.growrelationship.R;
 import com.spark.cong.growrelationship.View.Adapter.GroupPeopleRecyclerAdapter;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import io.reactivex.FlowableSubscriber;
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Action;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
@@ -63,14 +60,12 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
     private int mGroupId;
 
     //parameter
-    private List<People> lstPeopleOfGroup=new ArrayList<>();
-    private List<GroupPeople> lstGroupPeople;
+    private List<People> lstPeopleOfGroup;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     //ViewModel
     private GroupPeopleViewModel mViewModel;
     private GroupViewModel mGroupViewModel;
-    private PeopleViewModel mPeopleViewModel;
 
     //View
     private TextView txtTitle;
@@ -105,11 +100,12 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
 
     public void setView() {
         //set action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //RecyclerView
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView_GroupPeople);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView_GroupPeople);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         final GroupPeopleRecyclerAdapter adapter = new GroupPeopleRecyclerAdapter(this);
@@ -125,58 +121,37 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
         //ViewModel
         mViewModel = new ViewModelProvider(this).get(GroupPeopleViewModel.class);
         mGroupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
-        mPeopleViewModel = new ViewModelProvider(this).get(PeopleViewModel.class);
         mViewModel.setGroupId(mGroupId);
-        //observe data
-        mViewModel.getAllGroupPeopleByGroupId().observe(this, new Observer<List<GroupPeople>>() {
+
+        //getAllPeople
+        mViewModel.getAllPeopleOfGroup(mGroupId).observe(this, new Observer<List<People>>() {
             @Override
-            public void onChanged(List<GroupPeople> groupPeople) {
-//                adapter.setData(groupPeople);
-                lstGroupPeople = groupPeople;
-                lstPeopleOfGroup.clear();
-                for (int i=0; i<groupPeople.size();i++){
-//                    lstPeopleOfGroup.add(mPeopleViewModel.getPeopleById(groupPeople.get(i).getPeopleId()));
-                    Log.i("sdfdssf", "onChanged: "+ groupPeople.get(i).getPeopleId());
-                }
-                if(!lstPeopleOfGroup.isEmpty()){
-                    adapter.setData(lstPeopleOfGroup);
-                }
+            public void onChanged(List<People> peoples) {
+                adapter.setData(peoples);
+                lstPeopleOfGroup = peoples;
             }
         });
-//        mViewModel.lstGroupPeople().observe(this, new Observer<List<GroupPeople>>() {
-//            @Override
-//            public void onChanged(List<GroupPeople> groupPeople) {
-//                for(int i=0;i< groupPeople.size();i++){
-//                    Log.i("sdf", "onChanged: "+ groupPeople.get(i).getPeopleId());
-//
-//                }
-//            }
-//        });
 
         //set title of list group
-            compositeDisposable.add(mGroupViewModel.getGroupById(mGroupId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(new DisposableSubscriber<Group>() {
-                @Override
-                public void onNext(Group group) {
-                    txtTitle.setText(group.getGroupName());
-                }
+        compositeDisposable.add(mGroupViewModel.getGroupById(mGroupId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSubscriber<Group>() {
+                    @Override
+                    public void onNext(Group group) {
+                        txtTitle.setText(group.getGroupName());
+                    }
 
-                @Override
-                public void onError(Throwable t) {
+                    @Override
+                    public void onError(Throwable t) {
 
-                }
+                    }
 
-                @Override
-                public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-                }
-            }));
-//            Group group = mGroupViewModel.getGroupById(mGroupId);
-//            txtTitle.setText(group.getGroupName().toString());
-
-
+                    }
+                }));
     }
 
     public void setListener() {
@@ -206,39 +181,59 @@ public class GroupPeopleActivity extends AppCompatActivity implements View.OnCli
             break;
         }
     }
+
     //item click from Adapter of bottomSheet
     @Override
     public void onItemClick(View view, int position) {
-        Log.i("tset", "onItemClick:sdfdsfd ");
-        switch (view.getId()){
-            case R.id.action_open:{
-                Toast.makeText(getApplicationContext(),"open"+position,Toast.LENGTH_SHORT).show();
-                callPeopleActivity(position);
-            }break;
-            case R.id.action_delete:{
-                Toast.makeText(getApplicationContext(),"detele"+position,Toast.LENGTH_SHORT).show();
-                mViewModel.deleteGroupPeople(lstGroupPeople.get(position));
-            }break;
-            default:{
+        switch (view.getId()) {
+            //delete
+            case R.id.action_delete: {
+                deleteGroupPeople(new GroupPeople(mGroupId,lstPeopleOfGroup.get(position).getPeopleId()));
+            }
+            break;
+            case R.id.action_open:
+            default: {
                 callPeopleActivity(position);
             }
         }
 
     }
 
+    private void deleteGroupPeople(final GroupPeople groupPeople) {
+        compositeDisposable.add(Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                mViewModel.deleteGroupPeople(groupPeople);
+            }
+        })
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeWith(new DisposableCompletableObserver() {
+            @Override
+            public void onComplete() {
+                Toast.makeText(getApplicationContext(),"Delete Successful",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(getApplicationContext(),"Delete Fail",Toast.LENGTH_SHORT).show();
+            }
+        }));
+    }
+
     @Override
     public void onItemLongClick(View view, int position) {
         //show bottom sheet
-        callView.callBottomSheet(getSupportFragmentManager(),TAG_ITEM_PEOPLE_OF_GROUP,position);
+        callView.callBottomSheet(getSupportFragmentManager(), TAG_ITEM_PEOPLE_OF_GROUP, position);
     }
 
-    public void callPeopleActivity(int position){
-        String text = lstPeopleOfGroup.get(position).getPeopleName();
-        Intent intent = new Intent(GroupPeopleActivity.this,PeopleActivity.class);
-        intent.putExtra(INTENT_TO_PEOPLE,lstPeopleOfGroup.get(position).getPeopleId());
-        startActivityForResult(intent,REQUEST_CODE_PEOPLE_TO_GROUPPEOPLE);
+    public void callPeopleActivity(int position) {
+        Intent intent = new Intent(GroupPeopleActivity.this, PeopleActivity.class);
+        intent.putExtra(INTENT_TO_PEOPLE, lstPeopleOfGroup.get(position).getPeopleId());
+        startActivityForResult(intent, REQUEST_CODE_PEOPLE_TO_GROUPPEOPLE);
     }
-    public void callSelectPeopleActivity(){
+
+    public void callSelectPeopleActivity() {
         Intent intent = new Intent(GroupPeopleActivity.this, SelectPeoplesActivity.class);
         intent.putExtra(INTENT_SELECT_PEOPLE, mGroupId);
         startActivityForResult(intent, REQUEST_CODE_SELECT_PEOPLE);

@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 
 import com.spark.cong.growrelationship.Architecture.Dao.GroupPeopleDAO;
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
+import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.GrowDatabase;
 
 import java.util.List;
@@ -21,10 +22,21 @@ public class GroupPeopleRepository {
     }
 
 
-    /*----------------------------------method-----------------------------*/
+    /*----------------------------------select-----------------------------*/
+    //getAllGroupPeople
     public List<GroupPeople> getAllGroupPeople(){return groupPeopleDAO.getAllGroupPeople();}
 
+    //getAllPeopleOfGroup
+    public LiveData<List<People>> getAllPeopleOfGroup(int groupId){
+        return groupPeopleDAO.getAllPeopleOfGroup(groupId);
+    }
+    //get all by groupId
     public LiveData<List<GroupPeople>> getAllGroupPeopleByGroupId(int groupId){return groupPeopleDAO.getAllPeopleByGroupId(groupId);}
+
+    //getAllPeopleIsNotGroupId
+    public LiveData<List<People>> getAllPeopleIsNotGroupId(int groupId){
+        return groupPeopleDAO.getAllPeopleIsNotGroupId(groupId);
+    }
 
     public void insertGroupPeople(GroupPeople groupPeople){
         new InsertGroupPeopleAsyncTask(groupPeopleDAO).execute(groupPeople);
@@ -32,21 +44,17 @@ public class GroupPeopleRepository {
 
     //get all PeopleId without GroupId
     public LiveData<int[]> getAllPeopleIdWithoutGroupId(int groupId){
-//        try {
-//            return new GetAllPeopleIdWithoutGroupIdAsyncTask(groupPeopleDAO).execute(groupId).get();
-//        }catch (Exception e){
-//            throw new RuntimeException("error to get peopleId without GroupID");
-//        }
         return groupPeopleDAO.getAllPeopleIdWithoutGroupId(groupId);
     }
 
-    //delete by peopleId
+    /*----------------------------------delete-----------------------------*/
+    //delete
     public void deleteGroupPeople(GroupPeople groupPeople){
-        new DeleteGroupPeopleAsyncTask(groupPeopleDAO).execute(groupPeople);
+        groupPeopleDAO.deleteGroupPeople(groupPeople);
     }
 
-    /*----------------------------------asyncTask-----------------------------*/
 
+    /*----------------------------------asyncTask-----------------------------*/
     //insert
     public class InsertGroupPeopleAsyncTask extends AsyncTask<GroupPeople,Void,Void>{
         private GroupPeopleDAO groupPeopleDAO;
@@ -58,14 +66,4 @@ public class GroupPeopleRepository {
         }
     }
 
-    //delete
-    public class DeleteGroupPeopleAsyncTask extends AsyncTask<GroupPeople,Void,Void>{
-        private GroupPeopleDAO groupPeopleDAO;
-        public DeleteGroupPeopleAsyncTask(GroupPeopleDAO groupPeopleDAO){this.groupPeopleDAO = groupPeopleDAO;}
-        @Override
-        protected Void doInBackground(GroupPeople... integers) {
-            groupPeopleDAO.deleteGroupPeople(integers[0]);
-            return null;
-        }
-    }
 }

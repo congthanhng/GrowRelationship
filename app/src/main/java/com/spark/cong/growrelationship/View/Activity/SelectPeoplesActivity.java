@@ -30,14 +30,21 @@ import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 
 public class SelectPeoplesActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private RecyclerView recyclerView;
+    //data from previous activity
     private int mGroupId;
-    private GroupPeopleViewModel mViewModel;
-    private SelectPeopleRecyclerAdapter adapter;
+
+    //ViewModel
     private PeopleViewModel mPeopleViewModel;
-    private int[] lstPeopleId;
+    private GroupPeopleViewModel mViewModel;
+
+    //parameter
     private List<People> lstPeopleSelect = new ArrayList<>();
+    private int[] lstPeopleId;
+
+    //view
     private CheckBox checkBoxAll;
+    private SelectPeopleRecyclerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,35 +70,26 @@ public class SelectPeoplesActivity extends AppCompatActivity implements View.OnC
         mPeopleViewModel = new ViewModelProvider(this).get(PeopleViewModel.class);
 
         //recyclerView
-        recyclerView = (RecyclerView)findViewById(R.id.recycler_select_people);
+        RecyclerView recyclerView = findViewById(R.id.recycler_select_people);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new SelectPeopleRecyclerAdapter();
         recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,1));
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
-        mViewModel.getAllPeopleIdByWithoutGroupId(mGroupId).observe(this, new Observer<int[]>() {
+
+        //get list people to set list item of recycler
+        mViewModel.getAllPeopleIsNotGroupId(mGroupId).observe(this, new Observer<List<People>>() {
             @Override
-            public void onChanged(int[] ints) {
-                lstPeopleId = ints;
-                if(lstPeopleId != null){
-                    lstPeopleSelect.clear();
-                    for(int item:lstPeopleId){
-//                        lstPeopleSelect.add(mPeopleViewModel.getPeopleById(item));
-                    }
-                }
-                if(lstPeopleSelect!=null){
-                    adapter.setData(lstPeopleSelect);
-                }
+            public void onChanged(List<People> peoples) {
+                adapter.setData(peoples);
+                lstPeopleSelect = peoples;
             }
         });
-
-
         //checkBox
-        checkBoxAll = (CheckBox)findViewById(R.id.checkbox_select_people);
+        checkBoxAll = findViewById(R.id.checkbox_select_people);
     }
 
     public void setListener(){
-        //checkBox
-//        checkBoxAll.setOnClickListener(this);
         checkBoxAll.setOnClickListener(this);
 
     }
@@ -104,6 +102,7 @@ public class SelectPeoplesActivity extends AppCompatActivity implements View.OnC
 
     }
 
+    //menu listener
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){

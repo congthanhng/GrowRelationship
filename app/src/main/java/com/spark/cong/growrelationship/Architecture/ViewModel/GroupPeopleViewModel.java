@@ -12,12 +12,16 @@ import androidx.lifecycle.Transformations;
 import com.spark.cong.growrelationship.Architecture.Entity.GroupPeople;
 import com.spark.cong.growrelationship.Architecture.Entity.People;
 import com.spark.cong.growrelationship.Architecture.Repository.GroupPeopleRepository;
+import com.spark.cong.growrelationship.Architecture.Repository.PeopleRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class GroupPeopleViewModel extends AndroidViewModel {
     private GroupPeopleRepository groupPeopleRepository;
-    private LiveData<List<GroupPeople>> mAllGroupPeopleByGroupId;
     private MutableLiveData<Integer> mGroupId;
 
     public GroupPeopleViewModel(@NonNull Application application) {
@@ -27,14 +31,8 @@ public class GroupPeopleViewModel extends AndroidViewModel {
     }
 
 
-    //get all
-//    public LiveData<List<GroupPeople>> getAllGroupPeople(){
-//        return groupPeopleRepository.getAllGroupPeople();
-//    }
-
     //get all by groupId
     public LiveData<List<GroupPeople>> getAllGroupPeopleByGroupId() {
-//        return groupPeopleRepository.getAllGroupPeopleByGroupId(groupId);
         return Transformations.switchMap(mGroupId, new Function<Integer, LiveData<List<GroupPeople>>>() {
             @Override
             public LiveData<List<GroupPeople>> apply(Integer input) {
@@ -43,11 +41,17 @@ public class GroupPeopleViewModel extends AndroidViewModel {
         });
     }
 
+    //getAllPeopleOfGroup
+    public LiveData<List<People>> getAllPeopleOfGroup(int groupId){
+        return groupPeopleRepository.getAllPeopleOfGroup(groupId);
+    }
+
+    //set value of MutableLiveData
     public void setGroupId(int groupId){
         mGroupId.setValue(groupId);
     }
 
-
+    //insert
     public void insertGroupPeople(GroupPeople groupPeople){
         groupPeopleRepository.insertGroupPeople(groupPeople);
     }
@@ -57,23 +61,14 @@ public class GroupPeopleViewModel extends AndroidViewModel {
        return groupPeopleRepository.getAllPeopleIdWithoutGroupId(groupId);
     }
 
-    //delete by peopleid
+    //get all People is not given groupId
+    public LiveData<List<People>> getAllPeopleIsNotGroupId(int groupId){
+        return groupPeopleRepository.getAllPeopleIsNotGroupId(groupId);
+    }
+
+    //delete
     public void deleteGroupPeople(GroupPeople groupPeople){
         groupPeopleRepository.deleteGroupPeople(groupPeople);
     }
 
-    public MutableLiveData<List<GroupPeople>> lstGroupPeople(){
-        MutableLiveData<List<GroupPeople>> listMutableLiveData = new MutableLiveData<>();
-        listMutableLiveData.setValue(groupPeopleRepository.getAllGroupPeople());
-        return listMutableLiveData;
-    }
-
-//    void setLstGroupPeople(){
-//        this.lstGroupPeople.setValue(groupPeopleRepository.getAllGroupPeople());
-//    }
-
-    //get all People by GroupId
-//    public LiveData<List<People>> getAllPeopleByGroupId(){
-//        return Transformations.sw
-//    }
 }

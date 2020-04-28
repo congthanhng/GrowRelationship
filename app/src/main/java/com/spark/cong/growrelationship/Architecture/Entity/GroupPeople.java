@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.*;
 
-@Entity(tableName = "group_people",foreignKeys = {
+@Entity(tableName = "group_people",primaryKeys = {"group_id","people_id"},foreignKeys = {
         @ForeignKey(
                 entity = Group.class,
                 parentColumns = "group_id",
@@ -22,10 +22,6 @@ import static androidx.room.ForeignKey.*;
 
 })
 public class GroupPeople {
-    @PrimaryKey(autoGenerate = true)
-    @NonNull
-    @ColumnInfo(name = "group_people_id")
-    private int groupPeopleId;
 
     @NonNull
     @ColumnInfo(name = "group_id",index = true)
@@ -38,14 +34,6 @@ public class GroupPeople {
     public GroupPeople(int groupId, int peopleId) {
         this.groupId = groupId;
         this.peopleId = peopleId;
-    }
-
-    public int getGroupPeopleId() {
-        return groupPeopleId;
-    }
-
-    public void setGroupPeopleId(int groupPeopleId) {
-        this.groupPeopleId = groupPeopleId;
     }
 
     public int getGroupId() {

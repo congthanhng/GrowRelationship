@@ -62,6 +62,7 @@ public class SelectPeopleRecyclerAdapter extends RecyclerView.Adapter<SelectPeop
         }
         notifyDataSetChanged();
     }
+
     //get array item check
     public List<Integer> getCheckArray(){
         List<Integer> lstChecked = new ArrayList<>();
