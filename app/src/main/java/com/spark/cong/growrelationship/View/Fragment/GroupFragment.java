@@ -56,13 +56,13 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
     /*------------------------------------View-----------------------------*/
     private RecyclerView recyclerView;
 
-    /*------------------------------------param-----------------------------*/
+    /*------------------------------------RxJava-----------------------------*/
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    /*------------------------------------normal-----------------------------*/
     private List<Group> listGroup;
     private GroupRecyclerAdapter adapter;
     private FragmentActivity myContext;
-
-    /*------------------------------------RxJava-----------------------------*/
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     /*------------------------------------constructor-----------------------------*/
     public static GroupFragment newInstance() {
@@ -83,20 +83,19 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group, container, false);
         //recyclerView
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewGroup);
+        recyclerView = view.findViewById(R.id.recyclerViewGroup);
         recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), SPAN_COUNT));
         adapter = new GroupRecyclerAdapter(view.getContext(), this, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING, SPAN_COUNT)); // spacing between items
-
         return view;
-
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         mViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
         //LiveData
         mViewModel.getAllGroup().observe(getViewLifecycleOwner(), new Observer<List<Group>>() {
@@ -155,7 +154,7 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
 
                     @Override
                     public void onComplete() {
-                        Toast.makeText(getContext(), "insert successfull", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "insert successful", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -171,16 +170,12 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
     public void onItemClick(View view, int position) {
 //        Toast.makeText(myContext,"itemClick"+position,Toast.LENGTH_SHORT).show();
         switch (view.getId()) {
-            case R.id.action_open: {
-                callGroupPeopleActivity(position);
-
-            }
-            break;
             case R.id.action_delete: {
                 //delete a group
                 deleteGroup(position);
             }
             break;
+            case R.id.action_open:
             default: {
                 callGroupPeopleActivity(position);
             }
@@ -203,6 +198,7 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
 
     public void callGroupPeopleActivity(int position) {
         int groupId = listGroup.get(position).getGroupId();
+
         if (groupId >= 0) {
             Intent intent = new Intent(getActivity(), GroupPeopleActivity.class);
             intent.putExtra(INTENT_TO_GROUP_PEOPLE, groupId);
@@ -212,14 +208,19 @@ public class GroupFragment extends Fragment implements ItemClickListener, ItemLo
         }
     }
 
-    private void deleteGroup(int position) {
-        compositeDisposable.add(mViewModel.deleteGroup(listGroup.get(position))
+    private void deleteGroup(final int position) {
+        compositeDisposable.add(Completable.fromAction(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        mViewModel.deleteGroup(listGroup.get(position));
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        Toast.makeText(getContext(), "Delete sucessfull", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Delete successful", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

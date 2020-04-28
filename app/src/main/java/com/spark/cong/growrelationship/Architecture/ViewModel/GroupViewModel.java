@@ -56,13 +56,8 @@ public class GroupViewModel extends AndroidViewModel {
     }
 
     //delete a group
-    public Completable deleteGroup(final Group group){
-        return Completable.fromAction(new Action() {
-            @Override
-            public void run() throws Exception {
-                mGroupRepository.deleteGroup(group);
-            }
-        });
+    public void deleteGroup(final Group group){
+        mGroupRepository.deleteGroup(group);
     }
 
 
