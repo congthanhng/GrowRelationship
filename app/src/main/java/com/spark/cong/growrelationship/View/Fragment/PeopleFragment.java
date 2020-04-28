@@ -26,11 +26,9 @@ import com.spark.cong.growrelationship.Commons.ItemSpacingDecorator;
 import com.spark.cong.growrelationship.Commons.impl.CallViewImpl;
 import com.spark.cong.growrelationship.Commons.impl.CommonImpl;
 import com.spark.cong.growrelationship.R;
-import com.spark.cong.growrelationship.View.Activity.GroupPeopleActivity;
 import com.spark.cong.growrelationship.View.Activity.PeopleActivity;
 import com.spark.cong.growrelationship.View.Adapter.PeopleRecyclerAdapter;
 import com.spark.cong.growrelationship.View.Dialog.AddGroupDialog;
-import com.spark.cong.growrelationship.View.Dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
@@ -46,13 +44,8 @@ import static com.spark.cong.growrelationship.Commons.Constant.ITEM_SPACING;
 import static com.spark.cong.growrelationship.Commons.Constant.REQUEST_CODE_PEOPLE;
 import static com.spark.cong.growrelationship.Commons.Constant.TAG_ITEM_PEOPLE;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
-public class PeopleFragment extends Fragment implements View.OnClickListener, ItemClickListener, ItemLongClickListener,AddGroupDialog.EditNameGroupListener {
+
+public class PeopleFragment extends Fragment implements View.OnClickListener, ItemClickListener, ItemLongClickListener, AddGroupDialog.EditNameGroupListener {
 
     private CallView callView = CallViewImpl.getInstance();
 
@@ -60,11 +53,8 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
 
     private CommonImpl mCommon = CommonImpl.getInstance();
-//    private Button button;
-//    private TextInputEditText editText;
     private PeopleViewModel mViewModel;
     private RecyclerView recyclerView;
     private PeopleRecyclerAdapter adapter;
@@ -102,32 +92,30 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_people, container, false);
 
-        // Set the adapter
         Context context = view.getContext();
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_people);
+        recyclerView = view.findViewById(R.id.recycler_people);
+
         if (mColumnCount <= 1) {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
         //item spacing
-        recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING,1));
-        adapter = new PeopleRecyclerAdapter(view.getContext(),this,this);
-
-        //recyclerView.setAdapter(new PeopleRecyclerAdapter(DummyContent.ITEMS, mListener));
+        recyclerView.addItemDecoration(new ItemSpacingDecorator(ITEM_SPACING, 1));
+        adapter = new PeopleRecyclerAdapter(view.getContext(), this, this);
         recyclerView.setAdapter(adapter);
 
-//        button = (Button)view.findViewById(R.id.button_test_people);
-//        editText= (TextInputEditText) view.findViewById(R.id.edt_test_people);
-//        button.setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //ViewModel
         mViewModel = new ViewModelProvider(this).get(PeopleViewModel.class);
 
+        //getAllPeople
         mViewModel.getAllPeople().observe(getViewLifecycleOwner(), new Observer<List<People>>() {
             @Override
             public void onChanged(List<People> peoples) {
@@ -144,18 +132,12 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     @Override
@@ -169,23 +151,23 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
         compositeDisposable.clear();
     }
 
-    //item click listener of recycler and bottomsheet
+    //item click listener of recycler and bottomSheet
     @Override
     public void onItemClick(View view, int position) {
-    //Toast.makeText(getContext(),"item"+position,Toast.LENGTH_SHORT).show();
-        switch (view.getId()){
-            case R.id.action_open:{
-                callPeopleActivity(position);
-            }break;
-            case R.id.action_delete:{
+        switch (view.getId()) {
+
+            case R.id.action_delete: {
                 deletePeople(position);
-            }break;
+            }
+            break;
+            case R.id.action_open:
             default: {
                 callPeopleActivity(position);
             }
         }
     }
 
+    //func delete a people
     private void deletePeople(final int position) {
         final People people = mLstPeople.get(position);
         compositeDisposable.add(Completable.fromAction(new Action() {
@@ -194,28 +176,26 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
                 mViewModel.deletePeople(people);
             }
         }).subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribeWith(new DisposableCompletableObserver() {
-            @Override
-            public void onComplete() {
-                Toast.makeText(getContext(),"delete successful",Toast.LENGTH_SHORT).show();
-            }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        Toast.makeText(getContext(), "Delete successful", Toast.LENGTH_SHORT).show();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-
-            }
-        }));
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(getContext(), "Delete fail", Toast.LENGTH_SHORT).show();
+                    }
+                }));
     }
 
     @Override
     public void onItemLongClick(View view, int position) {
-//        Toast.makeText(getContext(),"longItem"+position,Toast.LENGTH_SHORT).show();
-        callView.callBottomSheet(getActivity().getSupportFragmentManager(),TAG_ITEM_PEOPLE,position,true,this);
+        callView.callBottomSheet(getActivity().getSupportFragmentManager(), TAG_ITEM_PEOPLE, position, true, this);
         BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
-//        bottomSheetFragment.show(getActivity().getSupportFragmentManager(),"people_bottom_sheet");
-
     }
+
 
     @Override
     public void onFinishEditDialog(String inputText) {
@@ -226,46 +206,33 @@ public class PeopleFragment extends Fragment implements View.OnClickListener, It
                 mViewModel.insertPeople(people);
             }
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribeWith(new DisposableCompletableObserver() {
-            @Override
-            public void onComplete() {
-                Toast.makeText(getContext(),"insert successful",Toast.LENGTH_SHORT).show();
-            }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        Toast.makeText(getContext(), "Insert successful", Toast.LENGTH_SHORT).show();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(getContext(), "Insert fail", Toast.LENGTH_SHORT).show();
 
-            }
-        }));
-
+                    }
+                }));
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
-    }
-
-    public void addNewPeople(){
+    //show dialog add new people when fab in tab 2 click
+    public void addNewPeople() {
         AddGroupDialog addGroupDialog = new AddGroupDialog(this);
         addGroupDialog.show(getActivity().getSupportFragmentManager(), "people");
     }
 
-    public void callPeopleActivity(int position){
+    //go to PeopleActivity when click a item
+    public void callPeopleActivity(int position) {
         int peopleId = mLstPeople.get(position).getPeopleId();
         Intent intent = new Intent(getActivity(), PeopleActivity.class);
-        intent.putExtra(INTENT_TO_PEOPLE,peopleId);
-        startActivityForResult(intent,REQUEST_CODE_PEOPLE);
+        intent.putExtra(INTENT_TO_PEOPLE, peopleId);
+        startActivityForResult(intent, REQUEST_CODE_PEOPLE);
     }
 }

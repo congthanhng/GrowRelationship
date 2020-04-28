@@ -15,6 +15,8 @@ import com.spark.cong.growrelationship.Architecture.ViewModel.PeopleViewModel;
 import com.spark.cong.growrelationship.Commons.impl.CommonImpl;
 import com.spark.cong.growrelationship.R;
 
+import java.util.Objects;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -33,8 +35,6 @@ public class PeopleActivity extends AppCompatActivity {
     private EditText editText;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-//    private int groupId;
-//    private List<Group> lstPeople;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,50 +78,43 @@ public class PeopleActivity extends AppCompatActivity {
      */
     public void setView() {
         //set action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //viewModel
         mViewModel = new ViewModelProvider(this).get(PeopleViewModel.class);
-        editText =  findViewById(R.id.edt_test_people);
+        editText = findViewById(R.id.edt_test_people);
 
         //get data of people
         if (mPeopleId >= 0) {
             getPeopleById(mPeopleId);
-            if (mPeople != null) {
-                editText.setText(mPeople.getPeopleName());
-
-            } else {
-                Toast.makeText(getApplicationContext(), "null", Toast.LENGTH_SHORT).show();
-
-            }
         } else {
             Toast.makeText(getApplicationContext(), "Please check your data transfer,", Toast.LENGTH_SHORT).show();
         }
-
         //test
     }
 
+    //get people by id
     private void getPeopleById(final int id) {
         compositeDisposable.add(mViewModel.getPeopleById(id)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribeWith(new DisposableSubscriber<People>() {
-            @Override
-            public void onNext(People people) {
-                mPeople = people;
-            }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSubscriber<People>() {
+                    @Override
+                    public void onNext(People people) {
+                        editText.setText(people.getPeopleName());
+                    }
 
-            @Override
-            public void onError(Throwable t) {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
+                    }
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
-        }));
+                    }
+                }));
     }
 
     //listener

@@ -44,7 +44,7 @@ import static com.spark.cong.growrelationship.Commons.Constant.tabSelected;
 import static com.spark.cong.growrelationship.Commons.Constant.tabUnSelected;
 
 
-public class MainActivity extends AppCompatActivity implements  PeopleFragment.OnListFragmentInteractionListener, PopupMenu.OnMenuItemClickListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements  PopupMenu.OnMenuItemClickListener, View.OnClickListener {
     private TabLayout mTabs;
     private ViewPager2 mViewpaper2;
     private TabFragmentAdapter tabAdapter;
@@ -159,13 +159,6 @@ public class MainActivity extends AppCompatActivity implements  PeopleFragment.O
         popupMenu.show();
 
     }
-
-
-    @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
-        Toast.makeText(getApplicationContext(), "" + item.content.toString(), Toast.LENGTH_SHORT).show();
-    }
-
 
     //menu item listener
     @Override

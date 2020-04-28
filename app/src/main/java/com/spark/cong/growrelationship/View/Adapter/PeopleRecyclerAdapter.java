@@ -52,7 +52,6 @@ public class PeopleRecyclerAdapter extends RecyclerView.Adapter<PeopleRecyclerAd
 
     //setData
     public void setData(List<People> lstPeople){
-        Log.i("sdfsf", "setData: sdfafaf");
         if(lstPeople!=null){
             this.mPeoples = lstPeople;
             notifyDataSetChanged();
