@@ -1,6 +1,5 @@
 package com.spark.cong.growrelationship;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -9,32 +8,23 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.spark.cong.growrelationship.Architecture.Entity.Group;
-import com.spark.cong.growrelationship.Architecture.ViewModel.GroupViewModel;
 import com.spark.cong.growrelationship.View.Adapter.TabFragmentAdapter;
-import com.spark.cong.growrelationship.View.Dialog.EditGroupDialog;
-import com.spark.cong.growrelationship.View.Dummy.DummyContent;
 import com.spark.cong.growrelationship.View.Fragment.GroupFragment;
 import com.spark.cong.growrelationship.View.Fragment.InteractiveFragment;
 import com.spark.cong.growrelationship.View.Fragment.PeopleFragment;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.List;
 
 import static com.spark.cong.growrelationship.Commons.Constant.POPUP_CONSTANT;
 import static com.spark.cong.growrelationship.Commons.Constant.POPUP_FORCE_SHOW_ICON;
@@ -44,7 +34,7 @@ import static com.spark.cong.growrelationship.Commons.Constant.tabSelected;
 import static com.spark.cong.growrelationship.Commons.Constant.tabUnSelected;
 
 
-public class MainActivity extends AppCompatActivity implements  PopupMenu.OnMenuItemClickListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, View.OnClickListener {
     private TabLayout mTabs;
     private ViewPager2 mViewpaper2;
     private TabFragmentAdapter tabAdapter;
@@ -199,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements  PopupMenu.OnMenu
             @Override
             public void onAnimationStart(Animation animation) {
             }
+
             @Override
             public void onAnimationEnd(Animation animation) {
                 // Change FAB color and icon
@@ -260,13 +251,14 @@ public class MainActivity extends AppCompatActivity implements  PopupMenu.OnMenu
 //            groupFragment.addNewGroup();
 //        }
     }
-    public void fabPeopleListener(){
+
+    public void fabPeopleListener() {
         try {
             PeopleFragment fragment = (PeopleFragment) tabAdapter.getLstFragment().get(1);
-            if(fragment !=null){
+            if (fragment != null) {
                 fragment.addNewPeople();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e("Exeption", "fabPeopleListener: " + e);
 
         }

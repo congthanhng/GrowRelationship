@@ -37,7 +37,7 @@ public class SelectPeoplesActivity extends AppCompatActivity implements View.OnC
     private PeopleViewModel mPeopleViewModel;
     private GroupPeopleViewModel mViewModel;
 
-    //parameter
+    //argument
     private List<People> lstPeopleSelect = new ArrayList<>();
     private int[] lstPeopleId;
 
